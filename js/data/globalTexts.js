@@ -325,10 +325,7 @@ export const globalTextData = {
       "alert_upgrade_success_message": "Congratulations! You have upgraded to the {TIER_NAME} plan. Your new benefits are active.",
       "alert_upgrade_failed_title": "Upgrade Failed",
       "alert_upgrade_failed_message": "There was an issue processing your upgrade. Please try again or contact support.",
-      "tooltip_manage_subscription": "View and manage your subscription tier.",
-      "alert_welcome_trial_title": "Welcome to the Lorelic!",
-      "alert_welcome_trial_message": "Your chronicle has begun! As a new Chronicler, you've been gifted a **14-day free trial** of our premium features.\n\nYou can now:\n- Weave persistent stories with **World Shards**.\n- Explore all available worlds.\n- Use more advanced Storyteller AIs.\n\n_A confirmation link has been sent to {USER_EMAIL} to secure your account._",
-      "button_lets_go": "Let's Go!"
+      "tooltip_manage_subscription": "View and manage your subscription tier."
     },
     "cs": {
       "toggle_language_aria": "Přepnout jazyk aplikace",
@@ -646,10 +643,7 @@ export const globalTextData = {
       "alert_upgrade_success_message": "Gratulujeme! Úspěšně jsi upgradoval/a na plán {TIER_NAME}. Tvé nové výhody jsou aktivní.",
       "alert_upgrade_failed_title": "Upgrade Selhal",
       "alert_upgrade_failed_message": "Během procesu upgradu se něco pokazilo. Zkus to prosím znovu nebo kontaktuj podporu.",
-      "tooltip_manage_subscription": "Zobrazit a spravovat úroveň tvého předplatného.",
-      "alert_welcome_trial_title": "Vítejte v Lorelicu!",
-      "alert_welcome_trial_message": "Vaše kronika započala! Jako nový Kronikář jste obdržel/a **14denní bezplatnou zkušební verzi** našich prémiových funkcí.\n\nNyní můžete:\n- Tvořit trvalé příběhy pomocí **Fragmentů Světa**.\n- Prozkoumávat všechny dostupné světy.\n- Používat pokročilejší Vypravěče.\n\n_Na adresu {USER_EMAIL} byl odeslán potvrzovací odkaz k zabezpečení vašeho účtu._",
-      "button_lets_go": "Vzhůru za dobrodružstvím!"
+      "tooltip_manage_subscription": "Zobrazit a spravovat úroveň tvého předplatného."
     }
   },
   "landing": {
