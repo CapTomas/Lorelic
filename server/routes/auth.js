@@ -658,7 +658,7 @@ router.post("/reset-password", async (req, res) => {
     });
     logger.info(`Password reset successfully for user: ${user.email}`);
     logger.info(
-      `SIMULATED EMAIL: Your password for Anomady has been successfully changed for ${user.email}.`
+      `SIMULATED EMAIL: Your password for Lorelic has been successfully changed for ${user.email}.`
     );
     res.status(200).json({ message: "Password reset successfully. You can now log in with your new password." });
   } catch (error) {

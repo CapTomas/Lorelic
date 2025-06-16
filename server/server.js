@@ -94,7 +94,7 @@ app.get('/api/health', (req, res) => {
 app.get('/api/test', (req, res) => {
   logger.debug('GET /api/test hit');
   res.json({
-    message: 'Anomady Backend API is responding!',
+    message: 'Lorelic Backend API is responding!',
     timestamp: new Date().toISOString(),
     version: process.env.npm_package_version || '1.0.0',
   });
@@ -171,7 +171,7 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': `Anomady-Server/${process.env.npm_package_version || '1.0.0'}`,
+        'User-Agent': `Lorelic-Server/${process.env.npm_package_version || '1.0.0'}`,
       },
       body: JSON.stringify(payload),
       signal: controller.signal,

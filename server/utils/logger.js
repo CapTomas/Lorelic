@@ -15,7 +15,7 @@ const CURRENT_LOG_LEVEL = LOG_LEVELS[CURRENT_LOG_LEVEL_NAME] !== undefined
                           ? LOG_LEVELS[CURRENT_LOG_LEVEL_NAME]
                           : LOG_LEVELS.INFO;
 
-const APP_NAME_PREFIX = '[AnomadyBE]';
+const APP_NAME_PREFIX = '[LorelicBE]';
 
 /**
  * Formats a log message with a timestamp, app prefix, level, and the message content.

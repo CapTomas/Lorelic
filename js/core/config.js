@@ -16,13 +16,13 @@ export const SCROLL_INDICATOR_TOLERANCE = 2; // px
 export const AUTOSCROLL_THRESHOLD = 40; // px
 
 // --- LocalStorage Keys ---
-export const JWT_STORAGE_KEY = 'anomadyAuthToken';
-export const MODEL_PREFERENCE_STORAGE_KEY = 'anomadyModelPreference';
+export const JWT_STORAGE_KEY = 'lorelicAuthToken';
+export const MODEL_PREFERENCE_STORAGE_KEY = 'lorelicModelPreference';
 export const LANGUAGE_PREFERENCE_STORAGE_KEY = 'preferredAppLanguage';
 export const NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY = 'preferredNarrativeLanguage';
-export const CURRENT_THEME_STORAGE_KEY = 'anomadyCurrentTheme';
-export const LANDING_SELECTED_GRID_THEME_KEY = 'anomadyLandingSelectedGridTheme';
-export const LOG_LEVEL_STORAGE_KEY = 'anomadyLogLevel';
+export const CURRENT_THEME_STORAGE_KEY = 'lorelicCurrentTheme';
+export const LANDING_SELECTED_GRID_THEME_KEY = 'lorelicLandingSelectedGridTheme';
+export const LOG_LEVEL_STORAGE_KEY = 'lorelicLogLevel';
 
 // --- AI Model Configuration ---
 /** The model name for standard, free-tier users. */

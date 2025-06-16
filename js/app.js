@@ -116,7 +116,7 @@ async function _handleUrlChangeOrInitialLoad() {
  * @private
  */
 async function _initializeApp() {
-  log(LOG_LEVEL_INFO, 'Anomady Application initializing...');
+  log(LOG_LEVEL_INFO, 'Lorelic Application initializing...');
   // 1. Set logger level from localStorage or default
   const storedLogLevel = localStorage.getItem(LOG_LEVEL_STORAGE_KEY);
   setCoreLogLevel(storedLogLevel || (DEFAULT_LANGUAGE === 'cs' ? 'debug' : 'info'));

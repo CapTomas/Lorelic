@@ -1,5 +1,5 @@
 {
-  "description": "This JSON file encapsulates the complete leveling and game mechanics for the Anomady engine. It includes character progression data, attribute rules, item and economy systems, and challenge benchmarks. It is intended to be a single source of truth for game balance and mechanics implementation.",
+  "description": "This JSON file encapsulates the complete leveling and game mechanics for the Lorelic engine. It includes character progression data, attribute rules, item and economy systems, and challenge benchmarks. It is intended to be a single source of truth for game balance and mechanics implementation.",
   "philosophy": "Provides a theme-agnostic, robust, and flexible framework for character progression and interaction. The design emphasizes player agency through narrative choices, with underlying mechanics providing consistent context for the AI Game Master, ensuring a reactive world and meaningful progression.",
   "attributes": {
     "description": "Defines the four core character attributes. Integrity and Willpower are dynamic resource pools, while Aptitude and Resilience are passive modifiers.",

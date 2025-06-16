@@ -26,7 +26,7 @@ const LOG_LEVEL_HIERARCHY = {
   [LOG_LEVEL_SILENT]: 4,
 };
 
-const APP_NAME_PREFIX = '[AnomadyFE]';
+const APP_NAME_PREFIX = '[LorelicFE]';
 
 // --- Module State ---
 

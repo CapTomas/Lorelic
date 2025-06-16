@@ -54,7 +54,7 @@ async function callSilentGeminiAPI(contents, systemInstruction, modelName, taskD
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': `Anomady-Server-SilentAI/${NPM_PACKAGE_VERSION}`,
+        'User-Agent': `Lorelic-Server-SilentAI/${NPM_PACKAGE_VERSION}`,
       },
       body: JSON.stringify(payload),
       signal: controller.signal,

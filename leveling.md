@@ -6,11 +6,11 @@ Here's the revised document:
 
 ---
 
-## **Anomady: Core Mechanics & Systems Design**
+## **Lorelic: Core Mechanics & Systems Design**
 
 **Document Version:** 1.3 (Revised)
 
-**Philosophy:** This document outlines the foundational mechanics governing character existence, progression, interaction, and the resolution of challenges within the Anomady engine. These systems are designed to be theme-agnostic, providing a robust yet flexible framework adaptable to diverse narrative settings. The core design emphasizes player agency expressed through narrative choices, with underlying mechanics providing consistent context for the AI Game Master to interpret and respond, ensuring that the world feels reactive, and progression feels meaningful across multiple playthroughs of a theme.
+**Philosophy:** This document outlines the foundational mechanics governing character existence, progression, interaction, and the resolution of challenges within the Lorelic engine. These systems are designed to be theme-agnostic, providing a robust yet flexible framework adaptable to diverse narrative settings. The core design emphasizes player agency expressed through narrative choices, with underlying mechanics providing consistent context for the AI Game Master to interpret and respond, ensuring that the world feels reactive, and progression feels meaningful across multiple playthroughs of a theme.
 
 ---
 
@@ -223,7 +223,7 @@ The numbers and systems exist to provide a consistent framework for your creativ
 
 ---
 
-### **Anomady: Character Progression & Challenge Benchmarks**
+### **Lorelic: Character Progression & Challenge Benchmarks**
 
 **Key for Table Columns (Generalized Terminology):**
 
