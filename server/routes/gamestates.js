@@ -213,23 +213,28 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
       }
       // Handle World Shard Unlocking
       if (new_persistent_lore_unlock && typeof new_persistent_lore_unlock === 'object') {
-        const { key_suggestion, title, content, unlock_condition_description } = new_persistent_lore_unlock;
-        if (key_suggestion && title && content && unlock_condition_description) {
-          try {
-            await tx.userThemePersistedLore.create({
-              data: { userId: userId, themeId: theme_id, loreFragmentKey: key_suggestion, loreFragmentTitle: title, loreFragmentContent: content, unlockConditionDescription: unlock_condition_description }
-            });
-            logger.info(`[WorldShard] Successfully created new world shard via GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}'`);
-          } catch (shardError) {
-            if (shardError.code === 'P2002') {
-              logger.warn(`[WorldShard] Failed to create shard for user ${userId}, theme ${theme_id}, key '${key_suggestion}' due to unique constraint (likely duplicate key from AI). Shard not created.`);
+        const userTier = req.user.tier || 'free';
+        if (userTier === 'pro' || userTier === 'ultra') {
+            const { key_suggestion, title, content, unlock_condition_description } = new_persistent_lore_unlock;
+            if (key_suggestion && title && content && unlock_condition_description) {
+              try {
+                await tx.userThemePersistedLore.create({
+                  data: { userId: userId, themeId: theme_id, loreFragmentKey: key_suggestion, loreFragmentTitle: title, loreFragmentContent: content, unlockConditionDescription: unlock_condition_description }
+                });
+                logger.info(`[WorldShard] Successfully created new world shard via GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}'`);
+              } catch (shardError) {
+                if (shardError.code === 'P2002') {
+                  logger.warn(`[WorldShard] Failed to create shard for user ${userId}, theme ${theme_id}, key '${key_suggestion}' due to unique constraint (likely duplicate key from AI). Shard not created.`);
+                } else {
+                  logger.error(`[WorldShard] Error creating new world shard during GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}':`, shardError);
+                  throw new Error(`Failed to create world shard: ${shardError.message}`);
+                }
+              }
             } else {
-              logger.error(`[WorldShard] Error creating new world shard during GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}':`, shardError);
-              throw new Error(`Failed to create world shard: ${shardError.message}`);
+              logger.warn(`[WorldShard] Received 'new_persistent_lore_unlock' signal but required fields were missing. User: ${userId}, Theme: ${theme_id}. Unlock data:`, new_persistent_lore_unlock);
             }
-          }
         } else {
-          logger.warn(`[WorldShard] Received 'new_persistent_lore_unlock' signal but required fields were missing. User: ${userId}, Theme: ${theme_id}. Unlock data:`, new_persistent_lore_unlock);
+            logger.warn(`[WorldShard] User ${userId} (Tier: ${userTier}) attempted to unlock a shard, but this is a premium feature. Ignoring.`);
         }
       }
       const upsertedInteraction = await tx.userThemeInteraction.upsert({

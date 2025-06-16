@@ -5,7 +5,7 @@ import logger from '../utils/logger.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { generateTokenExpiry } from '../utils/tokenUtils.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, checkPaidTier } from '../middleware/authMiddleware.js';
 import { USER_TIERS, constructApiUsageResponse } from '../middleware/usageLimiter.js';
 const router = express.Router();
 const SALT_ROUNDS = 10;
@@ -336,7 +336,7 @@ router.post('/me/finalize-upgrade', protect, async (req, res) => {
  * @desc    Fetch a summary of themes for which the user has World Shards, including counts of active shards.
  * @access  Private
  */
-router.get('/me/shaped-themes-summary', protect, async (req, res) => {
+router.get('/me/shaped-themes-summary', protect, checkPaidTier, async (req, res) => {
   const userId = req.user.id;
   logger.info(`Fetching shaped themes summary for user ${userId}`);
   try {

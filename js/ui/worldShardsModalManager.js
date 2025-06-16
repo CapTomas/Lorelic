@@ -62,7 +62,16 @@ export async function showConfigureShardsModal(themeId) {
     });
     return;
   }
-
+  const userTier = currentUser.tier || 'free';
+  if (userTier !== 'pro' && userTier !== 'ultra') {
+    log(LOG_LEVEL_INFO, `User ${currentUser.id} (Tier: ${userTier}) attempted to access World Shards modal. Blocked.`);
+    showCustomModal({
+        type: 'alert',
+        titleKey: 'modal_title_manage_shards',
+        messageKey: 'tooltip_shards_locked_free',
+    });
+    return;
+  }
   const themeConfig = getThemeConfig(themeId);
   const themeDisplayName = themeConfig ? getUIText(themeConfig.name_key, {}, { explicitThemeContext: themeId }) : themeId;
 

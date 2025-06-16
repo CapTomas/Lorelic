@@ -459,20 +459,24 @@ export function renderLandingPageActionButtons(themeId) {
   }
   standardActionsRow.appendChild(storeButton);
   const themeStatus = getShapedThemeData().get(themeId);
+  const userTier = currentUser?.tier || 'free';
+  const isPremium = userTier === 'pro' || userTier === 'ultra';
   const configureShardsButton = document.createElement('button');
   configureShardsButton.id = 'configure-shards-icon-button';
   configureShardsButton.classList.add('ui-button', 'icon-button', 'configure-shards-button');
-  const canConfigureShards = currentUser && themeStatus?.hasShards;
+  const canConfigureShards = currentUser && isPremium && themeStatus?.hasShards;
   let shardTooltipKey;
   if (!currentUser) {
     shardTooltipKey = 'tooltip_shards_locked_anon';
+  } else if (!isPremium) {
+    shardTooltipKey = 'tooltip_shards_locked_free';
   } else {
     shardTooltipKey = canConfigureShards ? 'tooltip_configure_fragments' : 'tooltip_no_fragments_to_configure';
   }
-  const shardAltText = getUIText(shardTooltipKey, {}, { viewContext: 'landing' });
+  const shardAltText = getUIText(shardTooltipKey, {}, { viewContext: 'global' });
   configureShardsButton.innerHTML = `<img src="images/app/icon_world_shard.svg" alt="${shardAltText}" class="shard-icon">`;
   configureShardsButton.setAttribute('aria-label', shardAltText);
-  attachTooltip(configureShardsButton, shardTooltipKey, {}, { viewContext: 'landing' });
+  attachTooltip(configureShardsButton, shardTooltipKey, {}, { viewContext: 'global' });
   if (themeManifestEntry.playable && canConfigureShards && _gameControllerRef?.showConfigureShardsModal) {
     configureShardsButton.addEventListener('click', () => _gameControllerRef.showConfigureShardsModal(themeId));
   } else {

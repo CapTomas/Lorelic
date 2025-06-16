@@ -125,4 +125,25 @@ const authenticateOptionally = async (req, res, next) => {
   }
   next();
 };
-export { protect, authenticateOptionally };
+
+/**
+ * Middleware to check if a user has a paid tier subscription ('pro' or 'ultra').
+ * This should be used *after* the `protect` middleware.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ */
+const checkPaidTier = (req, res, next) => {
+  const userTier = req.user?.tier;
+  if (userTier === 'pro' || userTier === 'ultra') {
+    return next();
+  }
+  logger.warn(`User ${req.user.id} (Tier: ${userTier}) attempted to access a paid feature: ${req.originalUrl}`);
+  res.status(403).json({
+    error: {
+      message: 'This feature is only available for premium subscribers.',
+      code: 'PREMIUM_FEATURE_REQUIRED'
+    }
+  });
+};
+export { protect, authenticateOptionally, checkPaidTier };

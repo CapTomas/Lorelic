@@ -8,16 +8,54 @@ import { getCurrentUser } from '../core/state.js';
 import { getUIText } from '../services/localizationService.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_DEBUG } from '../core/logger.js';
 
+/**
+ * Defines the features available for each user tier.
+ * @constant {object}
+ */
+const TIER_FEATURES = {
+    free: ['feature_api_calls_flash'],
+    pro: ['feature_api_calls_flash', 'feature_api_calls_pro', 'feature_longer_responses', 'feature_world_shards'],
+    ultra: ['feature_api_calls_flash', 'feature_api_calls_pro', 'feature_api_calls_ultra', 'feature_longer_responses', 'feature_world_shards', 'feature_priority_access'],
+};
+
+let _landingPageManagerRef = null;
 let _authUiManagerRef = null;
 
 /**
  * Initializes the BillingManager with necessary dependencies.
  * @param {object} dependencies - Object containing references to other modules.
  * @param {object} dependencies.authUiManager - Reference to authUiManager.
+ * @param {object} dependencies.landingPageManager - Reference to landingPageManager.
  */
 export function initBillingManager(dependencies = {}) {
     _authUiManagerRef = dependencies.authUiManager;
+    _landingPageManagerRef = dependencies.landingPageManager;
     log(LOG_LEVEL_INFO, "BillingManager initialized.");
+}
+
+/**
+ * Refreshes UI components that are sensitive to the user's tier after an upgrade or downgrade.
+ * @private
+ */
+async function _refreshUIAfterTierChange() {
+    // Always refresh the model toggle button, as it's always visible.
+    modelToggleManager.updateModelToggleButtonAppearance();
+    if (_landingPageManagerRef) {
+        // This is the most important step. It fetches the latest backend data
+        // reflecting the new tier's permissions and updates the central state.
+        // It will also re-render the theme grid if the landing page is visible.
+        await _landingPageManagerRef.fetchShapedWorldStatusAndUpdateGrid();
+        // After the data state is correct, check if we also need to refresh
+        // the action buttons for a selected theme on a visible landing page.
+        if (document.body.classList.contains('landing-page-active')) {
+            const currentSelection = _landingPageManagerRef.getCurrentLandingSelection?.();
+            if (currentSelection) {
+                // The grid itself was already re-rendered, but we need to ensure
+                // the action buttons (like the shard button) are also updated.
+                _landingPageManagerRef.renderLandingPageActionButtons(currentSelection);
+            }
+        }
+    }
 }
 
 /**
@@ -46,12 +84,7 @@ function _createTierColumn(tierId, isCurrentTier) {
     column.appendChild(tierPrice);
     const featuresList = document.createElement('ul');
     featuresList.className = 'features-list';
-    const features = {
-        free: ['feature_api_calls_flash'],
-        pro: ['feature_api_calls_flash', 'feature_api_calls_pro', 'feature_longer_responses', 'feature_world_shards'],
-        ultra: ['feature_api_calls_flash', 'feature_api_calls_pro', 'feature_api_calls_ultra', 'feature_longer_responses', 'feature_world_shards', 'feature_priority_access'],
-    };
-    (features[tierId] || []).forEach(featureKey => {
+    (TIER_FEATURES[tierId] || []).forEach(featureKey => {
         const li = document.createElement('li');
         li.textContent = getUIText(featureKey);
         featuresList.appendChild(li);
@@ -70,6 +103,7 @@ function _createTierColumn(tierId, isCurrentTier) {
             actionButton.textContent = getUIText('system_processing_short');
             try {
                 await authService.handleDowngradeToFree();
+                await _refreshUIAfterTierChange();
                 modalManager.hideCustomModal();
                 modalManager.showCustomModal({
                     type: 'alert',
@@ -77,15 +111,12 @@ function _createTierColumn(tierId, isCurrentTier) {
                     messageKey: 'alert_downgrade_success_message',
                     replacements: { TIER_NAME: getUIText('tier_free_name') }
                 });
-
                 setTimeout(() => {
                     modalManager.hideCustomModal();
                     if (_authUiManagerRef?.showUserProfileModal) {
                         _authUiManagerRef.showUserProfileModal();
                     }
                 }, 2500);
-
-                modelToggleManager.updateModelToggleButtonAppearance();
             } catch (error) {
                 log(LOG_LEVEL_ERROR, `Downgrade to free failed: ${error.message}`);
                 modalManager.displayModalError(error.message || getUIText('alert_downgrade_failed_message'));
@@ -158,11 +189,10 @@ export async function handleSuccessfulUpgrade(tier, sessionId) {
         messageKey: 'alert_upgrade_success_message',
         replacements: { TIER_NAME: getUIText(`tier_${tier}_name`) }
     });
-
     try {
         await authService.handleUpgradeFinalization(tier, sessionId);
         log(LOG_LEVEL_DEBUG, "Upgrade finalized, updating UI.");
-
+        await _refreshUIAfterTierChange();
         // Refresh UI elements that depend on user tier
         if (_authUiManagerRef) {
             // Give a moment for the user to see the success message
@@ -171,7 +201,6 @@ export async function handleSuccessfulUpgrade(tier, sessionId) {
                 _authUiManagerRef.showUserProfileModal(); // Re-open profile to show new tier
             }, 1500);
         }
-        modelToggleManager.updateModelToggleButtonAppearance();
     } catch (error) {
         log(LOG_LEVEL_ERROR, "Error during upgrade finalization:", error);
         modalManager.hideCustomModal();

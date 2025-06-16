@@ -144,7 +144,7 @@ async function _initializeApp() {
   languageManager.initLanguageManager({ storyLogManager, landingPageManager, dashboardManager });
   authUiManager.initAuthUiManager({ authService, modalManager, gameController, userThemeControlsManager, landingPageManager, languageManager, billingManager });
   worldShardsModalManager.initWorldShardsModalManager({ landingPageManager });
-  billingManager.initBillingManager({ authUiManager });
+  billingManager.initBillingManager({ authUiManager, landingPageManager });
   characterPanelManager.initCharacterPanelManager({ landingPageManager, userThemeControlsManager, gameController });
   suggestedActionsManager.initSuggestedActionsManager({ gameController });
   modelToggleManager.initModelToggleManager({ storyLogManager });

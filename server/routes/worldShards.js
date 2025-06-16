@@ -2,7 +2,7 @@
 import express from 'express';
 import prisma from '../db.js';
 import logger from '../utils/logger.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, checkPaidTier } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const router = express.Router();
  * @desc    Fetch all World Shards for the authenticated user and specified theme.
  * @access  Private
  */
-router.get('/themes/:themeId/worldshards', protect, async (req, res) => {
+router.get('/themes/:themeId/worldshards', protect, checkPaidTier, async (req, res) => {
   const userId = req.user.id;
   const { themeId } = req.params;
 
@@ -45,7 +45,7 @@ router.get('/themes/:themeId/worldshards', protect, async (req, res) => {
  * @desc    Update isActiveForNewGames status for a specific Shard ID.
  * @access  Private
  */
-router.put('/worldshards/:shardId/status', protect, async (req, res) => {
+router.put('/worldshards/:shardId/status', protect, checkPaidTier, async (req, res) => {
   const userId = req.user.id;
   const { shardId } = req.params;
   const { isActiveForNewGames } = req.body;
@@ -89,7 +89,7 @@ router.put('/worldshards/:shardId/status', protect, async (req, res) => {
  * @desc    "Shatter" (delete) a specific World Shard.
  * @access  Private
  */
-router.delete('/worldshards/:shardId', protect, async (req, res) => {
+router.delete('/worldshards/:shardId', protect, checkPaidTier, async (req, res) => {
   const userId = req.user.id;
   const { shardId } = req.params;
 
@@ -129,7 +129,7 @@ router.delete('/worldshards/:shardId', protect, async (req, res) => {
  * @desc    "Reset World" - delete all Shards for a user/theme.
  * @access  Private
  */
-router.delete('/themes/:themeId/worldshards/reset', protect, async (req, res) => {
+router.delete('/themes/:themeId/worldshards/reset', protect, checkPaidTier, async (req, res) => {
   const userId = req.user.id;
   const { themeId } = req.params;
 
