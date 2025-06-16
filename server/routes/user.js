@@ -27,6 +27,8 @@ router.get('/me/preferences', protect, async (req, res) => {
         preferred_app_language: req.user.preferred_app_language,
         preferred_narrative_language: req.user.preferred_narrative_language,
         preferred_model_name: req.user.preferred_model_name,
+        trial_started_at: req.user.trial_started_at,
+        trial_expires_at: req.user.trial_expires_at,
       }
     });
   } catch (error) {
@@ -89,6 +91,7 @@ router.put('/me/preferences', protect, async (req, res) => {
             id: true, email: true, username: true, story_preference: true, newsletter_opt_in: true,
             preferred_app_language: true, preferred_narrative_language: true, preferred_model_name: true,
             email_confirmed: true, created_at: true, updated_at: true, tier: true, apiUsage: true,
+            trial_started_at: true, trial_expires_at: true,
         }
     });
     const userForResponse = {
@@ -190,12 +193,10 @@ router.put('/me/password', protect, async (req, res) => {
 router.post('/me/downgrade-to-free', protect, async (req, res) => {
     const userId = req.user.id;
     logger.info(`User ${userId} requested downgrade to 'free' tier.`);
-
     if (req.user.tier === 'free') {
         logger.warn(`User ${userId} attempted to downgrade to 'free' but is already on that tier.`);
         return res.status(400).json({ error: { message: 'You are already on the free plan.', code: 'ALREADY_ON_FREE_TIER' } });
     }
-
     try {
         // In a real application, this would interact with a payment provider like Stripe
         // to cancel the subscription, possibly at the end of the current billing period.
@@ -212,15 +213,14 @@ router.post('/me/downgrade-to-free', protect, async (req, res) => {
                 id: true, email: true, username: true, story_preference: true, newsletter_opt_in: true,
                 preferred_app_language: true, preferred_narrative_language: true, preferred_model_name: true,
                 email_confirmed: true, created_at: true, updated_at: true, tier: true, apiUsage: true,
+                trial_started_at: true, trial_expires_at: true,
             }
         });
-
         logger.info(`User ${userId} successfully downgraded to 'free' tier.`);
         res.status(200).json({
             message: 'Subscription successfully changed to the free plan.',
             user: updatedUser
         });
-
     } catch (error) {
         logger.error(`Error downgrading user ${userId} to free tier:`, error);
         res.status(500).json({ error: { message: 'Failed to update subscription.', code: 'DOWNGRADE_FAILED' } });
@@ -235,25 +235,20 @@ router.post('/me/create-checkout-session', protect, async (req, res) => {
     const { tier } = req.body;
     const userId = req.user.id;
     const validTiers = ['pro', 'ultra'];
-
     if (!tier || !validTiers.includes(tier)) {
         logger.warn(`Invalid tier upgrade request for user ${userId}: ${tier}`);
         return res.status(400).json({ error: { message: 'Invalid tier specified.', code: 'INVALID_TIER' } });
     }
-
     if (req.user.tier === tier) {
         return res.status(400).json({ error: { message: 'User is already on this tier.', code: 'ALREADY_ON_TIER' } });
     }
-
     logger.info(`Simulating checkout session for user ${userId} to upgrade to tier '${tier}'.`);
-
     // In a real application, you would create a Stripe Checkout Session here.
     // The session would contain metadata like userId and the target tier.
     // The success_url would point to your frontend confirmation page.
     // For now, we simulate this flow.
     try {
         const dummySessionId = `sim_session_${crypto.randomBytes(16).toString('hex')}`;
-
         // Store the intent to upgrade in the DB to verify on success.
         // This prevents users from just calling the success URL without initiating a "payment".
         // Using password_reset_token for this simulation is a temporary hack.
@@ -265,17 +260,13 @@ router.post('/me/create-checkout-session', protect, async (req, res) => {
                 password_reset_expires_at: generateTokenExpiry(15), // Intent expires in 15 mins
             }
         });
-
         const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/?payment_status=success&tier=${tier}&session_id=${dummySessionId}`;
-
         res.status(200).json({ redirectUrl: successUrl });
-
     } catch (error) {
         logger.error(`Error creating simulated checkout for user ${userId}:`, error);
         res.status(500).json({ error: { message: 'Failed to initiate upgrade process.', code: 'CHECKOUT_CREATION_FAILED' } });
     }
 });
-
 /**
  * @route   POST /api/v1/users/me/finalize-upgrade
  * @desc    Finalizes a tier upgrade after a simulated successful payment. In production, this would be a webhook.
@@ -285,17 +276,14 @@ router.post('/me/finalize-upgrade', protect, async (req, res) => {
     const { tier, sessionId } = req.body;
     const userId = req.user.id;
     const validTiers = ['pro', 'ultra'];
-
     if (!tier || !validTiers.includes(tier) || !sessionId) {
         logger.warn(`Invalid finalize upgrade request for user ${userId}:`, req.body);
         return res.status(400).json({ error: { message: 'Invalid upgrade parameters.', code: 'INVALID_UPGRADE_PARAMS' } });
     }
-
     // In a real application, you would verify the session ID with the payment provider
     // to confirm the payment was successful. Here, we verify our simulated intent.
     const expectedIntent = `upgrade_intent_${tier}_${sessionId}`;
     const userWithIntent = await prisma.user.findUnique({ where: { id: userId } });
-
     if (
         !userWithIntent ||
         userWithIntent.password_reset_token !== expectedIntent ||
@@ -304,7 +292,6 @@ router.post('/me/finalize-upgrade', protect, async (req, res) => {
         logger.error(`Upgrade finalization failed for user ${userId}. Intent mismatch or expired. Expected: ${expectedIntent}, Found: ${userWithIntent?.password_reset_token}`);
         return res.status(400).json({ error: { message: 'Invalid or expired upgrade session. Please try again.', code: 'INVALID_UPGRADE_SESSION' } });
     }
-
     try {
         logger.info(`Finalizing tier upgrade for user ${userId} to tier '${tier}'.`);
         const updatedUser = await prisma.user.update({
@@ -313,19 +300,21 @@ router.post('/me/finalize-upgrade', protect, async (req, res) => {
                 tier: tier,
                 password_reset_token: null,
                 password_reset_expires_at: null,
+                // Nullify trial dates upon successful upgrade
+                trial_started_at: null,
+                trial_expires_at: null,
             },
             select: {
                 id: true, email: true, username: true, story_preference: true, newsletter_opt_in: true,
                 preferred_app_language: true, preferred_narrative_language: true, preferred_model_name: true,
                 email_confirmed: true, created_at: true, updated_at: true, tier: true, apiUsage: true,
+                trial_started_at: true, trial_expires_at: true,
             }
         });
-
         res.status(200).json({
             message: 'User tier upgraded successfully.',
             user: updatedUser
         });
-
     } catch (error) {
         logger.error(`Error finalizing upgrade for user ${userId}:`, error);
         res.status(500).json({ error: { message: 'Failed to finalize upgrade.', code: 'UPGRADE_FINALIZATION_FAILED' } });

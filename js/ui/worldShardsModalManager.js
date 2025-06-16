@@ -6,6 +6,7 @@
 import * as apiService from '../core/apiService.js';
 import { getCurrentUser } from '../core/state.js';
 import { getUIText } from '../services/localizationService.js';
+import { getEffectiveUserTier } from '../services/authService.js';
 import { showCustomModal, hideCustomModal, displayModalError, showGenericConfirmModal } from './modalManager.js';
 import { getThemeConfig } from '../services/themeService.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_DEBUG } from '../core/logger.js';
@@ -62,9 +63,12 @@ export async function showConfigureShardsModal(themeId) {
     });
     return;
   }
-  const userTier = currentUser.tier || 'free';
-  if (userTier !== 'pro' && userTier !== 'ultra') {
-    log(LOG_LEVEL_INFO, `User ${currentUser.id} (Tier: ${userTier}) attempted to access World Shards modal. Blocked.`);
+
+  const effectiveTier = getEffectiveUserTier();
+  const isPremiumOrTrial = effectiveTier === 'pro' || effectiveTier === 'ultra';
+
+  if (!isPremiumOrTrial) {
+    log(LOG_LEVEL_INFO, `User ${currentUser.id} (Tier: ${currentUser.tier}, Effective: ${effectiveTier}) attempted to access World Shards modal. Blocked.`);
     showCustomModal({
         type: 'alert',
         titleKey: 'modal_title_manage_shards',
@@ -72,57 +76,47 @@ export async function showConfigureShardsModal(themeId) {
     });
     return;
   }
+
   const themeConfig = getThemeConfig(themeId);
   const themeDisplayName = themeConfig ? getUIText(themeConfig.name_key, {}, { explicitThemeContext: themeId }) : themeId;
-
   const modalContentContainer = document.createElement('div');
   modalContentContainer.className = 'configure-shards-modal-content';
-
   let currentShards = [];
 
   const renderShardList = () => {
     modalContentContainer.innerHTML = ''; // Clear previous content
-
     if (currentShards.length === 0) {
       const noShardsP = document.createElement('p');
       noShardsP.textContent = getUIText('modal_shards_none_found');
       modalContentContainer.appendChild(noShardsP);
       return;
     }
-
     const list = document.createElement('ul');
     list.className = 'shard-list';
     currentShards.sort((a, b) => new Date(a.unlockedAt) - new Date(b.unlockedAt));
-
     currentShards.forEach((shard) => {
       const listItem = document.createElement('li');
       listItem.className = 'shard-item';
       listItem.dataset.shardId = shard.id;
-
       const titleDiv = document.createElement('div');
       titleDiv.className = 'shard-title';
       titleDiv.textContent = shard.loreFragmentTitle;
-
       const unlockDescDiv = document.createElement('div');
       unlockDescDiv.className = 'shard-unlock-desc';
       unlockDescDiv.textContent = `(${getUIText('shard_unlock_condition_prefix')} ${shard.unlockConditionDescription})`;
-
       const controlsDiv = document.createElement('div');
       controlsDiv.className = 'shard-controls';
-
       const toggleLabel = document.createElement('label');
       toggleLabel.className = 'shard-toggle-label';
       const toggleInput = document.createElement('input');
       toggleInput.type = 'checkbox';
       toggleInput.checked = shard.isActiveForNewGames;
       toggleInput.setAttribute('aria-label', `${getUIText('shard_active_toggle_label')} for ${shard.loreFragmentTitle}`);
-
       const updateVisualState = () => {
         titleDiv.style.textDecoration = shard.isActiveForNewGames ? 'none' : 'line-through';
         titleDiv.style.opacity = shard.isActiveForNewGames ? '1' : '0.6';
       };
       updateVisualState();
-
       toggleInput.addEventListener('change', async (e) => {
         const newStatus = e.target.checked;
         try {
@@ -137,10 +131,8 @@ export async function showConfigureShardsModal(themeId) {
           displayModalError(getUIText('error_api_call_failed', { ERROR_MSG: error.message }), modalContentContainer);
         }
       });
-
       toggleLabel.appendChild(toggleInput);
       toggleLabel.appendChild(document.createTextNode(` ${getUIText('shard_active_toggle_label')}`));
-
       const shatterButton = document.createElement('button');
       shatterButton.className = 'ui-button danger small shard-shatter-button';
       shatterButton.textContent = getUIText('button_shatter_shard');
@@ -163,25 +155,20 @@ export async function showConfigureShardsModal(themeId) {
           }
         }
       });
-
       controlsDiv.appendChild(toggleLabel);
       controlsDiv.appendChild(shatterButton);
-
       listItem.appendChild(titleDiv);
       listItem.appendChild(unlockDescDiv);
       listItem.appendChild(controlsDiv);
       list.appendChild(listItem);
     });
-
     modalContentContainer.appendChild(list);
   };
-
   const bulkActionHandler = async (actionType) => {
     let confirmNeeded = false;
     let confirmTitleKey = '';
     let confirmMessageKey = '';
     let apiCall = async () => {};
-
     if (actionType === 'activateAll') {
       apiCall = async () => {
         for (const shard of currentShards) {
@@ -209,7 +196,6 @@ export async function showConfigureShardsModal(themeId) {
         currentShards = [];
       };
     }
-
     if (confirmNeeded) {
       const confirmed = await showGenericConfirmModal({
         titleKey: confirmTitleKey,
@@ -218,7 +204,6 @@ export async function showConfigureShardsModal(themeId) {
       });
       if (!confirmed) return;
     }
-
     try {
       await apiCall();
       renderShardList(); // Re-render the list after bulk action
@@ -228,14 +213,12 @@ export async function showConfigureShardsModal(themeId) {
       displayModalError(getUIText('error_api_call_failed', { ERROR_MSG: error.message }), modalContentContainer);
     }
   };
-
   const modalCustomActions = [
     { textKey: 'button_activate_all_shards', className: 'ui-button small', onClick: () => bulkActionHandler('activateAll') },
     { textKey: 'button_deactivate_all_shards', className: 'ui-button small', onClick: () => bulkActionHandler('deactivateAll') },
     { textKey: 'button_reset_world_shards', className: 'ui-button danger small', onClick: () => bulkActionHandler('resetAll') },
     { textKey: 'modal_ok_button', className: 'ui-button primary', onClick: () => hideCustomModal() },
   ];
-
   showCustomModal({
     type: 'custom',
     titleKey: 'modal_title_manage_shards',
@@ -243,7 +226,6 @@ export async function showConfigureShardsModal(themeId) {
     htmlContent: modalContentContainer,
     customActions: modalCustomActions,
   });
-
   // Initial fetch and render of shards
   try {
     const response = await apiService.fetchWorldShards(currentUser.token, themeId);

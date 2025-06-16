@@ -32,6 +32,36 @@ const ALLOWED_MODELS_BY_TIER = {
 };
 
 /**
+ * Checks if the current user is on a free tier but has an active trial period.
+ * @returns {boolean} True if the user is on an active trial, false otherwise.
+ */
+export function isUserOnActiveTrial() {
+  const user = state.getCurrentUser();
+  if (!user || user.tier !== 'free' || !user.trial_expires_at) {
+    return false;
+  }
+  const now = new Date();
+  const expires = new Date(user.trial_expires_at);
+  return expires > now;
+}
+
+/**
+ * Gets the user's effective tier, considering any active trial.
+ * If the user is on the 'free' tier but has an active trial, it returns 'pro'.
+ * @returns {string} The user's effective tier ('anonymous', 'free', 'pro', 'ultra').
+ */
+export function getEffectiveUserTier() {
+    const user = state.getCurrentUser();
+    if (!user) {
+        return 'anonymous';
+    }
+    if (user.tier === 'free' && isUserOnActiveTrial()) {
+        return 'pro'; // On trial, user gets pro features
+    }
+    return user.tier;
+}
+
+/**
  * Handles the user registration process.
  * @param {string} email - User's email.
  * @param {string} password - User's password.
@@ -173,7 +203,7 @@ export async function loadUserPreferences() {
       }
       state.setCurrentAppLanguage(userPrefs.preferred_app_language || DEFAULT_LANGUAGE);
       state.setCurrentNarrativeLanguage(userPrefs.preferred_narrative_language || state.getCurrentAppLanguage());
-      const userTier = currentUser.tier || 'free';
+      const userTier = getEffectiveUserTier();
       const allowedModels = ALLOWED_MODELS_BY_TIER[userTier] || ALLOWED_MODELS_BY_TIER.free;
       if (userPrefs.preferred_model_name && allowedModels.includes(userPrefs.preferred_model_name)) {
         state.setCurrentModelName(userPrefs.preferred_model_name);

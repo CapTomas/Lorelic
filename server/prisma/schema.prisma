@@ -22,6 +22,8 @@ model User {
   // User Tier & Limits
   tier                           String    @default("free")
   apiUsage                       Json      @default("{}") @map("api_usage")
+  trial_started_at               DateTime?
+  trial_expires_at               DateTime?
   // Timestamps & Auth Tokens
   created_at                     DateTime  @default(now())
   updated_at                     DateTime  @updatedAt

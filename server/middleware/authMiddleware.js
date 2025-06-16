@@ -43,6 +43,8 @@ const protect = async (req, res, next) => {
           updated_at: true,
           tier: true,
           apiUsage: true,
+          trial_started_at: true,
+          trial_expires_at: true,
         },
       });
       if (!user) {
@@ -108,6 +110,8 @@ const authenticateOptionally = async (req, res, next) => {
           updated_at: true,
           tier: true,
           apiUsage: true,
+          trial_started_at: true,
+          trial_expires_at: true,
         },
       });
       if (user) {
@@ -125,20 +129,30 @@ const authenticateOptionally = async (req, res, next) => {
   }
   next();
 };
-
 /**
- * Middleware to check if a user has a paid tier subscription ('pro' or 'ultra').
+ * Middleware to check if a user has access to paid features.
+ * This includes users on 'pro' or 'ultra' tiers, or users on an active trial.
  * This should be used *after* the `protect` middleware.
  * @param {import('express').Request} req - The Express request object.
  * @param {import('express').Response} res - The Express response object.
  * @param {import('express').NextFunction} next - The Express next middleware function.
  */
 const checkPaidTier = (req, res, next) => {
-  const userTier = req.user?.tier;
-  if (userTier === 'pro' || userTier === 'ultra') {
+  const user = req.user;
+  // Allow if user has a paid tier
+  if (user.tier === 'pro' || user.tier === 'ultra') {
     return next();
   }
-  logger.warn(`User ${req.user.id} (Tier: ${userTier}) attempted to access a paid feature: ${req.originalUrl}`);
+  // Check for active trial if user is on the free tier
+  if (user.tier === 'free') {
+    const now = new Date();
+    if (user.trial_expires_at && new Date(user.trial_expires_at) > now) {
+      logger.info(`User ${user.id} accessing paid feature on active trial.`);
+      return next(); // Trial is active, grant access
+    }
+  }
+  // If not on a paid tier and trial is not active, deny access
+  logger.warn(`User ${user.id} (Tier: ${user.tier}) attempted to access a paid feature without an active subscription or trial: ${req.originalUrl}`);
   res.status(403).json({
     error: {
       message: 'This feature is only available for premium subscribers.',

@@ -12,7 +12,7 @@ import {
 import { USER_TIERS, constructApiUsageResponse } from '../middleware/usageLimiter.js';
 const router = express.Router();
 const SALT_ROUNDS = 10;
-
+const TRIAL_DURATION_DAYS = 14;
 /**
  * @route   POST /api/v1/auth/register
  * @desc    Register a new user and initiate email confirmation.
@@ -109,6 +109,8 @@ router.post("/register", async (req, res) => {
     logger.debug(`Password hashed for email: ${email}`);
     const confirmationToken = generateSecureToken();
     const confirmationTokenExpiresAt = generateTokenExpiry(24 * 60); // 24 hours
+    const now = new Date();
+    const trialExpiresAt = new Date(now.getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000);
     const newUser = await prisma.user.create({
       data: {
         email: email.toLowerCase(),
@@ -122,11 +124,13 @@ router.post("/register", async (req, res) => {
         email_confirmed: false,
         email_confirmation_token: confirmationToken,
         email_confirmation_expires_at: confirmationTokenExpiresAt,
+        trial_started_at: now,
+        trial_expires_at: trialExpiresAt,
         // apiUsage gets default value from schema
       },
     });
     logger.info(
-      `User registered successfully: ${newUser.email} (ID: ${newUser.id})`
+      `User registered successfully: ${newUser.email} (ID: ${newUser.id}) with a ${TRIAL_DURATION_DAYS}-day trial.`
     );
     const confirmationLink = `${
       process.env.FRONTEND_URL || "http://localhost:" + (process.env.PORT || 3000)
@@ -149,6 +153,8 @@ router.post("/register", async (req, res) => {
         created_at: newUser.created_at,
         email_confirmed: newUser.email_confirmed,
         tier: newUser.tier,
+        trial_started_at: newUser.trial_started_at,
+        trial_expires_at: newUser.trial_expires_at,
       },
     });
   } catch (error) {
@@ -283,6 +289,8 @@ router.post("/login", async (req, res) => {
           created_at: true,
           tier: true,
           apiUsage: true,
+          trial_started_at: true,
+          trial_expires_at: true,
       }
     });
     if (!user) {
@@ -344,7 +352,6 @@ router.post("/login", async (req, res) => {
       logger.info(
         `User logged in successfully: ${user.email} (ID: ${user.id})`
       );
-
       const userForResponse = {
           id: user.id,
           email: user.email,
@@ -358,8 +365,9 @@ router.post("/login", async (req, res) => {
           created_at: user.created_at,
           tier: user.tier,
           api_usage: constructApiUsageResponse(user),
+          trial_started_at: user.trial_started_at,
+          trial_expires_at: user.trial_expires_at,
       };
-
       res.status(200).json({
           message: 'Login successful.',
           token,
@@ -397,7 +405,6 @@ router.get("/me", protect, async (req, res) => {
   logger.info(
     `User data requested for /me by: ${req.user.email} (ID: ${req.user.id})`
   );
-
   const userForResponse = {
     ...req.user,
     api_usage: constructApiUsageResponse(req.user),

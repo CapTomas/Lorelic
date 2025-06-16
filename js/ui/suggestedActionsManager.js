@@ -7,6 +7,7 @@ import { suggestedActionsWrapper, playerActionInput } from './domElements.js';
 import { setCurrentSuggestedActions, getCurrentTheme, getCurrentUser } from '../core/state.js';
 import { autoGrowTextarea } from './uiUtils.js';
 import { handleMullOverShardAction } from '../services/aiService.js';
+import { getEffectiveUserTier } from '../services/authService.js';
 import { log, LOG_LEVEL_DEBUG, LOG_LEVEL_WARN, LOG_LEVEL_ERROR } from '../core/logger.js';
 import { attachTooltip, hideCurrentTooltip } from './tooltipManager.js';
 
@@ -58,11 +59,8 @@ export function displaySuggestedActions(actions, options = {}) {
     header.textContent = options.headerText;
     suggestedActionsWrapper.appendChild(header);
   }
-
-  const currentUser = getCurrentUser();
-  const userTier = currentUser?.tier || 'anonymous';
-  const isPremium = userTier === 'pro' || userTier === 'ultra';
-
+  const effectiveTier = getEffectiveUserTier();
+  const isPremium = effectiveTier === 'pro' || effectiveTier === 'ultra';
   const displayableActions = actions?.slice(0, MAX_SUGGESTED_ACTIONS) || [];
   let premiumSlots = 0;
   if (!isPremium && displayableActions.length >= 3) {
@@ -70,7 +68,6 @@ export function displaySuggestedActions(actions, options = {}) {
   }
   const actionsToRender = displayableActions.slice(0, displayableActions.length - premiumSlots);
   const validActionsToStore = [];
-
   if (actionsToRender.length > 0) {
     actionsToRender.forEach((actionObjOrString) => {
       // Determine action properties from string or object
@@ -142,22 +139,18 @@ export function displaySuggestedActions(actions, options = {}) {
       validActionsToStore.push(actionObjOrString);
     });
   }
-
   // Add premium locked slots
   for (let i = 0; i < premiumSlots; i++) {
       const btn = document.createElement('button');
       btn.classList.add('ui-button', 'premium-locked');
       btn.disabled = true;
-
       const lockIcon = document.createElement('img');
       lockIcon.src = 'images/app/icon_lock.svg';
       lockIcon.className = 'premium-lock-icon';
       btn.appendChild(lockIcon);
-
       attachTooltip(btn, 'tooltip_premium_action_locked');
       suggestedActionsWrapper.appendChild(btn);
   }
-
   setCurrentSuggestedActions(displayableActions);
   log(LOG_LEVEL_DEBUG, `Displayed ${actionsToRender.length} suggested actions and ${premiumSlots} locked slots.`);
 }

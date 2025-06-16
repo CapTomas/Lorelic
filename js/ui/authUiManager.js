@@ -194,10 +194,15 @@ export function showAuthModal(initialMode = 'login') {
                 if (result.actionAfterClose === 'showRegistrationSuccessAlert') {
                     const registeredEmail = result.data?.user?.email || '';
                     _modalManager.showCustomModal({
-                        type: "alert",
-                        titleKey: "alert_registration_success_title",
-                        messageKey: "alert_registration_success_check_email_message",
+                        type: "custom",
+                        titleKey: "alert_welcome_trial_title",
+                        messageKey: "alert_welcome_trial_message",
                         replacements: { USER_EMAIL: registeredEmail },
+                        customActions: [{
+                            textKey: 'button_lets_go',
+                            className: 'ui-button primary',
+                            onClick: () => _modalManager.hideCustomModal()
+                        }]
                     });
                 } else if (currentAuthMode === 'login') {
                     const themeWasActive = result.data?.themeActiveBeforeLoginIfAnon;
@@ -286,30 +291,61 @@ export async function showUserProfileModal() {
             dl.appendChild(dtUsername);
             dl.appendChild(ddUsername);
         }
+        // --- Tier Status ---
         if (currentUser.tier) {
             const dtTier = document.createElement('dt');
-            dtTier.textContent = getUIText("modal_title_manage_subscription");
+            dtTier.textContent = getUIText("label_profile_tier_status");
             const ddTier = document.createElement('dd');
-            const tierContainer = document.createElement('div');
-            tierContainer.className = 'tier-and-manage-button';
-            const tierNameSpan = document.createElement('span');
-            tierNameSpan.className = 'user-tier-display';
-            tierNameSpan.textContent = getUIText(`tier_${currentUser.tier}_name`);
-            tierNameSpan.classList.add(`tier-${currentUser.tier}`);
-            tierContainer.appendChild(tierNameSpan);
-            if (_billingManagerRef) {
-                const manageSubButton = document.createElement('button');
-                manageSubButton.className = 'ui-button small';
-                manageSubButton.textContent = getUIText("button_manage_plan");
-                attachTooltip(manageSubButton, 'tooltip_manage_subscription');
-                manageSubButton.addEventListener('click', () => {
+
+            if (currentUser.tier === 'free' && _authService.isUserOnActiveTrial()) {
+                const now = new Date();
+                const expires = new Date(currentUser.trial_expires_at);
+                const daysRemaining = Math.max(0, Math.ceil((expires - now) / (1000 * 60 * 60 * 24)));
+
+                const trialContainer = document.createElement('div');
+                trialContainer.className = 'tier-and-manage-button';
+
+                const trialStatusSpan = document.createElement('span');
+                trialStatusSpan.className = 'user-tier-display tier-trial';
+                trialStatusSpan.textContent = getUIText('tier_status_trial', { DAYS_REMAINING: daysRemaining });
+                attachTooltip(trialStatusSpan, 'tooltip_trial_status');
+
+                const subscribeButton = document.createElement('button');
+                subscribeButton.className = 'ui-button small primary';
+                subscribeButton.textContent = getUIText("button_subscribe_now");
+                attachTooltip(subscribeButton, 'tooltip_manage_subscription');
+                subscribeButton.addEventListener('click', () => {
                     hideCurrentTooltip();
                     _modalManager.hideCustomModal();
                     _billingManagerRef.showTierSelectionModal();
                 });
-                tierContainer.appendChild(manageSubButton);
+
+                trialContainer.appendChild(trialStatusSpan);
+                trialContainer.appendChild(subscribeButton);
+                ddTier.appendChild(trialContainer);
+            } else {
+                // Standard tier display
+                const tierContainer = document.createElement('div');
+                tierContainer.className = 'tier-and-manage-button';
+                const tierNameSpan = document.createElement('span');
+                tierNameSpan.className = 'user-tier-display';
+                tierNameSpan.textContent = getUIText(`tier_${currentUser.tier}_name`);
+                tierNameSpan.classList.add(`tier-${currentUser.tier}`);
+                tierContainer.appendChild(tierNameSpan);
+                if (_billingManagerRef) {
+                    const manageSubButton = document.createElement('button');
+                    manageSubButton.className = 'ui-button small';
+                    manageSubButton.textContent = getUIText("button_manage_plan");
+                    attachTooltip(manageSubButton, 'tooltip_manage_subscription');
+                    manageSubButton.addEventListener('click', () => {
+                        hideCurrentTooltip();
+                        _modalManager.hideCustomModal();
+                        _billingManagerRef.showTierSelectionModal();
+                    });
+                    tierContainer.appendChild(manageSubButton);
+                }
+                ddTier.appendChild(tierContainer);
             }
-            ddTier.appendChild(tierContainer);
             dl.appendChild(dtTier);
             dl.appendChild(ddTier);
         }
