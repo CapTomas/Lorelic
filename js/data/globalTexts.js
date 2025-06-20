@@ -330,7 +330,7 @@ export const globalTextData = {
     "cs": {
       "toggle_language_aria": "Přepnout jazyk aplikace",
       "system_status_online_short": "Světy čekají",
-      "system_processing_short": "Příběh se tká...",
+      "system_processing_short": "Příběh nabírá tvar...",
       "status_ok": "V provozu",
       "status_warning": "Doporučena opatrnost",
       "status_danger": "Nebezpečí",
