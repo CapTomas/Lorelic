@@ -54,6 +54,7 @@ let _currentRunStats = {
 };
 let _currentInventory = [];
 let _equippedItems = {};
+let _selectedSuggestedAction = null; // Holds the full object of the last clicked suggested action.
 
 // UI & View State
 let _currentPanelStates = {};
@@ -302,6 +303,12 @@ export const setPanelState = (panelId, isExpanded) => {
   _currentPanelStates[panelId] = isExpanded;
 };
 
+/** @returns {object | null} The full object of the last clicked suggested action. */
+export const getSelectedSuggestedAction = () => _selectedSuggestedAction;
+export const setSelectedSuggestedAction = (action) => {
+  _selectedSuggestedAction = action;
+};
+
 /** @returns {object[]} An array of suggested action strings or objects. */
 export const getCurrentSuggestedActions = () => _currentSuggestedActions;
 export const setCurrentSuggestedActions = (actions) => {
@@ -392,6 +399,7 @@ export const clearVolatileGameState = () => {
   _lastKnownDashboardUpdates = {};
   _lastKnownGameStateIndicators = {};
   _currentSuggestedActions = [];
+  _selectedSuggestedAction = null;
   _isInitialGameLoad = true;
   _currentAiPlaceholder = '';
   _currentTurnUnlockData = null;

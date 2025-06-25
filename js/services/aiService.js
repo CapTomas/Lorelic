@@ -359,13 +359,22 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
         .filter(turn => turn.role === 'user' || turn.role === 'model')
         .map(turn => ({ role: turn.role, parts: turn.parts.map(part => ({ text: part.text })) }))
         .slice(-RECENT_INTERACTION_WINDOW_SIZE);
-    const payload = {
+      const payload = {
       contents: historyForAI,
       generationConfig: DEFAULT_GENERATION_CONFIG,
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
       modelName: state.getCurrentModelName(),
     };
+    // Check for a user-initiated dice roll from a selected suggested action.
+    const selectedAction = state.getSelectedSuggestedAction();
+    if (selectedAction && typeof selectedAction === 'object' && selectedAction.dice_roll) {
+        payload.dice_roll_request = [selectedAction.dice_roll];
+        log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+    }
+    // Clear the latched action after it has been attached to the current turn's payload.
+    // This ensures it is only used once.
+    state.setSelectedSuggestedAction(null);
     const token = state.getCurrentUser()?.token || null;
     const responseData = await apiService.callGeminiProxy(payload, token);
     // After a successful API call, check for updated usage stats in the response

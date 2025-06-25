@@ -95,6 +95,8 @@ Your ENTIRE response MUST be a single, valid JSON object. No introductory text, 
     "suggested_actions": [
         // array of 3 short, distinct, and actionable strings. These suggestions should be logical next steps or intriguing options based on the initial scenario.
         // They MUST be in the NARRATIVE language (${currentNarrativeLanguage.toUpperCase()}).
+        // ${suggestedActionsFormat_master_texts}
+
     ],
     "game_state_indicators": {
         ${generated_game_state_indicators}

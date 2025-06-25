@@ -39,6 +39,7 @@ YOUR IMMEDIATE TASK - RENDER A SCENE OF SUDDEN, OVERWHELMING CORRUPTION:
     *   OMIT any field that has NOT changed from its state in the last turn.
 
 3.  **Suggested Actions**: Offer 3 *desperate yet plausible* choices IN THE NARRATIVE LANGUAGE, directly relevant to the flare's current manifestation and the Warden's state. These should be urgent attempts at survival, mitigation, or escape. Avoid generic options; make each a weighty decision.
+        // ${suggestedActionsFormat_master_texts}
 
 4.  **Game State Indicators**: Update the "game_state_indicators" JSON object.
     *   `blight_flare_active`: (boolean) **ABSOLUTELY CRUCIAL:** Set to `false` IF your narrative describes the Blight flare definitively ending or being suppressed to a non-critical, non-immediate threat THIS TURN (due to player action, its own nature, or other narrative events). Otherwise, if the flare persists as an active, immediate crisis, set to `true`. This decision MUST be an undeniable reflection of your narrative's outcome for this turn.

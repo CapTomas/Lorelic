@@ -31,7 +31,8 @@ YOUR IMMEDIATE TASK - BREATHE UNHOLY LIFE INTO THE UNCANNY:
         *   `blight_exposure_level`: (string) **CRUCIAL: If updated, provide ONLY the numerical level as a string (e.g., "1", "2", "3", "4").** If the omen itself feels like a Blight incursion or heightens their sensitivity to it, consider updating this.
     *   OMIT any field that has NOT changed from its state in the last turn (derived from game history).
 3.  **Suggested Actions**: Offer 3 thematic, intriguing, and *desperate* actions IN THE NARRATIVE LANGUAGE. These are the Warden's potential responses to this brush with the unnatural, each carrying its own risk.
-    Examples: "Attempt to decipher the vision's harrowing meaning through forgotten lore.", "Seek a lost ritual of warding to shield against the ill influence, though its price may be steep.", "Cautiously investigate the epicenter of the unsettling whispers, ready for anything.", "Steel your nerves, mutter a half-forgotten prayer, and prepare for the worst the Blight can conjure."
+        // They MUST be in the NARRATIVE language (${currentNarrativeLanguage.toUpperCase()}).
+        // ${suggestedActionsFormat_master_texts}
 4.  **Game State Indicators**: Update the "game_state_indicators" JSON object.
     *   `omen_detected`: (boolean) MUST be `false`. The omen has manifested its horror; this flag is now cleared, returning the game to its default flow for the next player action, leaving behind its psychic residue.
     *   `blight_flare_active`: (boolean) Set to `true` IF the omen itself *is* or *triggers* an immediate Blight surge (e.g., the omen is a physical manifestation of Blight), otherwise maintain previous state.

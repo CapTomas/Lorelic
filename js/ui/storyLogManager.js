@@ -40,8 +40,9 @@ function _adjustPlayerMessageWidthForDice(playerMessageElement, diceContainerEle
 /**
  * Renders a dice roll animation next to the last player message.
  * It creates a visual representation for each die rolled in each notation.
- * @param {Array<object>} rollResults - The results from the dice roller.
+ * @param {Array<object>} rollResults - The results from the dice roller, including success status.
  * @param {boolean} [skipAnimation=false] - If true, renders the dice instantly without animation.
+ * @returns {Promise<void>} A promise that resolves when the rendering and animations are complete.
  */
 export function renderDiceRoll(rollResults, skipAnimation = false) {
     return new Promise(resolve => {
@@ -54,88 +55,93 @@ export function renderDiceRoll(rollResults, skipAnimation = false) {
             resolve();
             return;
         }
-        // Remove any existing dice container from this message
+
         const existingContainer = lastPlayerMessage.querySelector('.dice-roll-container');
         if (existingContainer) {
             existingContainer.remove();
         }
+
         lastPlayerMessage.classList.add('has-dice-roll');
         const mainContainer = document.createElement('div');
         mainContainer.className = 'dice-roll-container';
-        if (skipAnimation) {
-            rollResults.forEach(roll => {
-                if (roll.error || !roll.rolls || roll.rolls.length === 0) {
+
+        const allRollInstancesFinished = [];
+
+        rollResults.forEach(roll => {
+            if (roll.error || !roll.rolls || roll.rolls.length === 0) return;
+
+            const rollInstancePromise = new Promise(rollInstanceResolve => {
+                const instance = document.createElement('div');
+                instance.className = 'dice-roll-instance';
+
+                // Tooltip
+                const tooltipText = (typeof roll.target === 'number')
+                    ? `${roll.notation} ${roll.comparison} ${roll.target} → Rolled: ${roll.result} `
+                    : `${roll.notation} → Rolled: ${roll.result}`;
+                attachTooltip(instance, null, {}, { rawText: tooltipText });
+
+                // Instant render for history
+                if (skipAnimation) {
+                    instance.classList.add(roll.success ? 'success' : 'failure', 'settled');
+                    roll.rolls.forEach(dieValue => {
+                        const diceEl = document.createElement('div');
+                        diceEl.className = 'dice';
+                        diceEl.textContent = dieValue;
+                        instance.appendChild(diceEl);
+                    });
+                    mainContainer.appendChild(instance);
+                    rollInstanceResolve();
                     return;
                 }
-                const notationGroup = document.createElement('div');
-                notationGroup.className = 'dice-notation-group';
-                const modifierString = roll.modifier !== 0 ? (roll.modifier > 0 ? ` + ${roll.modifier}` : ` - ${Math.abs(roll.modifier)}`) : '';
-                const tooltipText = `${roll.notation} → ${roll.rolls.join(' + ')}${modifierString} = ${roll.result}`;
-                attachTooltip(notationGroup, null, {}, { rawText: tooltipText });
-                roll.rolls.forEach(dieValue => {
-                    const diceEl = document.createElement('div');
-                    diceEl.className = 'dice'; // Use only the base class to avoid highlight animation
-                    diceEl.textContent = dieValue;
-                    notationGroup.appendChild(diceEl);
+
+                // Animated render
+                mainContainer.appendChild(instance);
+
+                const individualDiePromises = roll.rolls.map(dieValue => {
+                    return new Promise(dieResolve => {
+                        const diceEl = document.createElement('div');
+                        diceEl.className = 'dice is-rolling';
+                        diceEl.textContent = '?';
+                        instance.appendChild(diceEl);
+
+                        const updateInterval = 100;
+                        let elapsed = 0;
+                        const animationDuration = 1500;
+
+                        const intervalId = setInterval(() => {
+                            const randomFlicker = Math.floor(Math.random() * (roll.sides || 20)) + 1;
+                            diceEl.textContent = randomFlicker;
+                            elapsed += updateInterval;
+                            if (elapsed >= animationDuration) {
+                                clearInterval(intervalId);
+                                diceEl.textContent = dieValue;
+                                diceEl.classList.remove('is-rolling');
+                                dieResolve();
+                            }
+                        }, updateInterval);
+                    });
                 });
-                mainContainer.appendChild(notationGroup);
-            });
-            if (mainContainer.hasChildNodes()) {
-                lastPlayerMessage.prepend(mainContainer);
-                log(LOG_LEVEL_DEBUG, 'Dice roll rendered instantly from history.');
-                _adjustPlayerMessageWidthForDice(lastPlayerMessage, mainContainer);
-            }
-            resolve();
-            return;
-        }
-        const animationDuration = 2000; // ms
-        const allDicePromises = [];
-        rollResults.forEach(roll => {
-            if (roll.error || !roll.rolls || roll.rolls.length === 0) {
-                return;
-            }
-            const notationGroup = document.createElement('div');
-            notationGroup.className = 'dice-notation-group';
-            // Tooltip for the whole group
-            const modifierString = roll.modifier !== 0 ? (roll.modifier > 0 ? ` + ${roll.modifier}` : ` - ${Math.abs(roll.modifier)}`) : '';
-            const tooltipText = `${roll.notation} → ${roll.rolls.join(' + ')}${modifierString} = ${roll.result}`;
-            attachTooltip(notationGroup, null, {}, { rawText: tooltipText });
-            // Create a promise for each individual die in the group
-            roll.rolls.forEach(dieValue => {
-                const diePromise = new Promise(diceResolve => {
-                    const diceEl = document.createElement('div');
-                    diceEl.className = 'dice is-rolling';
-                    diceEl.textContent = '?';
-                    notationGroup.appendChild(diceEl);
-                    const updateInterval = 100; // ms
-                    let elapsed = 0;
-                    const intervalId = setInterval(() => {
-                        // Show random numbers during animation based on the die's sides.
-                        const randomFlicker = Math.floor(Math.random() * (roll.sides || 20)) + 1;
-                        diceEl.textContent = randomFlicker;
-                        elapsed += updateInterval;
-                        if (elapsed >= animationDuration) {
-                            clearInterval(intervalId);
-                            diceEl.textContent = dieValue; // Set final individual die value
-                            diceEl.classList.remove('is-rolling');
-                            diceEl.classList.add('is-settled');
-                            diceResolve();
-                        }
-                    }, updateInterval);
+
+                Promise.all(individualDiePromises).then(() => {
+                    setTimeout(() => {
+                        instance.classList.add(roll.success ? 'success' : 'failure');
+                        setTimeout(() => {
+                            instance.classList.add('settled');
+                            rollInstanceResolve();
+                        }, 1200); // Duration of success/fail flash + fade
+                    }, 100); // Short delay before flash
                 });
-                allDicePromises.push(diePromise);
             });
-            mainContainer.appendChild(notationGroup);
+            allRollInstancesFinished.push(rollInstancePromise);
         });
+
         if (mainContainer.hasChildNodes()) {
             lastPlayerMessage.prepend(mainContainer);
-            log(LOG_LEVEL_DEBUG, 'Dice roll animation rendered for individual dice.');
+            log(LOG_LEVEL_DEBUG, 'Dice roll display rendered.');
             _adjustPlayerMessageWidthForDice(lastPlayerMessage, mainContainer);
-        } else {
-            resolve(); // No valid rolls to render
-            return;
         }
-        Promise.all(allDicePromises).then(() => {
+
+        Promise.all(allRollInstancesFinished).then(() => {
             resolve();
         });
     });

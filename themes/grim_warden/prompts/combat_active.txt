@@ -84,9 +84,9 @@ Your response MUST be a single, perfectly structured JSON object as follows:
     // (string: string) Key-value pairs for dashboard items explicitly CHANGED this turn.
   },
   "suggested_actions": [
-    "string (Action 1)",
-    "string (Action 2)",
-    "string (Action 3, optional)"
+    // array of 3 short, distinct, and actionable options.
+    // They MUST be in the NARRATIVE language (${currentNarrativeLanguage.toUpperCase()}).
+    // ${suggestedActionsFormat_master_texts}
   ],
   "game_state_indicators": {
     // (string: boolean/string) Key-value pairs for game state flags.

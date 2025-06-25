@@ -1,7 +1,7 @@
 /**
  * @file Provides robust dice rolling utility for D&D style notations.
  * Supports standard rolls (e.g., '2d6'), modifiers ('1d20+5'),
- * advantage ('a2d20'), and disadvantage ('d2d20').
+ * advantage ('a2d20'), disadvantage ('d2d20'), and success checking.
  */
 import logger from './logger.js';
 
@@ -24,20 +24,16 @@ function _parseNotation(notation) {
     // ([+-]\d+)?$ - Optional modifier at the end (e.g., '+5', '-2').
     const diceRegex = /^(a|d)?(\d*)d(\d+)([+-]\d+)?$/i;
     const match = notation.toLowerCase().match(diceRegex);
-
     if (!match) {
         logger.warn(`[DiceRoller] Invalid dice notation provided: ${notation}`);
         return null;
     }
-
     const count = match[2] ? parseInt(match[2], 10) : 1;
-
     // For advantage/disadvantage, the dice count must be 2.
     if (match[1] && count !== 2) {
         logger.warn(`[DiceRoller] Advantage/Disadvantage notation requires 2 dice (e.g., a2d20). Received: ${notation}`);
         return null;
     }
-
     return {
         advDis: match[1] || null, // 'a' or 'd'
         count: count,
@@ -58,12 +54,17 @@ function _rollDie(sides) {
 }
 
 /**
- * Executes a single parsed dice roll instruction.
+ * Executes a single parsed dice roll instruction and checks for success.
  * @private
- * @param {object} parsed - The parsed dice notation object from _parseNotation.
- * @returns {object} An object containing the individual rolls, modifier, and final result.
+ * @param {object} rollConfig - The dice roll configuration object ({ notation, target, comparison }).
+ * @returns {object} An object containing the individual rolls, modifier, result, and success status.
  */
-function _executeSingleRoll(parsed) {
+function _executeSingleRoll(rollConfig) {
+    const parsed = _parseNotation(rollConfig.notation);
+    if (!parsed) {
+        return { notation: rollConfig.notation, error: 'Invalid dice notation' };
+    }
+
     const rolls = [];
     for (let i = 0; i < parsed.count; i++) {
         rolls.push(_rollDie(parsed.sides));
@@ -78,34 +79,49 @@ function _executeSingleRoll(parsed) {
         result = rolls.reduce((sum, roll) => sum + roll, 0) + parsed.modifier;
     }
 
+    let success = false;
+    const comparison = rollConfig.comparison || '>=';
+    // Ensure target is always treated as a number for calculations and response.
+    const target = (rollConfig.target !== undefined && rollConfig.target !== null) ? parseInt(String(rollConfig.target), 10) : undefined;
+
+    if (typeof target === 'number' && !isNaN(target)) {
+        switch (comparison) {
+            case '>=': success = result >= target; break;
+            case '<=': success = result <= target; break;
+            case '>':  success = result > target; break;
+            case '<':  success = result < target; break;
+            default:   success = result >= target; // Default comparison
+        }
+    }
+
     return {
+        notation: rollConfig.notation,
+        sides: parsed.sides,
         rolls,
         modifier: parsed.modifier,
         result,
+        success,
+        target: (typeof target === 'number' && !isNaN(target)) ? target : undefined, // Return a clean number or undefined
+        comparison,
     };
 }
 
 /**
- * Takes an array of dice notations, executes each roll, and returns the structured results.
- * @param {string[]} notations - An array of dice roll strings (e.g., ['1d20+2', 'a2d20', '4d6']).
- * @returns {object[]} An array of result objects for each notation.
+ * Takes an array of dice roll configurations, executes each roll, and returns the structured results.
+ * @param {Array<object>} rollConfigs - An array of objects, each like { notation, target, comparison }.
+ * @returns {object[]} An array of result objects for each configuration.
  */
-export function executeRolls(notations) {
-    if (!Array.isArray(notations)) {
-        logger.error('[DiceRoller] executeRolls received a non-array input:', notations);
-        return [{ error: 'Invalid input: Expected an array of dice notations.' }];
+export function executeRolls(rollConfigs) {
+    if (!Array.isArray(rollConfigs)) {
+        logger.error('[DiceRoller] executeRolls received a non-array input:', rollConfigs);
+        return [{ error: 'Invalid input: Expected an array of dice roll configurations.' }];
     }
-    logger.info(`[DiceRoller] Executing rolls for notations:`, notations);
-    return notations.map(notation => {
-        const parsed = _parseNotation(notation);
-        if (!parsed) {
-            return { notation, error: 'Invalid dice notation' };
+    logger.info(`[DiceRoller] Executing rolls for configs:`, rollConfigs);
+
+    return rollConfigs.map(config => {
+        if (typeof config !== 'object' || !config.notation) {
+            return { notation: config, error: 'Invalid roll configuration, must be an object with a notation property.' };
         }
-        const rollResult = _executeSingleRoll(parsed);
-        return {
-            notation,
-            sides: parsed.sides,
-            ...rollResult,
-        };
+        return _executeSingleRoll(config);
     });
 }

@@ -4,7 +4,12 @@
 
 // --- IMPORTS ---
 import { suggestedActionsWrapper, playerActionInput } from './domElements.js';
-import { setCurrentSuggestedActions, getCurrentTheme, getCurrentUser } from '../core/state.js';
+import {
+  setCurrentSuggestedActions,
+  getCurrentTheme,
+  getCurrentUser,
+  setSelectedSuggestedAction,
+} from '../core/state.js';
 import { autoGrowTextarea } from './uiUtils.js';
 import { handleMullOverShardAction } from '../services/aiService.js';
 import { getEffectiveUserTier } from '../services/authService.js';
@@ -43,6 +48,7 @@ export function initSuggestedActionsManager(dependencies = {}) {
  *     - `{ text: string, displayText: string, descriptionForTooltip: string, isBoonChoice: boolean }`
  *     - `{ text: string, isTemporaryMullOver: boolean, shardData: object }`
  *     - `{ text: string, isDefeatAction: boolean }`
+ *     - `{ text: string, dice_roll: { notation: string, target: number, comparison: string } }`
  * @param {object} [options={}] - Optional parameters for display.
  * @param {string} [options.headerText] - Text to display as a header above the buttons.
  */
@@ -81,6 +87,7 @@ export function displaySuggestedActions(actions, options = {}) {
         isBoonChoice = false,
         isTraitChoice = false,
         isDefeatAction = false,
+        dice_roll = null,
       } = isObject ? actionObjOrString : {};
       const isBoonOrTrait = isBoonChoice || isTraitChoice;
       if (!actionText?.trim()) {
@@ -94,11 +101,18 @@ export function displaySuggestedActions(actions, options = {}) {
       if (isDefeatAction) btn.classList.add('defeat-action-button');
       btn.textContent = buttonDisplayText;
       btn.removeAttribute('title');
-      if (tooltipText) {
-        attachTooltip(btn, null, {}, { rawText: tooltipText });
+      let finalTooltipText = tooltipText;
+      if (dice_roll && dice_roll.notation && typeof dice_roll.target === 'number') {
+          const comparison = dice_roll.comparison || '>=';
+          const rollString = `Roll: ${dice_roll.notation} ${comparison} ${dice_roll.target}`;
+          finalTooltipText = finalTooltipText ? `${finalTooltipText}\n${rollString}` : rollString;
+      }
+      if (finalTooltipText) {
+        attachTooltip(btn, null, {}, { rawText: finalTooltipText });
       }
       btn.addEventListener('click', () => {
         hideCurrentTooltip();
+        setSelectedSuggestedAction(actionObjOrString);
         // --- Defeat Action ---
         if (isDefeatAction) {
           const themeId = getCurrentTheme();

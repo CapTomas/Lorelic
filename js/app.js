@@ -184,6 +184,17 @@ async function _initializeApp() {
       }
     });
     dom.playerActionInput.addEventListener('input', uiUtils.handlePlayerActionInput);
+    // Add listener to clear selected suggested action if user types something else
+    dom.playerActionInput.addEventListener('input', () => {
+      const selectedAction = state.getSelectedSuggestedAction();
+      if (selectedAction) {
+        const actionText = (typeof selectedAction === 'object' && selectedAction.text) ? selectedAction.text : selectedAction;
+        if (dom.playerActionInput.value !== actionText) {
+          state.setSelectedSuggestedAction(null);
+          log(LOG_LEVEL_DEBUG, 'Player input changed, detaching suggested action metadata.');
+        }
+      }
+    });
     uiUtils.handlePlayerActionInput({ target: dom.playerActionInput });
   }
   if (dom.storyLog) {

@@ -89,8 +89,9 @@ ${jsonOutput_master_texts}
     ${generated_dashboard_description}
     },
     "suggested_actions": [
-        // array of 3 short, distinct, and actionable strings. These suggestions should be logical next steps or intriguing options based on the initial scenario.
+        // array of 3 short, distinct, and actionable options.
         // They MUST be in the NARRATIVE language (${currentNarrativeLanguage.toUpperCase()}).
+        // ${suggestedActionsFormat_master_texts}
     ],
     "game_state_indicators": {
         ${generated_game_state_indicators}

@@ -2681,25 +2681,42 @@ button.ui-button.danger:hover {
     display: flex;
     flex-direction: column; /* Stack multiple notations vertically */
     align-items: flex-end; /* Align dice groups to the right */
-    gap: var(--spacing-md); /* Gap between different notations */
+    gap: var(--spacing-sm); /* Gap between different notations */
     z-index: 5;
 }
-.dice-notation-group {
+
+.dice-roll-instance {
     display: flex;
-    gap: var(--spacing-xs); /* Gap between individual dice in a group */
-    cursor: help; /* Indicates the tooltip with roll details */
-    padding: 4px;
+    gap: var(--spacing-xs);
+    cursor: help;
+    padding: var(--spacing-xs);
+    border: 2px solid var(--color-text-muted);
     border-radius: var(--radius-sm);
-    transition: background-color var(--transition-fast);
+    background-color: var(--color-bg-input-field);
+    transition: all 0.5s ease-out;
 }
-.dice-notation-group:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+
+.dice-roll-instance.success {
+    animation: flash-success 1.2s ease-in-out;
 }
+
+.dice-roll-instance.failure {
+    animation: flash-failure 1.2s ease-in-out;
+}
+
+.dice-roll-instance.success.settled {
+    border-color: var(--color-accent-meter-green);
+}
+
+.dice-roll-instance.failure.settled {
+    border-color: var(--color-accent-meter-red);
+}
+
 .dice {
     width: 35px;
     height: 35px;
-    background-color: var(--color-bg-input-field);
-    border: 2px solid var(--color-text-muted);
+    background-color: var(--color-bg-panel);
+    border: 1px solid transparent; /* Simple inner border */
     border-radius: var(--radius-xs);
     display: flex;
     align-items: center;
@@ -2711,14 +2728,12 @@ button.ui-button.danger:hover {
     user-select: none;
     transition: all 0.3s ease-in-out;
 }
+
 .dice.is-rolling {
     animation: roll-the-dice 0.1s infinite steps(1, end);
-    border-color: var(--color-accent-main);
     color: var(--color-text-primary);
 }
-.dice.is-settled {
-    animation: settled-dice-fade 5s forwards ease-in-out;
-}
+
 @keyframes roll-the-dice {
     0% { transform: translate(1px, 1px) rotate(2deg); }
     25% { transform: translate(-1px, -1px) rotate(-2deg); }
@@ -2726,19 +2741,26 @@ button.ui-button.danger:hover {
     75% { transform: translate(1px, -1px) rotate(-1deg); }
     100% { transform: translate(0, 0) rotate(0); }
 }
-@keyframes settled-dice-fade {
-    0%, 30% {
-				border-color: var(--color-accent-main);
-				color: var(--color-accent-main-light);
-    		box-shadow: 0 0 10px rgba(var(--color-accent-main-rgb), 0.5);
-        transform: scale(1.1);
-    }
-    100% {
-        background-color: var(--color-bg-input-field);
+
+@keyframes flash-success {
+    0%, 100% {
         border-color: var(--color-text-muted);
-        color: var(--color-text-secondary);
         box-shadow: none;
-        transform: scale(1.0);
+    }
+    50% {
+        border-color: var(--color-accent-meter-green);
+        box-shadow: 0 0 12px rgba(var(--color-accent-meter-green-rgb), 0.7);
+    }
+}
+
+@keyframes flash-failure {
+    0%, 100% {
+        border-color: var(--color-text-muted);
+        box-shadow: none;
+    }
+    50% {
+        border-color: var(--color-accent-meter-red);
+        box-shadow: 0 0 12px rgba(var(--color-accent-meter-red-rgb), 0.7);
     }
 }
 /* Custom property for animating the gradient angle. A modern CSS feature. */
