@@ -95,9 +95,7 @@ export function executeRolls(notations) {
         logger.error('[DiceRoller] executeRolls received a non-array input:', notations);
         return [{ error: 'Invalid input: Expected an array of dice notations.' }];
     }
-
     logger.info(`[DiceRoller] Executing rolls for notations:`, notations);
-
     return notations.map(notation => {
         const parsed = _parseNotation(notation);
         if (!parsed) {
@@ -106,6 +104,7 @@ export function executeRolls(notations) {
         const rollResult = _executeSingleRoll(parsed);
         return {
             notation,
+            sides: parsed.sides,
             ...rollResult,
         };
     });
