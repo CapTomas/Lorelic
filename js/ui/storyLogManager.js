@@ -19,6 +19,66 @@ let userHasManuallyScrolledLog = false;
 // --- RENDERING ---
 
 /**
+ * Renders a dice roll animation next to the last player message.
+ * @param {Array<object>} rollResults - The results from the dice roller.
+ * @returns {Promise<void>} A promise that resolves when all dice animations are complete.
+ */
+export function renderDiceRoll(rollResults) {
+    return new Promise(resolve => {
+        if (!storyLog || !rollResults || !rollResults.length) {
+            resolve();
+            return;
+        }
+        const lastPlayerMessage = storyLog.querySelector('.player-message:last-of-type');
+        if (!lastPlayerMessage) {
+            resolve();
+            return;
+        }
+        // Remove any existing dice container from this message
+        const existingContainer = lastPlayerMessage.querySelector('.dice-roll-container');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+        lastPlayerMessage.classList.add('has-dice-roll');
+        const container = document.createElement('div');
+        container.className = 'dice-roll-container';
+        const animationDuration = 2000; // ms
+        const promises = rollResults.map(roll => {
+            return new Promise(diceResolve => {
+                if (roll.error) {
+                    diceResolve();
+                    return;
+                }
+                const diceEl = document.createElement('div');
+                diceEl.className = 'dice is-rolling';
+                diceEl.textContent = '?';
+                container.appendChild(diceEl);
+                const updateInterval = 100; // ms
+                let elapsed = 0;
+                const intervalId = setInterval(() => {
+                    // Show random numbers during animation
+                    const d20Roll = Math.floor(Math.random() * 20) + 1;
+                    diceEl.textContent = d20Roll;
+                    elapsed += updateInterval;
+                    if (elapsed >= animationDuration) {
+                        clearInterval(intervalId);
+                        diceEl.textContent = roll.result;
+                        diceEl.classList.remove('is-rolling');
+                        diceEl.classList.add('is-settled');
+                        diceResolve(); // Resolve this die's animation promise
+                    }
+                }, updateInterval);
+            });
+        });
+        lastPlayerMessage.prepend(container);
+        log(LOG_LEVEL_DEBUG, 'Dice roll animation rendered.');
+        Promise.all(promises).then(() => {
+            resolve(); // Resolve the main promise when all dice are done
+        });
+    });
+}
+
+/**
  * Renders a message to the story log DOM.
  * This function does NOT modify game state/history. It's the core display
  * logic used for both new messages and re-populating from history.

@@ -790,14 +790,12 @@ async function _setupNewGameEnvironment(themeId) {
  */
 export async function processPlayerAction(actionText, isGameStartingAction = false) {
     log(LOG_LEVEL_INFO, `Processing player action: "${actionText.substring(0, 50)}..."`);
-
     if (state.getIsInitialTraitSelectionPending()) {
         const traitAction = state.getCurrentSuggestedActions().find(action => action?.isTraitChoice && action.text === actionText);
         if (traitAction) return _handleInitialTraitSelection(traitAction.traitKey);
         storyLogManager.addMessageToLog(localizationService.getUIText("error_invalid_boon_choice"), "system system-error");
         return _presentInitialTraitChoices();
     }
-
     if (state.getIsBoonSelectionPending()) {
         const boonAction = state.getCurrentSuggestedActions().find(action => action?.isBoonChoice && action.text === actionText);
         if (boonAction) return _handleBoonSelection(boonAction.boonId, boonAction.text);
@@ -805,7 +803,6 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
         _boonSelectionContext.step.startsWith('secondary') ? _presentSecondaryBoonChoices(_boonSelectionContext.step.replace('secondary_', '')) : _presentPrimaryBoonChoices();
         return;
     }
-
     let worldShardsPayload = "[]";
     if (isGameStartingAction && state.getCurrentNewGameSettings()?.useEvolvedWorld) {
         const currentUser = state.getCurrentUser();
@@ -825,7 +822,6 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             }
         }
     }
-
     if (!isGameStartingAction) {
         storyLogManager.renderMessage(actionText, "player");
         state.addTurnToGameHistory({ role: "user", parts: [{ text: actionText }] });
@@ -834,17 +830,18 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             dom.playerActionInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
     }
-
     uiUtils.setGMActivityIndicator(true);
     suggestedActionsManager.clearSuggestedActions();
     dashboardManager.clearAllDashboardItemDotClasses();
     storyLogManager.showLoadingIndicator();
-
     try {
         const fullAiResponse = await aiService.processAiTurn(actionText, worldShardsPayload);
-        storyLogManager.removeLoadingIndicator();
-
+                storyLogManager.removeLoadingIndicator();
         if (fullAiResponse) {
+            // Render dice roll animation if results are present in the response
+            if (fullAiResponse.dice_roll_results) {
+                await storyLogManager.renderDiceRoll(fullAiResponse.dice_roll_results);
+            }
             // Process response data
             const updatesFromAI = fullAiResponse.dashboard_updates || {};
             if (fullAiResponse.new_item_generated) {
@@ -860,9 +857,7 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             if (fullAiResponse.new_persistent_lore_unlock) {
                 characterPanelManager.triggerIconAnimation('lore');
             }
-
             state.setLastKnownDashboardUpdates(updatesFromAI);
-
             // Render UI
             storyLogManager.renderMessage(fullAiResponse.narrative, "gm");
             dashboardManager.updateDashboard(updatesFromAI);
@@ -871,7 +866,6 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             suggestedActionsManager.displaySuggestedActions(state.getCurrentSuggestedActions());
             handleGameStateIndicatorsChange(state.getLastKnownGameStateIndicators());
             if (dom.playerActionInput) dom.playerActionInput.placeholder = state.getCurrentAiPlaceholder() || localizationService.getUIText("placeholder_command");
-
             // Post-turn logic
             if (state.getCurrentRunStats().currentIntegrity <= 0 && !state.getCurrentSuggestedActions()?.[0]?.isDefeatAction) {
                 await _handleCharacterDefeat();

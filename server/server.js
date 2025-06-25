@@ -12,6 +12,7 @@ import userRoutes from './routes/user.js';
 import gameStateRoutes from './routes/gamestates.js';
 import themeInteractionRoutes from './routes/themeInteractions.js';
 import worldShardRoutes from './routes/worldShards.js';
+import { executeRolls } from './utils/diceRoller.js';
 import { protect, authenticateOptionally } from './middleware/authMiddleware.js';
 import { limitApiUsage } from './middleware/usageLimiter.js';
 const __filename = fileURLToPath(import.meta.url);
@@ -146,95 +147,141 @@ function mapGeminiError(status, message) {
   return errorMappings[status] || message || 'An unknown error occurred with the AI service.';
 }
 app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, validateGeminiRequest, async (req, res) => {
-  logger.info(`POST /api/v1/gemini/generate - Request from User ID: ${req.user?.id || 'Anonymous'}, IP: ${req.ip}`);
-  const geminiApiKey = process.env.GEMINI_API_KEY;
-  if (!geminiApiKey) {
-    logger.error('GEMINI_API_KEY is not set in environment variables.');
-    return res.status(500).json({
-      error: { message: 'API key not configured on server. Cannot connect to AI service.', code: 'MISSING_API_KEY' },
-    });
-  }
-  const { contents, generationConfig, safetySettings, systemInstruction, modelName } = req.body;
-  const effectiveModelName = modelName || 'gemini-1.5-flash-latest';
-  const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${effectiveModelName}:generateContent?key=${geminiApiKey}`;
-  const payload = {
-    contents,
-    ...(generationConfig && { generationConfig }),
-    ...(safetySettings && { safetySettings }),
-    ...(systemInstruction && { systemInstruction }),
-  };
-  logger.debug(`Proxying request to Gemini. Model: ${effectiveModelName}, User: ${req.user?.id || 'Anonymous'}`);
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), process.env.GEMINI_TIMEOUT || 45000);
-  try {
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': `Lorelic-Server/${process.env.npm_package_version || '1.0.0'}`,
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    };
-    const googleResponse = await fetch(GOOGLE_API_URL, fetchOptions);
-    clearTimeout(timeoutId);
-    logger.debug(`Gemini API response status: ${googleResponse.status} for User ID: ${req.user?.id || 'Anonymous'}`);
-    const responseText = await googleResponse.text();
-    let responseData;
+    logger.info(`POST /api/v1/gemini/generate - Request from User ID: ${req.user?.id || 'Anonymous'}, IP: ${req.ip}`);
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    if (!geminiApiKey) {
+        logger.error('GEMINI_API_KEY is not set in environment variables.');
+        return res.status(500).json({ error: { message: 'API key not configured on server.', code: 'MISSING_API_KEY' } });
+    }
+    const { contents, generationConfig, safetySettings, systemInstruction, modelName } = req.body;
+    if (generationConfig && generationConfig.responseMimeType) {
+      delete generationConfig.responseMimeType;
+    }
+    const effectiveModelName = modelName || 'gemini-1.5-flash-latest';
+    const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${effectiveModelName}:generateContent?key=${geminiApiKey}`;
+    // Define the tool for the AI to use
+    const tools = [{
+        functionDeclarations: [{
+            name: "rollDice",
+            description: "Rolls one or more dice based on standard D&D notation (e.g., '1d20', '3d6+2', 'a2d20' for advantage). Returns the individual rolls and the final result for each notation provided.",
+            parameters: {
+                type: "OBJECT",
+                properties: {
+                    notations: {
+                        type: "ARRAY",
+                        description: "An array of strings, where each string is a dice roll notation.",
+                        items: { type: "STRING" }
+                    }
+                },
+                required: ["notations"]
+            }
+        }]
+    }];
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), process.env.GEMINI_TIMEOUT || 45000);
     try {
-      responseData = JSON.parse(responseText);
-    } catch (parseError) {
-      logger.error('Failed to parse Gemini JSON response:', {
-        user: req.user?.id,
-        rawTextLength: responseText.length,
-        rawTextSnippet: responseText.substring(0, 500) + (responseText.length > 500 ? '...' : ''),
-        parseError: parseError.message,
-      });
-      return res.status(502).json({
-        error: { message: 'Invalid JSON response from AI service.', code: 'INVALID_AI_RESPONSE_FORMAT' },
-      });
+        let conversationHistory = [...contents];
+        let finalResponseData = null;
+        let lastDiceRollResults = null;
+        const MAX_TURNS = 5; // Safety break for tool-use loops
+        for (let turn = 0; turn < MAX_TURNS; turn++) {
+            const payload = {
+                contents: conversationHistory,
+                tools: tools,
+                ...(generationConfig && { generationConfig }),
+                ...(safetySettings && { safetySettings }),
+                ...(systemInstruction && { systemInstruction }),
+            };
+            logger.debug(`[Turn ${turn + 1}] Proxying request to Gemini. Model: ${effectiveModelName}, User: ${req.user?.id || 'Anonymous'}`);
+            const fetchOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'User-Agent': `Lorelic-Server/${process.env.npm_package_version || '1.0.0'}` },
+                body: JSON.stringify(payload),
+                signal: controller.signal,
+            };
+            const googleResponse = await fetch(GOOGLE_API_URL, fetchOptions);
+            const responseText = await googleResponse.text();
+            let currentTurnResponseData;
+            try {
+                currentTurnResponseData = JSON.parse(responseText);
+            } catch (parseError) {
+                logger.error('Failed to parse Gemini JSON response:', { rawTextSnippet: responseText.substring(0, 500) });
+                return res.status(502).json({ error: { message: 'Invalid JSON response from AI service.', code: 'INVALID_AI_RESPONSE_FORMAT' } });
+            }
+            if (!googleResponse.ok) {
+                logger.error(`Error from Gemini API (Status: ${googleResponse.status})`, currentTurnResponseData);
+                const mappedErrorMessage = mapGeminiError(googleResponse.status, currentTurnResponseData?.error?.message);
+                return res.status(googleResponse.status).json({ error: { message: mappedErrorMessage, code: currentTurnResponseData?.error?.code || `EXTERNAL_API_ERROR_${googleResponse.status}` } });
+            }
+            const candidate = currentTurnResponseData.candidates?.[0];
+            if (!candidate) {
+                logger.warn('Unexpected Gemini response structure (no candidates)', currentTurnResponseData);
+                return res.status(502).json({ error: { message: 'Unexpected response format from AI service (no candidates).', code: 'INVALID_AI_RESPONSE_STRUCTURE' } });
+            }
+            if (candidate.content?.parts?.[0]?.text) {
+                logger.info(`[Turn ${turn + 1}] Received final text response from AI.`);
+                finalResponseData = currentTurnResponseData;
+                break; // Exit loop, we have our final answer
+            }
+            if (candidate.content?.parts?.[0]?.functionCall) {
+                logger.info(`[Turn ${turn + 1}] Received function call from AI.`);
+                const functionCall = candidate.content.parts[0].functionCall;
+                // Add the AI's function call to history for the next turn
+                conversationHistory.push(candidate.content);
+                if (functionCall.name === 'rollDice') {
+                    const notations = functionCall.args?.notations || [];
+                    const diceResults = executeRolls(notations);
+                    lastDiceRollResults = diceResults; // Store the results for the final response
+                    // Add the function execution result to history
+                    conversationHistory.push({
+                        role: "tool",
+                        parts: [{
+                            functionResponse: {
+                                name: "rollDice",
+                                response: {
+                                    content: JSON.stringify(diceResults),
+                                }
+                            }
+                        }]
+                    });
+                    logger.debug(`[Turn ${turn + 1}] Executed rollDice function. Results:`, diceResults);
+                } else {
+                    logger.warn(`[Turn ${turn + 1}] AI called an unknown function: ${functionCall.name}`);
+                    // To prevent loops, we'll break and respond with an error.
+                    return res.status(501).json({ error: { message: `AI requested an unsupported function: ${functionCall.name}`, code: 'UNSUPPORTED_FUNCTION_CALL' } });
+                }
+                continue; // Continue to the next turn of the conversation
+            }
+            // If we get here, the response was valid but didn't contain text or a function call we can handle.
+            logger.warn(`[Turn ${turn + 1}] AI response was valid but contained no actionable content. Breaking loop.`);
+            finalResponseData = currentTurnResponseData; // Send what we got
+            break;
+        }
+        clearTimeout(timeoutId);
+        if (!finalResponseData) {
+            logger.error('AI conversation loop finished without a final response.');
+            return res.status(500).json({ error: { message: 'AI failed to produce a final response after function calls.', code: 'AI_CONVERSATION_TIMEOUT' } });
+        }
+        // Attach dice roll results if they exist from the conversation
+        if (lastDiceRollResults) {
+            finalResponseData.dice_roll_results = lastDiceRollResults;
+            logger.debug('Attaching dice roll results to the final response.');
+        }
+        // Increment usage and get new counts only after the final successful turn
+        if (req.incrementUsage) {
+            const updatedUsage = await req.incrementUsage();
+            finalResponseData.api_usage = updatedUsage; // Attach usage data to the response
+        }
+        logger.info(`Successfully processed Gemini request for model ${effectiveModelName}, User ID: ${req.user?.id || 'Anonymous'}`);
+        res.status(200).json(finalResponseData);
+    } catch (error) {
+        clearTimeout(timeoutId);
+        logger.error('Error in multi-turn Gemini API call:', { message: error.message, name: error.name });
+        if (error.name === 'AbortError') {
+            return res.status(504).json({ error: { message: 'Request to AI service timed out.', code: 'AI_REQUEST_TIMEOUT' } });
+        }
+        res.status(500).json({ error: { message: 'Failed to communicate with external AI service.', code: 'EXTERNAL_API_COMMUNICATION_ERROR' } });
     }
-    if (!googleResponse.ok) {
-      logger.error(`Error from Gemini API (Status: ${googleResponse.status}) for User ID: ${req.user?.id || 'Anonymous'}:`, responseData);
-      const mappedErrorMessage = mapGeminiError(googleResponse.status, responseData?.error?.message);
-      return res.status(googleResponse.status).json({
-        error: {
-          message: mappedErrorMessage,
-          code: responseData?.error?.code || `EXTERNAL_API_ERROR_${googleResponse.status}`,
-          details: process.env.NODE_ENV !== 'production' ? responseData : undefined,
-        },
-      });
-    }
-    if (!responseData.candidates || !Array.isArray(responseData.candidates) || responseData.candidates.length === 0) {
-      logger.warn('Unexpected Gemini response structure (no candidates):', { user: req.user?.id || 'Anonymous', responseData });
-      return res.status(502).json({
-        error: { message: 'Unexpected response format from AI service (no candidates).', code: 'INVALID_AI_RESPONSE_STRUCTURE' },
-      });
-    }
-    // Increment usage and get new counts
-    if (req.incrementUsage) {
-      const updatedUsage = await req.incrementUsage();
-      responseData.api_usage = updatedUsage; // Attach usage data to the response
-    }
-    logger.info(`Successfully processed Gemini request for model ${effectiveModelName}, User ID: ${req.user?.id || 'Anonymous'}`);
-    res.status(200).json(responseData);
-  } catch (error) {
-    clearTimeout(timeoutId); // Ensure timeout is cleared on any error
-    logger.error('Error calling Gemini API:', {
-      user: req.user?.id || 'Anonymous',
-      message: error.message,
-      name: error.name,
-      stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
-    });
-    if (error.name === 'AbortError') {
-      return res.status(504).json({
-        error: { message: 'Request to AI service timed out.', code: 'AI_REQUEST_TIMEOUT' },
-      });
-    }
-    res.status(500).json({
-      error: { message: 'Failed to communicate with external AI service.', code: 'EXTERNAL_API_COMMUNICATION_ERROR' },
-    });
-  }
 });
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);

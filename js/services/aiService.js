@@ -368,13 +368,11 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
     };
     const token = state.getCurrentUser()?.token || null;
     const responseData = await apiService.callGeminiProxy(payload, token);
-
     // After a successful API call, check for updated usage stats in the response
     if (responseData.api_usage) {
       state.setCurrentUserApiUsage(responseData.api_usage);
       log(LOG_LEVEL_DEBUG, 'Updated user API usage state from proxy response:', responseData.api_usage);
     }
-
     if (responseData.promptFeedback?.blockReason) {
       throw new Error(`Content blocked by AI: ${responseData.promptFeedback.blockReason}.`);
     }
@@ -383,6 +381,10 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
     const parsedAIResponse = _parseJsonResponse(aiText);
     if (!parsedAIResponse?.narrative || typeof parsedAIResponse.dashboard_updates !== 'object' || !Array.isArray(parsedAIResponse.suggested_actions)) {
       throw new Error("Invalid JSON structure from AI: missing core fields.");
+    }
+    // Attach dice roll results from the top-level server response to the parsed AI content
+    if (responseData.dice_roll_results) {
+        parsedAIResponse.dice_roll_results = responseData.dice_roll_results;
     }
     state.addTurnToGameHistory({ role: "model", parts: [{ text: JSON.stringify(parsedAIResponse) }] });
     state.setLastKnownDashboardUpdates(parsedAIResponse.dashboard_updates);

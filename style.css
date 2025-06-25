@@ -2022,6 +2022,7 @@ body:not(.landing-page-active) .panel-box.is-expanded .panel-box-content {
 	color: var(--color-meter-critical);
 }
 #story-log .message {
+	position: relative;
 	max-width: 90%;
 	margin-bottom: var(--spacing-lg);
 	padding: var(--spacing-md) var(--spacing-lg);
@@ -2671,6 +2672,65 @@ button.ui-button.danger:hover {
     background-image: url(images/app/color_noise.png);
     transform: translateY(-1px);
 }
+/* --- Dice Roll Animation --- */
+.player-message.has-dice-roll {
+    max-width: calc(90% - 120px); /* Shrink message to make space for dice */
+}
+.dice-roll-container {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(calc(-100% - 16px), -50%);
+    display: flex;
+    gap: var(--spacing-sm);
+    z-index: 5;
+}
+.dice {
+    width: 35px;
+    height: 35px;
+    background-color: var(--color-bg-input-field);
+    border: 2px solid var(--color-text-muted);
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semi700);
+    font-family: var(--font-family-mono);
+    user-select: none;
+    transition: all 0.3s ease-in-out;
+}
+.dice.is-rolling {
+    animation: roll-the-dice 0.1s infinite steps(1, end);
+    border-color: var(--color-accent-main);
+    color: var(--color-text-primary);
+}
+.dice.is-settled {
+    animation: settled-dice-fade 5s forwards ease-in-out;
+}
+@keyframes roll-the-dice {
+    0% { transform: translate(1px, 1px) rotate(2deg); }
+    25% { transform: translate(-1px, -1px) rotate(-2deg); }
+    50% { transform: translate(-1px, 1px) rotate(1deg); }
+    75% { transform: translate(1px, -1px) rotate(-1deg); }
+    100% { transform: translate(0, 0) rotate(0); }
+}
+@keyframes settled-dice-fade {
+    0%, 30% {
+				border-color: var(--color-accent-main);
+				color: var(--color-accent-main-light);
+    		box-shadow: 0 0 10px rgba(var(--color-accent-main-rgb), 0.5);
+        transform: scale(1.1);
+    }
+    100% {
+        background-color: var(--color-bg-input-field);
+        border-color: var(--color-text-muted);
+        color: var(--color-text-secondary);
+        box-shadow: none;
+        transform: scale(1.0);
+    }
+}
 @media (min-width: 2000px) {
 	#theme-grid-container {
 		grid-template-columns: repeat(6, 1fr);
@@ -2839,6 +2899,17 @@ button.ui-button.danger:hover {
 	}
 	#suggested-actions-wrapper .ui-button {
 		flex-basis: calc(50% - (var(--spacing-sm) / 2));
+	}
+	.dice-roll-container {
+			transform: translate(calc(-100% - 8px), -50%);
+	}
+	.dice {
+			width: 35px;
+			height: 35px;
+			font-size: var(--font-size-base);
+	}
+	.player-message.has-dice-roll {
+			max-width: calc(95% - 90px);
 	}
 }
 @media (max-width: 400px) {
