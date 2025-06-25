@@ -37,7 +37,6 @@ export const ULTRA_MODEL_NAME = 'gemini-2.5-flash-preview-05-20';
  */
 export const ANONYMOUS_API_USAGE_LIMITS = {
   [FREE_MODEL_NAME]: {
-    hourly: { limit: 10 },
     daily: { limit: 25 },
   },
 };

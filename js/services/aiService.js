@@ -396,16 +396,15 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
     return parsedAIResponse;
   } catch (error) {
     log(LOG_LEVEL_ERROR, "processAiTurn failed:", error);
-    if (error.code === 'API_LIMIT_EXCEEDED') {
-        storyLogManager.addMessageToLog(
-            localizationService.getUIText("error_api_limit_exceeded"),
-            "system system-error system-emphasized"
-        );
-    } else if (error.code === 'MODEL_NOT_ALLOWED_FOR_TIER') {
-        storyLogManager.addMessageToLog(
-            localizationService.getUIText("error_model_not_allowed"),
-            "system system-error system-emphasized"
-        );
+    // This is a special block to pre-handle specific user-facing errors
+    // to prevent a generic message from showing up in the gameController.
+    if (error.code === 'DAILY_API_LIMIT_EXCEEDED' || error.code === 'MODEL_NOT_ALLOWED_FOR_TIER') {
+      const messageKey = error.code === 'DAILY_API_LIMIT_EXCEEDED' ? "error_daily_api_limit_exceeded" : "error_model_not_allowed";
+      storyLogManager.addMessageToLog(
+        localizationService.getUIText(messageKey),
+        "system system-error system-emphasized"
+      );
+      error.isHandled = true; // Mark error as handled to prevent double logging
     }
     state.setCurrentAiPlaceholder(localizationService.getUIText("placeholder_command"));
     throw error;

@@ -933,7 +933,9 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
     } catch (error) {
         log(LOG_LEVEL_ERROR, "Error during AI turn processing:", error);
         storyLogManager.removeLoadingIndicator();
-        storyLogManager.addMessageToLog(localizationService.getUIText("error_api_call_failed", { ERROR_MSG: error.message }), "system system-error");
+        if (!error.isHandled) {
+            storyLogManager.addMessageToLog(localizationService.getUIText("error_api_call_failed", { ERROR_MSG: error.message }), "system system-error");
+        }
         if (dom.playerActionInput) dom.playerActionInput.placeholder = localizationService.getUIText("placeholder_command");
     } finally {
         if (!state.getIsBoonSelectionPending() && !state.getIsInitialTraitSelectionPending()) {

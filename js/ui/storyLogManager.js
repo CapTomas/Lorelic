@@ -9,6 +9,7 @@ import { formatDynamicText } from './uiUtils.js';
 import { AUTOSCROLL_THRESHOLD } from '../core/config.js';
 import { log, LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_WARN } from '../core/logger.js';
 import { addTurnToGameHistory as stateAddTurnToGameHistory } from '../core/state.js';
+import { attachTooltip } from './tooltipManager.js';
 
 // --- CONSTANTS ---
 const LOADING_INDICATOR_ID = 'story-log-loading-indicator';
@@ -20,6 +21,7 @@ let userHasManuallyScrolledLog = false;
 
 /**
  * Renders a dice roll animation next to the last player message.
+ * It creates a visual representation for each die rolled in each notation.
  * @param {Array<object>} rollResults - The results from the dice roller.
  * @returns {Promise<void>} A promise that resolves when all dice animations are complete.
  */
@@ -40,40 +42,56 @@ export function renderDiceRoll(rollResults) {
             existingContainer.remove();
         }
         lastPlayerMessage.classList.add('has-dice-roll');
-        const container = document.createElement('div');
-        container.className = 'dice-roll-container';
+        const mainContainer = document.createElement('div');
+        mainContainer.className = 'dice-roll-container';
         const animationDuration = 2000; // ms
-        const promises = rollResults.map(roll => {
-            return new Promise(diceResolve => {
-                if (roll.error) {
-                    diceResolve();
-                    return;
-                }
-                const diceEl = document.createElement('div');
-                diceEl.className = 'dice is-rolling';
-                diceEl.textContent = '?';
-                container.appendChild(diceEl);
-                const updateInterval = 100; // ms
-                let elapsed = 0;
-                const intervalId = setInterval(() => {
-                    // Show random numbers during animation
-                    const d20Roll = Math.floor(Math.random() * 20) + 1;
-                    diceEl.textContent = d20Roll;
-                    elapsed += updateInterval;
-                    if (elapsed >= animationDuration) {
-                        clearInterval(intervalId);
-                        diceEl.textContent = roll.result;
-                        diceEl.classList.remove('is-rolling');
-                        diceEl.classList.add('is-settled');
-                        diceResolve(); // Resolve this die's animation promise
-                    }
-                }, updateInterval);
+        const allDicePromises = [];
+        rollResults.forEach(roll => {
+            if (roll.error || !roll.rolls || roll.rolls.length === 0) {
+                return;
+            }
+            const notationGroup = document.createElement('div');
+            notationGroup.className = 'dice-notation-group';
+            // Tooltip for the whole group
+            const modifierString = roll.modifier !== 0 ? (roll.modifier > 0 ? ` + ${roll.modifier}` : ` - ${Math.abs(roll.modifier)}`) : '';
+            const tooltipText = `${roll.notation} → ${roll.rolls.join(' + ')}${modifierString} = ${roll.result}`;
+            attachTooltip(notationGroup, null, {}, { rawText: tooltipText });
+            // Create a promise for each individual die in the group
+            roll.rolls.forEach(dieValue => {
+                const diePromise = new Promise(diceResolve => {
+                    const diceEl = document.createElement('div');
+                    diceEl.className = 'dice is-rolling';
+                    diceEl.textContent = '?';
+                    notationGroup.appendChild(diceEl);
+                    const updateInterval = 100; // ms
+                    let elapsed = 0;
+                    const intervalId = setInterval(() => {
+                        // Show random numbers during animation (d20 flicker is visually consistent)
+                        const d20Roll = Math.floor(Math.random() * 20) + 1;
+                        diceEl.textContent = d20Roll;
+                        elapsed += updateInterval;
+                        if (elapsed >= animationDuration) {
+                            clearInterval(intervalId);
+                            diceEl.textContent = dieValue; // Set final individual die value
+                            diceEl.classList.remove('is-rolling');
+                            diceEl.classList.add('is-settled');
+                            diceResolve();
+                        }
+                    }, updateInterval);
+                });
+                allDicePromises.push(diePromise);
             });
+            mainContainer.appendChild(notationGroup);
         });
-        lastPlayerMessage.prepend(container);
-        log(LOG_LEVEL_DEBUG, 'Dice roll animation rendered.');
-        Promise.all(promises).then(() => {
-            resolve(); // Resolve the main promise when all dice are done
+        if (mainContainer.hasChildNodes()) {
+            lastPlayerMessage.prepend(mainContainer);
+            log(LOG_LEVEL_DEBUG, 'Dice roll animation rendered for individual dice.');
+        } else {
+            resolve(); // No valid rolls to render
+            return;
+        }
+        Promise.all(allDicePromises).then(() => {
+            resolve();
         });
     });
 }

@@ -66,14 +66,12 @@ export function updateModelToggleButtonAppearance() {
     const modelName = getUIText(modelInfo.nameKey);
     modelToggleButton.textContent = modelName;
     const baseTooltipText = getUIText('tooltip_model_toggle_anon_base');
-    const usageForModel = apiUsage[modelInfo.model] || { daily: { count: 0, limit: 0 }, hourly: { count: 0, limit: 0 } };
-    const anonLimits = ANONYMOUS_API_USAGE_LIMITS[modelInfo.model] || { daily: { limit: 'N/A' }, hourly: { limit: 'N/A' } };
+    const usageForModel = apiUsage[modelInfo.model] || { daily: { count: 0, limit: 0 } };
+    const anonLimits = ANONYMOUS_API_USAGE_LIMITS[modelInfo.model] || { daily: { limit: 'N/A' } };
     const tooltipText = getUIText('tooltip_model_toggle_usage_anon', {
       BASE_TEXT: baseTooltipText,
       DAILY_COUNT: usageForModel.daily.count,
       DAILY_LIMIT: anonLimits.daily.limit,
-      HOURLY_COUNT: usageForModel.hourly.count,
-      HOURLY_LIMIT: anonLimits.hourly.limit,
     });
     modelToggleButton.setAttribute('aria-label', baseTooltipText);
     attachTooltip(modelToggleButton, null, {}, { rawText: tooltipText });
