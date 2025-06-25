@@ -2731,6 +2731,65 @@ button.ui-button.danger:hover {
         transform: scale(1.0);
     }
 }
+/* Custom property for animating the gradient angle. A modern CSS feature. */
+@property --wipe-angle {
+  syntax: '<angle>';
+  initial-value: 360deg;
+  inherits: false;
+}
+
+/* Animates the --wipe-angle property from 360deg down to 0deg */
+@keyframes border-wipe-away {
+  from { --wipe-angle: 360deg; }
+  to { --wipe-angle: 0deg; }
+}
+
+@keyframes fade-out-message {
+    from { opacity: 1; }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.shard-unlock-notification {
+    border: 2px solid transparent; /* Reserve space */
+    position: relative;
+    overflow: hidden;
+}
+
+.shard-unlock-notification::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px; /* Cover the border area */
+    z-index: -1;
+    border-radius: var(--radius-md);
+
+    /* The animated gradient background */
+    background: conic-gradient(var(--color-accent-main) var(--wipe-angle), transparent calc(var(--wipe-angle) + 0.1deg));
+
+    /* This mask carves out the center, leaving only a border-like shape */
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+
+    /* Apply the animation */
+    animation: border-wipe-away var(--border-wipe-duration, 4s) linear forwards;
+}
+
+.shard-unlock-notification.is-fading-out {
+    animation: fade-out-message var(--fade-out-duration, 1s) ease-out forwards var(--fade-out-delay, 500ms);
+}
+.shard-update {
+    color: var(--color-accent-main);
+    font-weight: var(--font-weight-medium);
+    cursor: help;
+    border-bottom: 1px dotted rgba(var(--color-accent-main-rgb), 0.4);
+    transition: background-color var(--transition-fast);
+}
+
+.shard-update:hover {
+    background-color: rgba(var(--color-accent-main-rgb), 0.1);
+}
 @media (min-width: 2000px) {
 	#theme-grid-container {
 		grid-template-columns: repeat(6, 1fr);

@@ -442,7 +442,6 @@ export async function handleDowngradeToFree() {
 export async function saveCurrentGameState(forceSave = false) {
   const currentUser = state.getCurrentUser();
   const currentThemeId = state.getCurrentTheme();
-
   if (!currentUser?.token) {
     log(LOG_LEVEL_INFO, 'User not logged in. Game state not saved to backend.');
     return;
@@ -451,23 +450,18 @@ export async function saveCurrentGameState(forceSave = false) {
     log(LOG_LEVEL_WARN, 'Cannot save game state: currentTheme not set.');
     return;
   }
-
   const historyDelta = state.getUnsavedHistoryDelta();
   const isSaveNeeded = historyDelta.length > 0 || state.getIsBoonSelectionPending() || forceSave;
-
   if (!isSaveNeeded) {
     log(LOG_LEVEL_DEBUG, 'No new turns, pending boons, or force flag. Skipping save.');
     return;
   }
-
   log(LOG_LEVEL_INFO, `Saving game state for theme '${currentThemeId}'. Delta: ${historyDelta.length} turns.`);
-
   const userThemeProgress = state.getCurrentUserThemeProgress() || {};
   // Ensure acquiredTraitKeys is always an array in the payload.
   if (userThemeProgress && !Array.isArray(userThemeProgress.acquiredTraitKeys)) {
     userThemeProgress.acquiredTraitKeys = [];
   }
-
   const gameStatePayload = {
     theme_id: currentThemeId,
     player_identifier: state.getPlayerIdentifier() || 'Protagonist',
@@ -487,13 +481,16 @@ export async function saveCurrentGameState(forceSave = false) {
     session_inventory: state.getCurrentInventory(),
     equipped_items: state.getEquippedItems(),
   };
-
   // The unlock data is a one-time signal; reset it after including it in the payload.
   state.setCurrentTurnUnlockData(null);
-
   try {
-    await apiService.saveGameState(currentUser.token, gameStatePayload);
+    const response = await apiService.saveGameState(currentUser.token, gameStatePayload);
     log(LOG_LEVEL_INFO, 'Game state delta saved successfully to backend.');
+    // If the save operation resulted in lore evolution, update the local state immediately.
+    if (response?.evolved_lore) {
+      log(LOG_LEVEL_INFO, 'Received updated evolved lore from backend. Updating local state.');
+      state.setLastKnownEvolvedWorldLore(response.evolved_lore);
+    }
     // On successful save, clear the delta buffer.
     state.clearUnsavedHistoryDelta();
   } catch (error) {

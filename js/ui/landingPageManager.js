@@ -35,6 +35,8 @@ import {
   getCurrentUser,
   setLandingSelectedThemeProgress,
   getLandingSelectedThemeProgress,
+  setLandingSelectedThemeEvolvedLore,
+  getLandingSelectedThemeEvolvedLore,
 } from '../core/state.js';
 import * as apiService from '../core/apiService.js';
 import * as themeService from '../services/themeService.js';
@@ -42,7 +44,7 @@ import { getUIText } from '../services/localizationService.js';
 import { MIN_LEVEL_FOR_STORE } from '../core/config.js';
 import { THEMES_MANIFEST } from '../data/themesManifest.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_WARN, LOG_LEVEL_DEBUG } from '../core/logger.js';
-import { formatDynamicText, setGMActivityIndicator } from './uiUtils.js';
+import { formatDynamicText, setGMActivityIndicator, activateShardTooltips } from './uiUtils.js';
 import { attachTooltip } from './tooltipManager.js';
 import { showLoginModal } from './authUiManager.js';
 import { animatePanelExpansion } from './dashboardManager.js';
@@ -67,24 +69,48 @@ export function initLandingPageManager(gameController, userThemeControlsManager)
 // --- DATA FETCHING & STATE MANAGEMENT ---
 
 /**
- * Fetches all necessary data (progress, traits) for a selected theme on the landing page.
+ * Fetches all necessary data (progress, evolved lore) for a selected theme on the landing page.
  * @param {string} themeId - The ID of the theme to fetch data for.
  * @private
  */
 async function _prepareDataForLandingThemeSelection(themeId) {
   const currentUser = getCurrentUser();
+  // Reset state before fetching
+  setLandingSelectedThemeProgress(null);
+  setLandingSelectedThemeEvolvedLore(null);
 
   if (currentUser?.token) {
     try {
-      const response = await apiService.fetchUserThemeProgress(currentUser.token, themeId);
-      setLandingSelectedThemeProgress(response.userThemeProgress);
-      log(LOG_LEVEL_DEBUG, `Fetched and set landing theme progress for: ${themeId}`);
+      // Fetch both progress and game state in parallel
+      const [progressResponse, gameStateResponse] = await Promise.all([
+        apiService.fetchUserThemeProgress(currentUser.token, themeId).catch(e => e),
+        apiService.loadGameState(currentUser.token, themeId).catch(e => e)
+      ]);
+
+      // Handle Progress Response
+      if (progressResponse && !progressResponse.code) {
+          setLandingSelectedThemeProgress(progressResponse.userThemeProgress);
+          log(LOG_LEVEL_DEBUG, `Fetched and set landing theme progress for: ${themeId}`);
+      } else {
+          log(LOG_LEVEL_WARN, `Could not fetch theme progress for landing selection ${themeId}.`, progressResponse?.message);
+      }
+
+      // Handle GameState Response
+      if (gameStateResponse && !gameStateResponse.code) {
+          // Success: GameState found, use its lore
+          setLandingSelectedThemeEvolvedLore(gameStateResponse.game_history_lore);
+          log(LOG_LEVEL_DEBUG, `Fetched and set landing theme evolved lore for: ${themeId}`);
+      } else if (gameStateResponse?.code === 'GAME_STATE_NOT_FOUND') {
+          // Specific case: No GameState, use the base lore provided in the 404 response details
+          setLandingSelectedThemeEvolvedLore(gameStateResponse.details?.new_game_context?.base_lore || null);
+          log(LOG_LEVEL_DEBUG, `No game state found for landing selection ${themeId}. Using base lore from API response.`);
+      } else {
+          // Other error fetching GameState
+          log(LOG_LEVEL_WARN, `Could not fetch game state for landing selection ${themeId}.`, gameStateResponse?.message);
+      }
     } catch (error) {
-      log(LOG_LEVEL_WARN, `Could not fetch theme progress for landing selection ${themeId}. Defaulting.`, error);
-      setLandingSelectedThemeProgress(null);
+      log(LOG_LEVEL_ERROR, `Unhandled error fetching data for landing selection ${themeId}.`, error);
     }
-  } else {
-    setLandingSelectedThemeProgress(null);
   }
 }
 
@@ -302,39 +328,36 @@ export function updateLandingPagePanelsWithThemeInfo(themeId, animateExpansion =
     log(LOG_LEVEL_WARN, `Cannot update landing page panels: Missing config for ${themeId} or DOM elements.`);
     return;
   }
-
   const descTitle = landingThemeDescriptionContainer.querySelector('.panel-box-title');
   if (descTitle) descTitle.textContent = getUIText('landing_theme_description_title', {}, { viewContext: 'landing' });
-
   const detailsTitle = landingThemeDetailsContainer.querySelector('.panel-box-title');
   if (detailsTitle) detailsTitle.textContent = getUIText('landing_theme_info_title', {}, { viewContext: 'landing' });
 
-  const loreText = getUIText(themeConfig.lore_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
-  landingThemeLoreText.innerHTML = `<p>${formatDynamicText(loreText)}</p>`;
+  // Use evolved lore from state if available, otherwise fall back to base lore
+  const evolvedLore = getLandingSelectedThemeEvolvedLore();
+  const baseLore = getUIText(themeConfig.lore_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
+  const loreTextToDisplay = evolvedLore || baseLore;
+  landingThemeLoreText.innerHTML = `<p>${formatDynamicText(loreTextToDisplay)}</p>`;
+  activateShardTooltips(landingThemeLoreText); // Activate tooltips on the new content
 
   const themeDisplayName = getUIText(themeConfig.name_long_key || themeConfig.name_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
   const inspirationText = getUIText(themeConfig.inspiration_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
   const toneText = getUIText(themeConfig.tone_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
   const conceptText = getUIText(themeConfig.concept_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
-
   landingThemeInfoContent.innerHTML = `
     <p><strong>${getUIText('landing_theme_name_label', {}, { viewContext: 'landing' })}:</strong> <span id="landing-selected-theme-name">${themeDisplayName}</span></p>
     <p><strong>${getUIText('landing_theme_inspiration_label', {}, { viewContext: 'landing' })}:</strong> <span id="landing-selected-theme-inspiration">${formatDynamicText(inspirationText)}</span></p>
     <p><strong>${getUIText('landing_theme_tone_label', {}, { viewContext: 'landing' })}:</strong> <span id="landing-selected-theme-tone">${formatDynamicText(toneText)}</span></p>
     <p><strong>${getUIText('landing_theme_concept_label', {}, { viewContext: 'landing' })}:</strong> <span id="landing-selected-theme-concept">${formatDynamicText(conceptText)}</span></p>
   `;
-
   renderLandingPageActionButtons(themeId);
   if (landingThemeActions) landingThemeActions.style.display = 'flex';
-
   if (animateExpansion) {
     const lorePanelBox = landingThemeDescriptionContainer.querySelector('.panel-box');
     if (lorePanelBox?.id) animatePanelExpansion(lorePanelBox.id, true, false);
-
     const detailsPanelBox = landingThemeDetailsContainer.querySelector('.panel-box');
     if (detailsPanelBox?.id) animatePanelExpansion(detailsPanelBox.id, true, false);
   }
-
   log(LOG_LEVEL_DEBUG, `Landing page panels updated for theme: ${themeId}`);
 }
 

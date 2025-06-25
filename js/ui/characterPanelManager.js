@@ -197,12 +197,10 @@ async function _showLoreModal() {
     const currentUser = state.getCurrentUser();
     const themeConfig = themeService.getThemeConfig(themeId);
     if (!themeConfig) return;
-
     const themeDisplayName = getUIText(themeConfig.name_key, {}, { explicitThemeContext: themeId });
     const modalContent = document.createElement('div');
     modalContent.className = 'lore-modal-content';
     modalContent.textContent = getUIText('system_processing_short'); // Loading indicator
-
     modalManager.showCustomModal({
         type: 'custom',
         titleKey: 'modal_title_world_lore',
@@ -210,17 +208,19 @@ async function _showLoreModal() {
         htmlContent: modalContent,
         customActions: [{ textKey: 'modal_ok_button', className: 'ui-button primary', onClick: () => modalManager.hideCustomModal() }],
     });
-
     try {
         const baseLore = getUIText(themeConfig.lore_key, {}, { explicitThemeContext: themeId, viewContext: 'game' });
+        const evolvedLore = state.getLastKnownEvolvedWorldLore();
+        const loreToDisplay = evolvedLore || baseLore;
+
         let shards = [];
         if (currentUser && currentUser.token) {
             const shardsResponse = await apiService.fetchWorldShards(currentUser.token, themeId);
             shards = shardsResponse.worldShards || [];
         }
-
         modalContent.innerHTML = ''; // Clear loading text
 
+        // Evolved Lore Section
         const loreSection = document.createElement('div');
         loreSection.className = 'lore-section';
         const loreTitle = document.createElement('h4');
@@ -228,18 +228,20 @@ async function _showLoreModal() {
         loreTitle.textContent = getUIText('lore_modal_base_lore_title');
         const loreText = document.createElement('p');
         loreText.className = 'lore-text-content';
-        loreText.textContent = baseLore;
+        loreText.innerHTML = uiUtils.formatDynamicText(loreToDisplay);
+        uiUtils.activateShardTooltips(loreText); // Activate tooltips on the new content
+
         loreSection.appendChild(loreTitle);
         loreSection.appendChild(loreText);
         modalContent.appendChild(loreSection);
 
+        // World Fragments Section
         const fragmentsSection = document.createElement('div');
         fragmentsSection.className = 'lore-section';
         const fragmentsTitle = document.createElement('h4');
         fragmentsTitle.className = 'lore-section-title';
         fragmentsTitle.textContent = getUIText('lore_modal_fragments_title');
         fragmentsSection.appendChild(fragmentsTitle);
-
         if (shards.length > 0) {
             const list = document.createElement('ul');
             list.className = 'lore-fragments-list';

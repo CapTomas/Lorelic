@@ -3,7 +3,7 @@ import express from 'express';
 import prisma from '../db.js';
 import logger from '../utils/logger.js';
 import { protect } from '../middleware/authMiddleware.js';
-import { generatePlayerSummarySnippet, evolveWorldLore } from '../utils/aiHelper.js';
+import { generatePlayerSummarySnippet, evolveWorldLore, integrateShardIntoLore } from '../utils/aiHelper.js';
 import { getResolvedBaseThemeLore, getResolvedThemeName } from '../utils/themeDataManager.js';
 
 const router = express.Router();
@@ -104,49 +104,94 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
     session_inventory: session_inventory || [],
     equipped_items: equipped_items || {},
   };
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       let existingGameState = await tx.gameState.findUnique({
         where: { userId_theme_id: { userId, theme_id } },
       });
+
       let combinedHistory;
       let finalCumulativePlayerSummary;
       let finalCurrentWorldLore;
+      let newlyEvolvedLore = null; // Variable to hold the new lore if it's generated
+
       if (existingGameState) {
         const existingHistory = Array.isArray(existingGameState.game_history) ? existingGameState.game_history : [];
         combinedHistory = existingHistory.concat(game_history_delta);
         finalCumulativePlayerSummary = existingGameState.game_history_summary || "";
         finalCurrentWorldLore = existingGameState.game_history_lore;
       } else {
-        // This is the first save for this theme. The delta is the full history.
         combinedHistory = game_history_delta;
         finalCumulativePlayerSummary = "";
-        finalCurrentWorldLore = null; // Will be fetched below
+        finalCurrentWorldLore = null;
       }
-      // If lore is missing (new game or reset), fetch the base lore.
+
       if (!finalCurrentWorldLore) {
           finalCurrentWorldLore = await getResolvedBaseThemeLore(theme_id, current_narrative_language);
           logger.info(`[LivingChronicle] Initializing world lore for user ${userId}, theme ${theme_id}.`);
       }
-      // The summarization check now happens on the combined history
+
+      // Handle World Shard Unlocking and Lore Evolution first
+      if (new_persistent_lore_unlock && typeof new_persistent_lore_unlock === 'object') {
+        const isPremiumOrTrial = (req.user.tier === 'pro' || req.user.tier === 'ultra' || (req.user.tier === 'free' && req.user.trial_expires_at && new Date(req.user.trial_expires_at) > new Date()));
+        if (isPremiumOrTrial) {
+            const { key_suggestion, title, content, unlock_condition_description } = new_persistent_lore_unlock;
+            if (key_suggestion && title && content && unlock_condition_description) {
+                const themeNameForAI = await getResolvedThemeName(theme_id, current_narrative_language);
+                const updatedLoreFromShard = await integrateShardIntoLore(
+                    finalCurrentWorldLore,
+                    { title, content },
+                    themeNameForAI,
+                    current_narrative_language
+                );
+
+                if (updatedLoreFromShard) {
+                    finalCurrentWorldLore = updatedLoreFromShard;
+                    newlyEvolvedLore = finalCurrentWorldLore; // Store it to return to client
+                    logger.info(`[WorldShard] Lore successfully evolved for user ${userId}, theme ${theme_id} with shard '${title}'`);
+                } else {
+                    logger.warn(`[WorldShard] AI failed to integrate shard '${title}' into lore. Lore will remain unchanged for this update.`);
+                }
+
+                try {
+                  await tx.userThemePersistedLore.create({
+                    data: { userId: userId, themeId: theme_id, loreFragmentKey: key_suggestion, loreFragmentTitle: title, loreFragmentContent: content, unlockConditionDescription: unlock_condition_description }
+                  });
+                  logger.info(`[WorldShard] Successfully created new world shard for user ${userId}, theme ${theme_id}, key '${key_suggestion}'`);
+                } catch (shardError) {
+                  if (shardError.code === 'P2002') {
+                    logger.warn(`[WorldShard] Failed to create shard for user ${userId}, theme ${theme_id}, key '${key_suggestion}' due to unique constraint (likely duplicate key from AI). Shard not created.`);
+                  } else {
+                    logger.error(`[WorldShard] Error creating new world shard during GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}':`, shardError);
+                    throw new Error(`Failed to create world shard: ${shardError.message}`);
+                  }
+                }
+            } else {
+              logger.warn(`[WorldShard] Received 'new_persistent_lore_unlock' signal but required fields were missing. User: ${userId}, Theme: ${theme_id}. Unlock data:`, new_persistent_lore_unlock);
+            }
+        } else {
+            logger.warn(`[WorldShard] User ${userId} (Tier: ${req.user.tier}) attempted to unlock a shard, but this is a premium feature. Ignoring.`);
+        }
+      }
+
       if (
         combinedHistory.length >= RAW_HISTORY_BUFFER_MAX_SIZE &&
         (!existingGameState || !existingGameState.summarization_in_progress)
       ) {
         logger.info(`[LivingChronicle] History buffer full (${combinedHistory.length} turns). Starting summarization for user ${userId}, theme ${theme_id}.`);
-        // Mark as in-progress immediately before starting async process
-        // We'll update the game state with this flag first, then run summarization
         const stateToUpdate = await tx.gameState.upsert({
             where: { userId_theme_id: { userId, theme_id } },
-            update: { ...gameStateClientPayload, game_history: combinedHistory, summarization_in_progress: true },
+            update: { ...gameStateClientPayload, game_history: combinedHistory, summarization_in_progress: true, game_history_lore: finalCurrentWorldLore },
             create: { userId, theme_id, ...gameStateClientPayload, game_history: combinedHistory, summarization_in_progress: true, game_history_summary: finalCumulativePlayerSummary, game_history_lore: finalCurrentWorldLore },
         });
+
         const baseLoreForSummarization = await getResolvedBaseThemeLore(theme_id, current_narrative_language);
         const themeNameForSummarization = await getResolvedThemeName(theme_id, current_narrative_language);
-        // Run summarization in the background, don't wait for it
+
         processSummarization(
             stateToUpdate.id, userId, theme_id,
-            [...combinedHistory], // Pass a copy
+            [...combinedHistory],
             finalCumulativePlayerSummary,
             finalCurrentWorldLore,
             current_narrative_language,
@@ -154,20 +199,18 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
             themeNameForSummarization
         ).catch(err => {
             logger.error(`[LivingChronicle] Background summarization process failed catastrophically for gsID ${stateToUpdate.id}:`, err);
-            // Attempt to reset the flag on catastrophic failure
             prisma.gameState.update({
                 where: { id: stateToUpdate.id }, data: { summarization_in_progress: false }
             }).catch(resetErr => logger.error(`[LivingChronicle] CRITICAL FALLBACK: Failed to reset summarization_in_progress for gsID ${stateToUpdate.id}:`, resetErr));
         });
       } else {
-         // If no summarization is needed, just save the appended history
          await tx.gameState.upsert({
             where: { userId_theme_id: { userId, theme_id } },
-            update: { ...gameStateClientPayload, game_history: combinedHistory },
+            update: { ...gameStateClientPayload, game_history: combinedHistory, game_history_lore: finalCurrentWorldLore },
             create: { userId, theme_id, ...gameStateClientPayload, game_history: combinedHistory, game_history_summary: finalCumulativePlayerSummary, game_history_lore: finalCurrentWorldLore, summarization_in_progress: false },
          });
       }
-      // Handle User Theme Progress update
+
       if (clientUserThemeProgress && typeof clientUserThemeProgress === 'object') {
         const acquiredTraitKeysForDB = Array.isArray(clientUserThemeProgress.acquiredTraitKeys)
                                          ? clientUserThemeProgress.acquiredTraitKeys
@@ -202,7 +245,7 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
           logger.info(`[UserThemeProgress] Initialized default progress for user ${userId}, theme ${theme_id}.`);
         }
       }
-      // After upsert/create, ensure character name is set if it was missing from an old record
+
       const finalProgressCheck = await tx.userThemeProgress.findUnique({ where: { userId_themeId: { userId: userId, themeId: theme_id } } });
       if (finalProgressCheck && !finalProgressCheck.characterName) {
         await tx.userThemeProgress.update({
@@ -211,41 +254,22 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
         });
         logger.info(`[UserThemeProgress] Backfilled missing character name for user ${userId}, theme ${theme_id}.`);
       }
-      // Handle World Shard Unlocking
-      if (new_persistent_lore_unlock && typeof new_persistent_lore_unlock === 'object') {
-        const userTier = req.user.tier || 'free';
-        if (userTier === 'pro' || userTier === 'ultra') {
-            const { key_suggestion, title, content, unlock_condition_description } = new_persistent_lore_unlock;
-            if (key_suggestion && title && content && unlock_condition_description) {
-              try {
-                await tx.userThemePersistedLore.create({
-                  data: { userId: userId, themeId: theme_id, loreFragmentKey: key_suggestion, loreFragmentTitle: title, loreFragmentContent: content, unlockConditionDescription: unlock_condition_description }
-                });
-                logger.info(`[WorldShard] Successfully created new world shard via GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}'`);
-              } catch (shardError) {
-                if (shardError.code === 'P2002') {
-                  logger.warn(`[WorldShard] Failed to create shard for user ${userId}, theme ${theme_id}, key '${key_suggestion}' due to unique constraint (likely duplicate key from AI). Shard not created.`);
-                } else {
-                  logger.error(`[WorldShard] Error creating new world shard during GameState save for user ${userId}, theme ${theme_id}, key '${key_suggestion}':`, shardError);
-                  throw new Error(`Failed to create world shard: ${shardError.message}`);
-                }
-              }
-            } else {
-              logger.warn(`[WorldShard] Received 'new_persistent_lore_unlock' signal but required fields were missing. User: ${userId}, Theme: ${theme_id}. Unlock data:`, new_persistent_lore_unlock);
-            }
-        } else {
-            logger.warn(`[WorldShard] User ${userId} (Tier: ${userTier}) attempted to unlock a shard, but this is a premium feature. Ignoring.`);
-        }
-      }
+
       const upsertedInteraction = await tx.userThemeInteraction.upsert({
         where: { userId_theme_id: { userId, theme_id } },
         create: { userId, theme_id, is_playing: true, last_played_at: new Date(), is_liked: false },
         update: { is_playing: true, last_played_at: new Date() },
       });
-      return { interaction: upsertedInteraction };
+
+      return { interaction: upsertedInteraction, evolved_lore: newlyEvolvedLore };
     });
+
     logger.info(`GameState & UserThemeInteraction for user ${userId}, theme ${theme_id} saved/updated.`);
-    res.status(200).json({ message: 'Game state saved.', interaction: result.interaction });
+    const responsePayload = { message: 'Game state saved.', interaction: result.interaction };
+    if (result.evolved_lore) {
+      responsePayload.evolved_lore = result.evolved_lore;
+    }
+    res.status(200).json(responsePayload);
   } catch (error) {
     logger.error(`Transaction error saving game state for user ${userId}, theme ${theme_id}:`, error);
     if (error.message.startsWith('Failed to create world shard:')) {
@@ -309,6 +333,58 @@ async function processSummarization(gameStateId, userIdForLog, theme_id, rawHist
     }
 }
 
+/**
+ * @route   POST /api/v1/gamestates/:themeId/new-session
+ * @desc    Starts a new game session, clearing session-specific data but preserving persistent lore.
+ * @access  Private
+ */
+router.post('/:themeId/new-session', protect, async (req, res) => {
+    const userId = req.user.id;
+    const { themeId } = req.params;
+    if (!themeId) {
+        return res.status(400).json({ error: { message: 'themeId parameter is required.', code: 'MISSING_THEMEID_PARAM_NEW_SESSION' } });
+    }
+    logger.info(`Starting new session for user ${userId}, theme ${themeId}.`);
+    try {
+        const existingState = await prisma.gameState.findUnique({
+            where: { userId_theme_id: { userId, theme_id: themeId } }
+        });
+
+        if (existingState) {
+            const updatedState = await prisma.gameState.update({
+                where: { id: existingState.id },
+                data: {
+                    game_history: [],
+                    session_inventory: [],
+                    equipped_items: {},
+                    last_dashboard_updates: {},
+                    last_game_state_indicators: {},
+                    current_prompt_type: 'initial',
+                    panel_states: {},
+                    dashboard_item_meta: {},
+                    is_boon_selection_pending: false,
+                    actions_before_boon_selection: null,
+                }
+            });
+            logger.info(`Session reset for user ${userId}, theme ${themeId}. Preserving evolved lore and summary.`);
+            res.status(200).json({
+                message: 'New session started, existing chronicle preserved.',
+                game_history_lore: updatedState.game_history_lore,
+                game_history_summary: updatedState.game_history_summary,
+            });
+        } else {
+            logger.info(`No existing game state for user ${userId}, theme ${themeId}. New session will start fresh.`);
+            res.status(200).json({
+                message: 'No existing game state found. New session will start fresh.',
+                game_history_lore: null,
+                game_history_summary: null,
+            });
+        }
+    } catch (error) {
+        logger.error(`Error starting new session for user ${userId}, theme ${themeId}:`, error);
+        res.status(500).json({ error: { message: 'Failed to start new session.', code: 'NEW_SESSION_ERROR' } });
+    }
+});
 
 /**
  * @route   GET /api/v1/gamestates/:themeId

@@ -18,6 +18,7 @@ import {
   actionInputSection,
   playerActionCharCounter,
 } from './domElements.js';
+import { attachTooltip } from './tooltipManager.js';
 import { log, LOG_LEVEL_DEBUG } from '../core/logger.js';
 
 // --- ELEMENT HIGHLIGHTING ---
@@ -130,19 +131,33 @@ export function autoGrowTextarea(textareaElement) {
 
 /**
  * Formats text with simple markdown-like syntax to HTML.
- * Supports `_italic_`, `*bold*`, and `~underline~`.
+ * Supports `_italic_`, `*bold*`, `~underline~`, and `<shard-update>`.
  * @param {string} text - The text to format.
  * @returns {string} The HTML formatted string.
  */
 export function formatDynamicText(text) {
   if (typeof text !== 'string' || !text) return '';
-
   let formattedText = text;
   formattedText = formattedText.replace(/(?<!\w)_([^_]+)_(?!\w)/g, '<em>$1</em>'); // _italic_
   formattedText = formattedText.replace(/(?<!\w)\*([^*]+)\*(?!\w)/g, '<strong>$1</strong>'); // *bold*
   formattedText = formattedText.replace(/~([^~]+)~/g, '<u>$1</u>'); // ~underline~
-
+  // New addition for shard updates
+  formattedText = formattedText.replace(/<shard-update shard-title="([^"]+)">([\s\S]*?)<\/shard-update>/g, '<span class="shard-update" data-shard-title="$1">$2</span>');
   return formattedText;
+}
+
+/**
+ * Finds elements with shard-update class and data-shard-title attribute within a parent
+ * and attaches the appropriate tooltip.
+ * @param {HTMLElement} parentElement - The element to search within.
+ */
+export function activateShardTooltips(parentElement) {
+    if (!parentElement) return;
+    parentElement.querySelectorAll('.shard-update[data-shard-title]').forEach(el => {
+        const title = el.dataset.shardTitle;
+        const tooltipText = `Updated by Shard: ‘${title}’`;
+        attachTooltip(el, null, {}, { rawText: tooltipText });
+    });
 }
 
 /**

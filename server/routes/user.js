@@ -336,7 +336,7 @@ router.get('/me/shaped-themes-summary', protect, checkPaidTier, async (req, res)
         userId: userId,
       },
       _count: {
-        id: true, // Count all shards for this theme
+        _all: true, // Correct way to count all rows in the group
       },
     });
     // Get count of *active* shards per theme for this user
@@ -347,16 +347,16 @@ router.get('/me/shaped-themes-summary', protect, checkPaidTier, async (req, res)
             isActiveForNewGames: true,
         },
         _count: {
-            isActiveForNewGames: true // This will count rows where isActiveForNewGames is true
+            _all: true, // Correct way to count rows matching the where clause
         }
     });
     // Create a map for easy lookup of active shard counts
-    const activeCountsMap = new Map(themesWithActiveShards.map(item => [item.themeId, item._count.isActiveForNewGames]));
+    const activeCountsMap = new Map(themesWithActiveShards.map(item => [item.themeId, item._count._all]));
     // Combine the summaries
     const result = shardSummary.map(theme => ({
       themeId: theme.themeId,
-      hasShards: theme._count.id > 0,
-      totalShardCount: theme._count.id,
+      hasShards: theme._count._all > 0,
+      totalShardCount: theme._count._all,
       activeShardCount: activeCountsMap.get(theme.themeId) || 0, // Default to 0 if no active shards
     }));
     res.status(200).json({

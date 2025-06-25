@@ -184,6 +184,14 @@ export const loadGameState = (token, themeId) => _callApi(`/api/v1/gamestates/${
  */
 export const deleteGameState = (token, themeId) => _callApi(`/api/v1/gamestates/${themeId}`, 'DELETE', null, token);
 
+/**
+ * Starts a new game session, clearing session-specific data but preserving persistent lore.
+ * @param {string} token - The user's JWT.
+ * @param {string} themeId - The ID of the theme to start a new session for.
+ * @returns {Promise<object>} The API response, potentially including preserved lore/summary.
+ */
+export const startNewGameSession = (token, themeId) => _callApi(`/api/v1/gamestates/${themeId}/new-session`, 'POST', null, token);
+
 // --- Theme Interaction Endpoints ---
 
 /**

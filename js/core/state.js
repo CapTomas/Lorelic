@@ -62,6 +62,7 @@ let _lastAiSuggestedActions = null; // Actions available before a special state 
 let _currentAiPlaceholder = '';
 let _currentLandingGridSelection = localStorage.getItem(LANDING_SELECTED_GRID_THEME_KEY) || null;
 let _landingSelectedThemeProgress = null; // Progress for the theme selected on the landing page.
+let _landingSelectedThemeEvolvedLore = null; // Evolved lore for the theme selected on the landing page.
 let _dashboardItemMeta = {}; // UI-specific metadata for dashboard items (e.g., { hasRecentUpdate: true }).
 let _currentNewGameSettings = null; // Stores settings for a new game (e.g., { useEvolvedWorld: boolean }).
 
@@ -339,6 +340,12 @@ export const setLandingSelectedThemeProgress = (progress) => {
   _landingSelectedThemeProgress = progress;
 };
 
+/** @returns {string | null} The evolved lore for the theme selected on the landing page. */
+export const getLandingSelectedThemeEvolvedLore = () => _landingSelectedThemeEvolvedLore;
+export const setLandingSelectedThemeEvolvedLore = (lore) => {
+    _landingSelectedThemeEvolvedLore = lore;
+};
+
 /** @returns {object} An object containing UI metadata for dashboard items (e.g., update dots). */
 export const getDashboardItemMeta = () => _dashboardItemMeta;
 export const setDashboardItemMeta = (meta) => {
@@ -404,5 +411,7 @@ export const clearVolatileGameState = () => {
   _currentInventory = [];
   _equippedItems = {};
   _dashboardItemMeta = {};
+  _landingSelectedThemeProgress = null;
+  _landingSelectedThemeEvolvedLore = null;
   clearCurrentNewGameSettings();
 };

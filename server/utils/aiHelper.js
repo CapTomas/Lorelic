@@ -100,6 +100,59 @@ async function callSilentGeminiAPI(contents, systemInstruction, modelName, taskD
 }
 
 /**
+ * Integrates a new lore shard into the existing world lore using an AI call.
+ * @param {string} currentLore - The current full lore text.
+ * @param {{title: string, content: string}} shardData - The title and content of the new shard.
+ * @param {string} themeName - The name of the theme for the prompt context.
+ * @param {string} currentNarrativeLanguage - The language for the lore.
+ * @returns {Promise<string|null>} The new, complete evolved lore with special tags, or null.
+ */
+export async function integrateShardIntoLore(currentLore, shardData, themeName, currentNarrativeLanguage) {
+  const contentForAI = [{
+    role: "user",
+    parts: [{
+      text: `Current World Lore:\n${currentLore}\n\nNewly Unlocked Shard:\nTitle: ${shardData.title}\nContent: ${shardData.content}`
+    }]
+  }];
+
+  const systemPrompt = `You are a world-building assistant for the text-based RPG "${themeName}".
+Your task is to **subtly modify** the 'Current World Lore' by integrating the key idea from the 'Newly Unlocked Shard'. The change should be minimal and precise.
+
+**Instructions:**
+- **Surgical Precision is Key:** Do NOT rewrite entire paragraphs or add long, expository sections. Your goal is to add or alter only one or two sentences to seamlessly blend the new information.
+- **Tag Correctly:** You MUST wrap ONLY the newly added or significantly modified text related to the shard in a special tag: \`<shard-update shard-title="${shardData.title}">...</shard-update>\`. The 'shard-title' attribute must be the exact title of the shard.
+- **Preserve Tone:** Maintain the original tone and style of the lore.
+- **Handle Empty Lore:** If the "Current World Lore" is empty, treat the shard content as the starting point and wrap the entire content in the tag.
+- **Output Raw Text:** Your entire response MUST be the full, updated lore text, and nothing else. No JSON, no explanations. Just the raw text.
+- **Language:** The output text must be in ${currentNarrativeLanguage.toUpperCase()}.
+
+**Example of GOOD, concise integration:**
+- **Current Lore:** "The forests of Whisperwood are ancient and quiet."
+- **Shard:** Title: "The Silent Watchers", Content: "The oldest trees in Whisperwood are not truly asleep. They have witnessed the rise and fall of empires, and they remember."
+- **Correct Output:** "The forests of Whisperwood are ancient and quiet. <shard-update shard-title="The Silent Watchers">It is said the oldest trees are not truly asleep, but are silent witnesses to history, remembering the rise and fall of empires.</shard-update>"
+
+**Example of BAD, verbose integration:**
+- **Incorrect Output:** "The forests of Whisperwood, known for their profound and ancient silence, are not as empty as they seem. <shard-update shard-title="The Silent Watchers">A new discovery reveals that the eldest trees, titans of bark and leaf, possess a form of consciousness. They are the Silent Watchers, eternal chroniclers who have observed countless empires turn to dust. Their quietude is not emptiness, but the deep contemplation of ages...</shard-update>"
+- **Reasoning:** This is too long, rewrites existing text unnecessarily, and adds flowery language. Avoid this. Be brief and to the point.`;
+
+  // This is a specialized, silent call that should not be expensive. Using the summarization model.
+  const modelToUse = SUMMARIZATION_MODEL_NAME;
+  let attempt = 0;
+  while (attempt <= MAX_RETRIES_SILENT_AI) {
+    // Note: This helper uses a slightly different call signature than the main proxy, as it's a text-only response.
+    const newLore = await callSilentGeminiAPI(contentForAI, { parts: [{ text: systemPrompt }] }, modelToUse, "ShardIntegration");
+    if (newLore) return newLore;
+    attempt++;
+    if (attempt <= MAX_RETRIES_SILENT_AI) {
+      logger.warn(`[SilentAI/ShardIntegration] Retrying (${attempt}/${MAX_RETRIES_SILENT_AI}) after delay...`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS_SILENT_AI));
+    }
+  }
+  logger.error(`[SilentAI/ShardIntegration] Failed to integrate shard after ${MAX_RETRIES_SILENT_AI + 1} attempts.`);
+  return null;
+}
+
+/**
  * Generates a player-centric summary from a chunk of game history.
  * @param {Array<Object>} historyChunk - The segment of game history to summarize.
  * @param {string} currentNarrativeLanguage - The language for the summary.

@@ -132,6 +132,51 @@ async function _equipStartingGear(themeId) {
     log(LOG_LEVEL_INFO, 'Starting gear setup complete.');
 }
 
+/**
+ * Displays a special, animated notification in the story log when a World Shard is unlocked.
+ * The notification has a border that "wipes away" and then the entire element fades out.
+ * @param {string} title - The title of the unlocked shard.
+ * @private
+ */
+function _showAnimatedShardUnlock(title) {
+    if (!dom.storyLog || !dom.storyLogViewport) return;
+
+    const messageText = localizationService.getUIText('notification_world_shard_unlocked', { TITLE: title });
+    const BORDER_ANIMATION_DURATION = 4000; // ms
+    const FADE_OUT_DURATION = 1000; // ms
+    const FADE_OUT_DELAY = 500; // ms, a brief pause after border disappears
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message system-message system-emphasized shard-unlock-notification';
+    msgDiv.innerHTML = `<p>${messageText}</p>`;
+
+    // Set CSS custom properties to sync JS timing with CSS animations
+    msgDiv.style.setProperty('--border-wipe-duration', `${BORDER_ANIMATION_DURATION}ms`);
+    msgDiv.style.setProperty('--fade-out-duration', `${FADE_OUT_DURATION}ms`);
+    msgDiv.style.setProperty('--fade-out-delay', `${FADE_OUT_DELAY}ms`);
+
+    dom.storyLog.appendChild(msgDiv);
+
+    // Scroll to bottom to ensure the notification is visible
+    requestAnimationFrame(() => {
+        dom.storyLogViewport.scrollTop = dom.storyLogViewport.scrollHeight;
+    });
+
+    // Since animationend doesn't fire for pseudo-elements, we use timeouts synced with the CSS.
+    // Timeout to start the fade-out after the border wipe animation completes.
+    setTimeout(() => {
+        if (dom.storyLog.contains(msgDiv)) {
+            msgDiv.classList.add('is-fading-out');
+        }
+    }, BORDER_ANIMATION_DURATION + FADE_OUT_DELAY);
+
+    // Timeout to remove the element from the DOM after the fade-out completes.
+    setTimeout(() => {
+        if (dom.storyLog.contains(msgDiv)) {
+            dom.storyLog.removeChild(msgDiv);
+        }
+    }, BORDER_ANIMATION_DURATION + FADE_OUT_DELAY + FADE_OUT_DURATION);
+}
 
 // =================================================================================================
 // SECTION: XP, Boons, and Initial Traits
@@ -856,6 +901,8 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             }
             if (fullAiResponse.new_persistent_lore_unlock) {
                 characterPanelManager.triggerIconAnimation('lore');
+                const shardTitle = fullAiResponse.new_persistent_lore_unlock.title || 'A new truth';
+                _showAnimatedShardUnlock(shardTitle);
             }
             state.setLastKnownDashboardUpdates(updatesFromAI);
             // Render UI
@@ -863,6 +910,11 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             dashboardManager.updateDashboard(updatesFromAI);
             characterPanelManager.updateCharacterPanel();
             modelToggleManager.updateModelToggleButtonAppearance(); // Refresh API usage counters on button
+            state.setCurrentSuggestedActions(fullAiResponse.suggested_actions);
+            state.setLastKnownGameStateIndicators(fullAiResponse.game_state_indicators || {});
+            state.setCurrentAiPlaceholder(fullAiResponse.input_placeholder || localizationService.getUIText("placeholder_command"));
+            state.setCurrentTurnUnlockData(fullAiResponse.new_persistent_lore_unlock || null);
+            if (state.getIsInitialGameLoad()) state.setIsInitialGameLoad(false);
             suggestedActionsManager.displaySuggestedActions(state.getCurrentSuggestedActions());
             handleGameStateIndicatorsChange(state.getLastKnownGameStateIndicators());
             if (dom.playerActionInput) dom.playerActionInput.placeholder = state.getCurrentAiPlaceholder() || localizationService.getUIText("placeholder_command");
@@ -944,7 +996,6 @@ export async function initiateNewGameSessionFlow(themeId, skipConfirmation = fal
     log(LOG_LEVEL_INFO, `New game flow for theme: ${themeId}. Skip confirmation: ${skipConfirmation}`);
     const currentUser = state.getCurrentUser();
     const themeIsActive = currentUser ? state.getPlayingThemes().includes(themeId) : (state.getCurrentTheme() === themeId && state.getGameHistory().length > 0);
-
     if (!skipConfirmation && themeIsActive) {
         const themeConfig = themeService.getThemeConfig(themeId);
         const themeDisplayName = themeConfig ? localizationService.getUIText(themeConfig.name_key, {}, { explicitThemeContext: themeId }) : themeId;
@@ -959,21 +1010,33 @@ export async function initiateNewGameSessionFlow(themeId, skipConfirmation = fal
             return;
         }
     }
-
+    let preservedLore = '';
+    let preservedSummary = '';
     if (currentUser?.token) {
         try {
-            await apiService.deleteGameState(currentUser.token, themeId);
+            // Instead of deleting the whole state, start a new session which preserves lore/summary on the backend.
+            const sessionResponse = await apiService.startNewGameSession(currentUser.token, themeId);
+            preservedLore = sessionResponse?.game_history_lore || '';
+            preservedSummary = sessionResponse?.game_history_summary || '';
+            log(LOG_LEVEL_INFO, 'New session started on backend. Preserved lore/summary retrieved.');
         } catch (error) {
-            if (error.code !== 'GAME_STATE_NOT_FOUND_FOR_DELETE') {
-                log(LOG_LEVEL_WARN, `Could not delete existing game state for theme ${themeId}.`, error.message);
-            }
+            log(LOG_LEVEL_ERROR, `Could not start new session on backend for theme ${themeId}. Will proceed with a fresh local state.`, error.message);
+            // Reset to empty strings to ensure a completely fresh start if the API fails.
+            preservedLore = '';
+            preservedSummary = '';
         }
     }
-
     const themeStatus = currentUser ? state.getShapedThemeData().get(themeId) : null;
     const useEvolvedWorld = !!(themeStatus?.hasShards && themeStatus?.activeShardCount > 0);
     state.setCurrentNewGameSettings({ useEvolvedWorld });
+    // This clears volatile state, including lore and summary in the state object.
     await _setupNewGameEnvironment(themeId);
+    // After the environment is set up, re-apply the preserved lore and summary if the user is logged in.
+    if (currentUser?.token) {
+        state.setLastKnownEvolvedWorldLore(preservedLore);
+        state.setLastKnownCumulativePlayerSummary(preservedSummary);
+        log(LOG_LEVEL_INFO, 'Preserved lore/summary re-applied to state after environment setup.');
+    }
 }
 
 /**
