@@ -24,7 +24,7 @@ export const USER_TIERS = {
   pro: {
     allowedModels: {
       'gemini-1.5-flash-latest': { dailyLimit: 100 },
-      'gemini-2.5-flash-preview-04-17': { dailyLimit: 50 },
+      'gemini-2.5-flash-preview-04-17': { dailyLimit: 200 },
     },
   },
   ultra: {

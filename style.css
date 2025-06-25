@@ -2673,9 +2673,6 @@ button.ui-button.danger:hover {
     transform: translateY(-1px);
 }
 /* --- Dice Roll Animation --- */
-.player-message.has-dice-roll {
-    max-width: calc(90% - 120px); /* Shrink message to make space for dice */
-}
 .dice-roll-container {
     position: absolute;
     left: 0;
@@ -2979,9 +2976,6 @@ button.ui-button.danger:hover {
 			width: 35px;
 			height: 35px;
 			font-size: var(--font-size-base);
-	}
-	.player-message.has-dice-roll {
-			max-width: calc(95% - 90px);
 	}
 }
 @media (max-width: 400px) {

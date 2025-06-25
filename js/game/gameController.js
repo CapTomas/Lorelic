@@ -1143,15 +1143,36 @@ export async function resumeGameSession(themeId) {
         state.setIsInitialGameLoad(false);
         // Repopulate UI
         storyLogManager.clearStoryLogDOM();
-        state.getGameHistory().forEach(turn => {
+        const history = state.getGameHistory();
+        for (let i = 0; i < history.length; i++) {
+            const turn = history[i];
             try {
-                if (turn.role === "user") storyLogManager.renderMessage(turn.parts[0].text, "player");
-                else if (turn.role === "model") storyLogManager.renderMessage(JSON.parse(turn.parts[0].text).narrative, "gm");
-                else if (turn.role === "system_log") storyLogManager.renderMessage(turn.parts[0].text, turn.senderTypes || "system");
+                if (turn.role === "user") {
+                    storyLogManager.renderMessage(turn.parts[0].text, "player");
+                    // Look ahead to the next turn to see if it's a model turn with dice rolls
+                    const nextTurn = history[i + 1];
+                    if (nextTurn && nextTurn.role === "model") {
+                        const modelData = JSON.parse(nextTurn.parts[0].text);
+                        if (modelData.dice_roll_results) {
+                            // Render the dice rolls instantly, without animation
+                            await storyLogManager.renderDiceRoll(modelData.dice_roll_results, true);
+                        }
+                    }
+                } else if (turn.role === "model") {
+                    const modelData = JSON.parse(turn.parts[0].text);
+                    // Handle special "deep dive" narratives differently
+                    if (modelData.isDeepDive) {
+                        storyLogManager.renderMessage(modelData.narrative, "system system-emphasized");
+                    } else {
+                        storyLogManager.renderMessage(modelData.narrative, "gm");
+                    }
+                } else if (turn.role === "system_log") {
+                    storyLogManager.renderMessage(turn.parts[0].text, turn.senderTypes || "system");
+                }
             } catch (e) {
                 log(LOG_LEVEL_ERROR, "Error parsing history turn on resume:", e, turn.parts[0].text);
             }
-        });
+        }
         characterPanelManager.updateCharacterPanel(false);
         characterPanelManager.showCharacterPanel(true);
         characterPanelManager.showXPBar(true);

@@ -17,15 +17,33 @@ const LOADING_INDICATOR_ID = 'story-log-loading-indicator';
 // --- MODULE STATE ---
 let userHasManuallyScrolledLog = false;
 
+/**
+ * Adjusts the max-width of a player message bubble to accommodate the dynamically
+ * sized dice roll container, preventing layout overlap.
+ * @param {HTMLElement} playerMessageElement The player message element.
+ * @param {HTMLElement} diceContainerElement The container for the dice.
+ * @private
+ */
+function _adjustPlayerMessageWidthForDice(playerMessageElement, diceContainerElement) {
+    const diceContainerWidth = diceContainerElement.offsetWidth;
+    if (diceContainerWidth > 0) {
+        const gap = 20; // px, provides space between dice and message bubble
+        playerMessageElement.style.maxWidth = `calc(99% - ${diceContainerWidth + gap}px)`;
+        log(LOG_LEVEL_DEBUG, `Adjusted player message max-width for dice container width of ${diceContainerWidth}px.`);
+    } else {
+        log(LOG_LEVEL_WARN, 'Could not calculate dice container width. Falling back to default CSS max-width.');
+    }
+}
+
 // --- RENDERING ---
 
 /**
  * Renders a dice roll animation next to the last player message.
  * It creates a visual representation for each die rolled in each notation.
  * @param {Array<object>} rollResults - The results from the dice roller.
- * @returns {Promise<void>} A promise that resolves when all dice animations are complete.
+ * @param {boolean} [skipAnimation=false] - If true, renders the dice instantly without animation.
  */
-export function renderDiceRoll(rollResults) {
+export function renderDiceRoll(rollResults, skipAnimation = false) {
     return new Promise(resolve => {
         if (!storyLog || !rollResults || !rollResults.length) {
             resolve();
@@ -44,6 +62,32 @@ export function renderDiceRoll(rollResults) {
         lastPlayerMessage.classList.add('has-dice-roll');
         const mainContainer = document.createElement('div');
         mainContainer.className = 'dice-roll-container';
+        if (skipAnimation) {
+            rollResults.forEach(roll => {
+                if (roll.error || !roll.rolls || roll.rolls.length === 0) {
+                    return;
+                }
+                const notationGroup = document.createElement('div');
+                notationGroup.className = 'dice-notation-group';
+                const modifierString = roll.modifier !== 0 ? (roll.modifier > 0 ? ` + ${roll.modifier}` : ` - ${Math.abs(roll.modifier)}`) : '';
+                const tooltipText = `${roll.notation} → ${roll.rolls.join(' + ')}${modifierString} = ${roll.result}`;
+                attachTooltip(notationGroup, null, {}, { rawText: tooltipText });
+                roll.rolls.forEach(dieValue => {
+                    const diceEl = document.createElement('div');
+                    diceEl.className = 'dice'; // Use only the base class to avoid highlight animation
+                    diceEl.textContent = dieValue;
+                    notationGroup.appendChild(diceEl);
+                });
+                mainContainer.appendChild(notationGroup);
+            });
+            if (mainContainer.hasChildNodes()) {
+                lastPlayerMessage.prepend(mainContainer);
+                log(LOG_LEVEL_DEBUG, 'Dice roll rendered instantly from history.');
+                _adjustPlayerMessageWidthForDice(lastPlayerMessage, mainContainer);
+            }
+            resolve();
+            return;
+        }
         const animationDuration = 2000; // ms
         const allDicePromises = [];
         rollResults.forEach(roll => {
@@ -66,9 +110,9 @@ export function renderDiceRoll(rollResults) {
                     const updateInterval = 100; // ms
                     let elapsed = 0;
                     const intervalId = setInterval(() => {
-                        // Show random numbers during animation (d20 flicker is visually consistent)
-                        const d20Roll = Math.floor(Math.random() * 20) + 1;
-                        diceEl.textContent = d20Roll;
+                        // Show random numbers during animation based on the die's sides.
+                        const randomFlicker = Math.floor(Math.random() * (roll.sides || 20)) + 1;
+                        diceEl.textContent = randomFlicker;
                         elapsed += updateInterval;
                         if (elapsed >= animationDuration) {
                             clearInterval(intervalId);
@@ -86,6 +130,7 @@ export function renderDiceRoll(rollResults) {
         if (mainContainer.hasChildNodes()) {
             lastPlayerMessage.prepend(mainContainer);
             log(LOG_LEVEL_DEBUG, 'Dice roll animation rendered for individual dice.');
+            _adjustPlayerMessageWidthForDice(lastPlayerMessage, mainContainer);
         } else {
             resolve(); // No valid rolls to render
             return;
