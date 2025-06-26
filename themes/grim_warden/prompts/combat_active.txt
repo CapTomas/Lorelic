@@ -14,6 +14,7 @@ SITUATION: THE AIR CRACKS WITH VIOLENCE – COMBAT IS A MAELSTROM! The `combat_a
 **CRITICAL CONTEXT:** The full game history is your only scripture. It details the player's last, desperate maneuver and the adversary's brutalized (or untouched) state. Your narrative MUST be an immediate, unflinching continuation.
 *   **If the adversary is new or was unharmed:** Unleash its full, terrifying (or chillingly calculated, if human) onslaught.
 *   **If the adversary is wounded/shaken:** Show its pain, its rage, its unnatural resilience, or its desperate human cunning.
+${diceRollGuardrail_master_texts}
 
 THEME-SPECIFIC COMBAT INSTRUCTIONS (The Unspoken Oaths of this Desperate Struggle – Let them Resonate in Every Word):
 ${theme_specific_instructions}

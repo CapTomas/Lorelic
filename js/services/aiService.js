@@ -11,6 +11,8 @@ import * as apiService from '../core/apiService.js';
 import * as themeService from '../services/themeService.js';
 import * as localizationService from '../services/localizationService.js';
 import * as storyLogManager from '../ui/storyLogManager.js';
+import * as uiUtils from '../ui/uiUtils.js';
+
 
 
 // --- CONSTANTS ---
@@ -349,7 +351,7 @@ export function getSystemPromptForDeepDive(shardData) {
  * @returns {Promise<object|null>} The parsed AI response object, or null on critical failure.
  */
 export async function processAiTurn(playerActionText, worldShardsPayloadForInitial = "[]") {
-  log(LOG_LEVEL_INFO, `Processing AI turn for player action: "${playerActionText.substring(0, 50)}..."`);
+  log(LOG_LEVEL_INFO, `Processing player action: "${playerActionText.substring(0, 50)}..."`);
   try {
     const systemPromptText = getSystemPrompt(worldShardsPayloadForInitial);
     if (getLogLevel() === 'debug') console.log("--- SYSTEM PROMPT ---", systemPromptText);
@@ -359,24 +361,52 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
         .filter(turn => turn.role === 'user' || turn.role === 'model')
         .map(turn => ({ role: turn.role, parts: turn.parts.map(part => ({ text: part.text })) }))
         .slice(-RECENT_INTERACTION_WINDOW_SIZE);
-      const payload = {
+
+    const selectedAction = state.getSelectedSuggestedAction();
+    let suppressAiRoll = false;
+
+    // Check if a suggested action was clicked and NOT edited.
+    if (selectedAction) {
+        const selectedActionText = (typeof selectedAction === 'object' && selectedAction.text) ? selectedAction.text : selectedAction;
+        // Use trim to account for any minor whitespace discrepancies.
+        if (playerActionText.trim() === selectedActionText.trim()) {
+            // If the text matches exactly, check if the action had NO roll specified.
+            const hasNoDiceRoll = (typeof selectedAction === 'string') || (typeof selectedAction === 'object' && !selectedAction.dice_roll);
+            if (hasNoDiceRoll && !state.getIsForceRollToggled()) {
+                suppressAiRoll = true;
+                log(LOG_LEVEL_INFO, 'Suppressing AI discretionary roll for a selected non-rolling action.');
+            }
+        }
+    }
+
+    const payload = {
       contents: historyForAI,
       generationConfig: DEFAULT_GENERATION_CONFIG,
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
       modelName: state.getCurrentModelName(),
+      suppress_ai_dice_roll: suppressAiRoll,
     };
     // Check for a user-initiated dice roll from a selected suggested action.
-    const selectedAction = state.getSelectedSuggestedAction();
     if (selectedAction && typeof selectedAction === 'object' && selectedAction.dice_roll) {
         payload.dice_roll_request = [selectedAction.dice_roll];
         log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+    }
+    // Check for the force roll toggle
+    if (state.getIsForceRollToggled()) {
+      payload.force_dice_roll = true;
+      log(LOG_LEVEL_INFO, 'Attaching user-forced dice roll request to payload.');
     }
     // Clear the latched action after it has been attached to the current turn's payload.
     // This ensures it is only used once.
     state.setSelectedSuggestedAction(null);
     const token = state.getCurrentUser()?.token || null;
     const responseData = await apiService.callGeminiProxy(payload, token);
+    // After a successful API call, if a forced roll was requested, reset the toggle
+    if (payload.force_dice_roll) {
+      state.setIsForceRollToggled(false);
+      uiUtils.updateForceRollToggleButton();
+    }
     // After a successful API call, check for updated usage stats in the response
     if (responseData.api_usage) {
       state.setCurrentUserApiUsage(responseData.api_usage);
@@ -419,6 +449,7 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
     throw error;
   }
 }
+
 /**
  * Handles the "Mull Over Shard" action by making a specialized AI call.
  * @param {object} shardData - The data of the World Shard to reflect upon.

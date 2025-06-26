@@ -325,6 +325,8 @@ export const globalTextData = {
       "alert_upgrade_success_message": "Congratulations! You have upgraded to the {TIER_NAME} plan. Your new benefits are active.",
       "alert_upgrade_failed_title": "Upgrade Failed",
       "alert_upgrade_failed_message": "There was an issue processing your upgrade. Please try again or contact support.",
+      "tooltip_force_roll_toggle": "Force a dice roll for this action.",
+      "aria_label_force_roll_toggle": "Toggle Force Dice Roll",
       "tooltip_manage_subscription": "View and manage your subscription tier."
     },
     "cs": {
@@ -645,6 +647,8 @@ export const globalTextData = {
       "alert_upgrade_success_message": "Gratulujeme! Úspěšně jsi upgradoval/a na plán {TIER_NAME}. Tvé nové výhody jsou aktivní.",
       "alert_upgrade_failed_title": "Upgrade Selhal",
       "alert_upgrade_failed_message": "Během procesu upgradu se něco pokazilo. Zkus to prosím znovu nebo kontaktuj podporu.",
+      "tooltip_force_roll_toggle": "Vynutit hod kostkou pro tuto akci.",
+      "aria_label_force_roll_toggle": "Přepnout Vynucení Hodu Kostkou",
       "tooltip_manage_subscription": "Zobrazit a spravovat úroveň tvého předplatného."
     }
   },

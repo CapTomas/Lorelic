@@ -12,6 +12,7 @@ ${narrativeLanguageInstruction}
 SITUATION: THE WORLD ITSELF CONVULSES – A BLIGHT FLARE ERUPTS! The `blight_flare_active` game state is TRUE. The ever-present corruption has just violently intensified, tearing through the mundane to unleash a localized crisis of unnatural horror. The Warden is at the epicenter of this virulent outbreak.
 
 **CRITICAL CONTEXT:** The game history is your guide. It whispers of the conditions that birthed this flare – perhaps a rising tide in the Warden's `blight_exposure_level`, a disturbed `local_blight_phenomenon`, or the dying curse of a Blighted entity. Your narrative must be an immediate, visceral continuation, making this sudden escalation a shocking, perilous, and deeply personal assault.
+${diceRollGuardrail_master_texts}
 
 THEME-SPECIFIC BLIGHT FLARE INSTRUCTIONS (The Unspeakable Truths of a Blight Surge – Let Them Seep Into Every Word):
 ${theme_specific_instructions}

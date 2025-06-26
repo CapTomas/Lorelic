@@ -12,6 +12,7 @@ ${narrativeLanguageInstruction}
 SITUATION: A RIFT IN THE FABRIC OF MADNESS – THE OMEN BLEEDS THROUGH! The `omen_detected` flag, a chilling premonition from the previous turn (as per game history), now unfurls its full, unsettling presence. The mundane, decaying world peels back like sun-scorched skin, revealing a glimpse of something Other, something that *should not be*. This is not a physical fight, but an intrusion—a chilling, cryptic whisper from the Outer Dark, a dissonant chord in the symphony of reality, a sign pregnant with unutterable dread or some dark, forgotten promise. The Warden stands upon the precipice of this unnatural, sanity-bending revelation.
 
 **CRITICAL CONTEXT:** The full game history is your guide to the Warden's state of mind and the world's oppressive ambiance *just before* this omen fully blooms and festers. Your narrative must be a seamless, chilling continuation from that precarious point, making the omen's arrival a stark, impactful, and deeply disturbing contrast.
+${diceRollGuardrail_master_texts}
 
 THEME-SPECIFIC OMEN INSTRUCTIONS (Weave these into the very fabric of the omen's unsettling tapestry):
 ${theme_specific_instructions}

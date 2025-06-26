@@ -57,6 +57,7 @@ let _equippedItems = {};
 let _selectedSuggestedAction = null; // Holds the full object of the last clicked suggested action.
 
 // UI & View State
+let _isForceRollToggled = false;
 let _currentPanelStates = {};
 let _currentSuggestedActions = [];
 let _lastAiSuggestedActions = null; // Actions available before a special state (like boon selection).
@@ -291,6 +292,12 @@ export const getCurrentStrainLevel = () => _currentRunStats.strainLevel || 1;
 /** @returns {string[]} An array of active condition strings. */
 export const getActiveConditions = () => _currentRunStats.conditions || [];
 
+/** @returns {boolean} True if the user has toggled the "force roll" button on. */
+export const getIsForceRollToggled = () => _isForceRollToggled;
+export const setIsForceRollToggled = (isToggled) => {
+  _isForceRollToggled = !!isToggled;
+};
+
 // --- UI & View State Management ---
 
 /** @returns {object} An object storing the expansion state of dashboard panels. */
@@ -403,6 +410,7 @@ export const clearVolatileGameState = () => {
   _isInitialGameLoad = true;
   _currentAiPlaceholder = '';
   _currentTurnUnlockData = null;
+  _isForceRollToggled = false;
   _currentPanelStates = {};
   _lastKnownCumulativePlayerSummary = '';
   _lastKnownEvolvedWorldLore = '';

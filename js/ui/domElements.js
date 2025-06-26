@@ -56,6 +56,7 @@ export const actionInputSection = document.getElementById("action-input-section"
 export const playerActionInput = document.getElementById("player-action-input");
 export const sendActionButton = document.getElementById("send-action-button");
 export const playerActionCharCounter = document.getElementById("player-action-char-counter");
+export const forceRollToggleButton = document.getElementById("force-roll-toggle-button");
 
 // --- Modals ---
 export const customModalOverlay = document.getElementById("custom-modal-overlay");

@@ -9,7 +9,13 @@ import {
   ANONYMOUS_PLAYER_ACTION_INPUT_LENGTH,
   PLAYER_ACTION_INPUT_LENGTH_BY_TIER,
 } from '../core/config.js';
-import { getIsRunActive, updateDashboardItemMetaEntry, getCurrentUser } from '../core/state.js';
+import {
+  getIsRunActive,
+  updateDashboardItemMetaEntry,
+  getCurrentUser,
+  getIsForceRollToggled,
+  setIsForceRollToggled,
+} from '../core/state.js';
 import {
   gmSpecificActivityIndicator,
   systemStatusIndicator,
@@ -17,12 +23,13 @@ import {
   sendActionButton,
   actionInputSection,
   playerActionCharCounter,
+  forceRollToggleButton,
 } from './domElements.js';
 import { attachTooltip } from './tooltipManager.js';
 import { log, LOG_LEVEL_DEBUG } from '../core/logger.js';
 
 // --- ELEMENT HIGHLIGHTING ---
-
+let forceRollInterval = null;
 /**
  * Briefly highlights a UI element that has been updated and adds a persistent
  * 'has-recent-update' class to its container for dot indicators. Also updates
@@ -161,6 +168,43 @@ export function activateShardTooltips(parentElement) {
 }
 
 /**
+ * Updates the appearance and behavior of the force roll toggle button.
+ * Manages the number-flicker animation and tooltip.
+ */
+export function updateForceRollToggleButton() {
+  if (!forceRollToggleButton) {
+    if (forceRollInterval) {
+      clearInterval(forceRollInterval);
+      forceRollInterval = null;
+    }
+    return;
+  }
+  const isToggled = getIsForceRollToggled();
+  forceRollToggleButton.classList.toggle('active', isToggled);
+  attachTooltip(forceRollToggleButton, 'tooltip_force_roll_toggle', {}, { viewContext: 'global' });
+  if (!forceRollInterval) {
+    forceRollToggleButton.textContent = Math.floor(Math.random() * 20) + 1;
+    forceRollInterval = setInterval(() => {
+      if (document.body.contains(forceRollToggleButton)) {
+        forceRollToggleButton.textContent = Math.floor(Math.random() * 20) + 1;
+      } else {
+        clearInterval(forceRollInterval);
+        forceRollInterval = null;
+      }
+    }, 5000);
+  }
+}
+/**
+ * Toggles the "force roll" state and updates the button's appearance.
+ */
+export function handleForceRollToggle() {
+  if (!forceRollToggleButton || forceRollToggleButton.disabled) return;
+  const currentToggleState = getIsForceRollToggled();
+  setIsForceRollToggled(!currentToggleState);
+  updateForceRollToggleButton();
+}
+
+/**
  * Handles input events on the player action textarea.
  * Updates the character counter and calls `autoGrowTextarea`.
  * The `maxlength` attribute on the textarea itself prevents typing beyond the limit,
@@ -223,17 +267,14 @@ export function setGMActivityIndicator(isProcessing) {
   const isRunCurrentlyActive = getIsRunActive();
   const inputGroup = playerActionInput?.closest('.input-group');
   const shouldBeDisabled = isProcessing || !isRunCurrentlyActive;
-
   if (gmSpecificActivityIndicator) gmSpecificActivityIndicator.style.display = isProcessing ? 'inline-flex' : 'none';
   if (systemStatusIndicator) systemStatusIndicator.style.display = isProcessing ? 'none' : 'inline-flex';
-
   if (playerActionInput) playerActionInput.disabled = shouldBeDisabled;
   if (sendActionButton) sendActionButton.disabled = shouldBeDisabled;
-
+  if (forceRollToggleButton) forceRollToggleButton.disabled = shouldBeDisabled;
   if (inputGroup) {
     inputGroup.classList.toggle('input-group-disabled', shouldBeDisabled);
   }
-
   const suggestedActionButtons = document.querySelectorAll('#suggested-actions-wrapper .ui-button');
   suggestedActionButtons.forEach((btn) => {
     // The defeat button is a special case: it should be enabled even if the run is inactive.
@@ -243,14 +284,12 @@ export function setGMActivityIndicator(isProcessing) {
       btn.disabled = shouldBeDisabled;
     }
   });
-
   // Only focus if processing is done AND the run is active.
   const isInputSectionVisible = actionInputSection && actionInputSection.style.display !== 'none';
   if (!isProcessing && isRunCurrentlyActive && isInputSectionVisible && playerActionInput) {
     playerActionInput.focus();
   }
 }
-
 /**
  * Enables or disables the main player action input area.
  * Used for states where the user should use suggested actions instead of typing
@@ -261,13 +300,11 @@ export function setPlayerInputEnabled(isEnabled) {
   const isRunCurrentlyActive = getIsRunActive();
   const finalEnabledState = isEnabled && isRunCurrentlyActive;
   const inputGroup = playerActionInput?.closest('.input-group');
-
   if (playerActionInput) playerActionInput.disabled = !finalEnabledState;
   if (sendActionButton) sendActionButton.disabled = !finalEnabledState;
-
+  if (forceRollToggleButton) forceRollToggleButton.disabled = !finalEnabledState;
   if (inputGroup) {
     inputGroup.classList.toggle('input-group-disabled', !finalEnabledState);
   }
-
   log(LOG_LEVEL_DEBUG, `Player action input set to enabled: ${finalEnabledState}`);
 }

@@ -688,6 +688,7 @@ async function _setupNewGameEnvironment(themeId) {
     characterPanelManager.showXPBar(true);
     landingPageManager.switchToGameView(themeId);
     uiUtils.updatePlayerActionInputMaxLength();
+    uiUtils.updateForceRollToggleButton();
     if (_userThemeControlsManagerRef) {
         await _userThemeControlsManagerRef.setThemeAsPlaying(themeId);
     }
@@ -896,6 +897,7 @@ export async function resumeGameSession(themeId) {
     ]);
     landingPageManager.switchToGameView(themeId);
     uiUtils.updatePlayerActionInputMaxLength();
+    uiUtils.updateForceRollToggleButton();
     dashboardManager.generatePanelsForTheme(themeId);
     characterPanelManager.buildCharacterPanel(themeId);
     const currentUser = state.getCurrentUser();

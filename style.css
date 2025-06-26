@@ -217,6 +217,32 @@ body {
         filter: drop-shadow(0 0 6px rgba(var(--color-accent-main-rgb), 0.8));
     }
 }
+#force-roll-toggle-button {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    margin-left: var(--spacing-sm);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semi700);
+    border-radius: var(--radius-xs);
+    background-color: transparent;
+    border: 2px solid var(--color-text-muted);
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+}
+#force-roll-toggle-button:hover {
+    border-color: var(--color-text-primary);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-element-hover);
+}
+#force-roll-toggle-button.active {
+    border-color: var(--color-accent-main);
+    color: var(--color-accent-main);
+    background-color: rgba(var(--color-accent-main-rgb), 0.15);
+    text-shadow: 0 0 4px rgba(var(--color-accent-main-rgb), 0.5);
+}
 /* Hide main layout during initial JS loading to prevent flicker */
 body.app-loading #main-layout {
     visibility: hidden;
@@ -2237,9 +2263,9 @@ body:not(.landing-page-active) .panel-box.is-expanded .panel-box-content {
 	align-self: center;
 	min-width: var(--input-button-size);
 	height: auto;
-	margin-top: var(--spacing-lg);
+	margin-top: 0;
 	margin-right: var(--spacing-lg);
-	margin-bottom: var(--spacing-lg);
+	margin-bottom: 0;
 	margin-left: var(--spacing-sm);
 	padding: var(--spacing-sm) var(--spacing-md);
 	font-size: var(--font-size-sm);
