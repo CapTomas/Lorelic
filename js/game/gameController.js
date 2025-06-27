@@ -706,7 +706,7 @@ async function _setupNewGameEnvironment(themeId) {
         }
         const themeDisplayName = themeService.getThemeConfig(themeId)?.name_key || themeId;
         const useEvolvedWorld = state.getCurrentNewGameSettings()?.useEvolvedWorld || false;
-        const initialActionText = `Start game as "${progress.characterName}". Theme: ${localizationService.getUIText(themeDisplayName, {}, { explicitThemeContext: themeId })}. Evolved World: ${useEvolvedWorld}.`;
+        const initialActionText = `User started a game as "${progress.characterName}". Theme: ${localizationService.getUIText(themeDisplayName, {}, { explicitThemeContext: themeId })}. Evolved World: ${useEvolvedWorld}.`;
         state.clearCurrentNewGameSettings();
         await processPlayerAction(initialActionText, true);
     } else {
@@ -728,7 +728,7 @@ async function _setupNewGameEnvironment(themeId) {
 /**
  * Processes the player's action, sends it to the AI, and updates the UI.
  * @param {string} actionText - The text of the player's action.
- * @param {boolean} [isGameStartingAction=false] - True if this is the automatic "Start game as..." action.
+ * @param {boolean} [isGameStartingAction=false] - True if this is the automatic "User started a game as..." action.
  */
 export async function processPlayerAction(actionText, isGameStartingAction = false) {
     log(LOG_LEVEL_INFO, `Processing player action: "${actionText.substring(0, 50)}..."`);
@@ -864,7 +864,7 @@ export async function handleIdentifierSubmission(identifier) {
     const themeId = state.getCurrentTheme();
     const themeDisplayName = themeService.getThemeConfig(themeId)?.name_key || themeId;
     const useEvolvedWorld = state.getCurrentNewGameSettings()?.useEvolvedWorld || false;
-    _deferredInitialActionText = `Start game as "${identifier}". Theme: ${localizationService.getUIText(themeDisplayName, {}, { explicitThemeContext: themeId })}. Evolved World: ${useEvolvedWorld}.`;
+    _deferredInitialActionText = `User started a game as "${identifier}". Theme: ${localizationService.getUIText(themeDisplayName, {}, { explicitThemeContext: themeId })}. Evolved World: ${useEvolvedWorld}.`;
     state.clearCurrentNewGameSettings();
     const progress = state.getCurrentUserThemeProgress();
     if (progress && progress.level === 1 && progress.currentXP === 0 && progress.acquiredTraitKeys.length === 0) {

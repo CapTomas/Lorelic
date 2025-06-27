@@ -102,10 +102,21 @@ export function displaySuggestedActions(actions, options = {}) {
       btn.textContent = buttonDisplayText;
       btn.removeAttribute('title');
       let finalTooltipText = tooltipText;
-      if (dice_roll && dice_roll.notation && typeof dice_roll.target === 'number') {
-          const comparison = dice_roll.comparison || '>=';
-          const rollString = `Roll: ${dice_roll.notation} ${comparison} ${dice_roll.target}`;
-          finalTooltipText = finalTooltipText ? `${finalTooltipText}\n${rollString}` : rollString;
+      let rollConfig = null;
+      if (dice_roll) {
+        // Case 1: The dice_roll object contains the rollConfigs array.
+        if (Array.isArray(dice_roll.rollConfigs) && dice_roll.rollConfigs.length > 0) {
+          rollConfig = dice_roll.rollConfigs[0];
+        // Case 2: The dice_roll object IS the config object itself.
+        } else if (dice_roll.notation && typeof dice_roll.target === 'number') {
+          rollConfig = dice_roll;
+        }
+      }
+
+      if (rollConfig) {
+        const comparison = rollConfig.comparison || '>=';
+        const rollString = `Roll: ${rollConfig.notation} ${comparison} ${rollConfig.target}`;
+        finalTooltipText = finalTooltipText ? `${finalTooltipText}\n${rollString}` : rollString;
       }
       if (finalTooltipText) {
         attachTooltip(btn, null, {}, { rawText: finalTooltipText });

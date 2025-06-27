@@ -231,6 +231,25 @@ export async function showUserProfileModal() {
         log(LOG_LEVEL_WARN, "showUserProfileModal called but no user is logged in.");
         return;
     }
+
+    const { FREE_MODEL_NAME, PRO_MODEL_NAME, ULTRA_MODEL_NAME } = await import('../core/config.js');
+    const getModelsForTier = (tier) => {
+        const tierModels = {
+            ultra: [
+                { value: FREE_MODEL_NAME, textKey: 'option_model_free' },
+                { value: PRO_MODEL_NAME, textKey: 'option_model_pro' },
+                { value: ULTRA_MODEL_NAME, textKey: 'option_model_ultra' },
+            ],
+            pro: [
+                { value: FREE_MODEL_NAME, textKey: 'option_model_free' },
+                { value: PRO_MODEL_NAME, textKey: 'option_model_pro' },
+            ],
+            free: [{ value: FREE_MODEL_NAME, textKey: 'option_model_free' }],
+        };
+        return tierModels[tier] || tierModels.free;
+    };
+
+
     const profileContent = document.createElement('div');
     profileContent.className = 'profile-modal-content';
     const renderProfile = () => {
@@ -381,13 +400,16 @@ export async function showUserProfileModal() {
             if (_languageManagerRef) _languageManagerRef.applyGlobalUITranslations();
             renderProfile();
         }).group);
-        formContainer.appendChild(createSelectField('prefModel', 'label_profile_model_select', state.getCurrentModelName(), [
-            { value: 'gemini-1.5-flash-latest', textKey: 'option_model_free' },
-            { value: 'gemini-2.5-flash-preview-04-17', textKey: 'option_model_pro' },
-        ], async (newValue) => {
+
+        const userTier = _authService.getEffectiveUserTier();
+        const availableModels = getModelsForTier(userTier);
+        formContainer.appendChild(createSelectField('prefModel', 'label_profile_model_select', state.getCurrentModelName(), availableModels,
+         async (newValue) => {
             await _authService.updateUserPreferences({ preferred_model_name: newValue });
+            state.setCurrentModelName(newValue);
             modelToggleManager.updateModelToggleButtonAppearance();
         }).group);
+
         const storyPrefField = createSelectField('prefStory', 'label_story_preference', currentUser.story_preference || 'explorer', [
             { value: "explorer", textKey: "option_story_preference_explorer", descriptionKey: "desc_story_preference_explorer" },
             { value: "strategist", textKey: "option_story_preference_strategist", descriptionKey: "desc_story_preference_strategist" },

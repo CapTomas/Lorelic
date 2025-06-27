@@ -59,7 +59,7 @@ ${diceRollGuardrail_master_texts}
 ---
 ## 4. RESPONSE FORMAT
 Your entire response MUST be a single, valid JSON object.
-${validJson_master_texts}
+${validJsonOutput_master_texts}
 
 {
   "narrative": "string (Your humorous and descriptive narrative of the lifeform encounter, in ${currentNarrativeLanguage.toUpperCase()})",

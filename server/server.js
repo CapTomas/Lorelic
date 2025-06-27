@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -13,13 +14,39 @@ import gameStateRoutes from './routes/gamestates.js';
 import themeInteractionRoutes from './routes/themeInteractions.js';
 import worldShardRoutes from './routes/worldShards.js';
 import { executeRolls } from './utils/diceRoller.js';
+import { MODEL_FREE, MODEL_PRO, MODEL_ULTRA } from './middleware/usageLimiter.js';
 import { protect, authenticateOptionally } from './middleware/authMiddleware.js';
 import { limitApiUsage } from './middleware/usageLimiter.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
+
+const DEBUG_DIR = path.join(__dirname, 'debug');
+
+/**
+ * Saves data to a debug file if debug mode is enabled.
+ * @param {string} fileName - The name of the file to save.
+ * @param {string | object} data - The data to write.
+ */
+async function saveDebugFile(fileName, data) {
+  if (process.env.DEBUG_SAVE_PROMPT !== 'true') {
+    return;
+  }
+  try {
+    await fs.mkdir(DEBUG_DIR, { recursive: true });
+    const filePath = path.join(DEBUG_DIR, fileName);
+    const content = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+    await fs.writeFile(filePath, content, 'utf-8');
+    logger.debug(`[Debug] Saved ${fileName}`);
+  } catch (err) {
+    logger.error(`[Debug] Failed to save debug file ${fileName}:`, err);
+  }
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
@@ -49,6 +76,7 @@ const rateLimitConfig = {
   legacyHeaders: false,
 };
 const requestCounts = new Map();
+
 /**
  * Middleware for basic in-memory rate limiting.
  * @param {import('express').Request} req - The Express request object.
@@ -75,12 +103,14 @@ const rateLimitMiddleware = (req, res, next) => {
   res.setHeader('X-RateLimit-Reset', Math.ceil((windowStart + rateLimitConfig.windowMs) / 1000));
   next();
 };
+
 app.use(rateLimitMiddleware);
 app.use(express.static(path.join(__dirname, '..'), {
   maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0',
   etag: true,
   lastModified: true,
 }));
+
 logger.info('Setting up API routes...');
 app.get('/api/health', (req, res) => {
   const healthCheck = {
@@ -92,6 +122,16 @@ app.get('/api/health', (req, res) => {
   logger.debug('Health check requested');
   res.status(200).json(healthCheck);
 });
+
+app.get('/api/v1/config/models', (req, res) => {
+  logger.debug('Model configuration requested');
+  res.status(200).json({
+    FREE_MODEL_NAME: MODEL_FREE,
+    PRO_MODEL_NAME: MODEL_PRO,
+    ULTRA_MODEL_NAME: MODEL_ULTRA,
+  });
+});
+
 app.get('/api/test', (req, res) => {
   logger.debug('GET /api/test hit');
   res.json({
@@ -100,6 +140,7 @@ app.get('/api/test', (req, res) => {
     version: process.env.npm_package_version || '1.0.0',
   });
 });
+
 /**
  * Validates the request body for the Gemini API proxy endpoint.
  * Ensures 'contents' field is present and is an array.
@@ -141,6 +182,7 @@ const validateGeminiRequest = (req, res, next) => {
   }
   next();
 };
+
 /**
  * Maps Gemini API error status codes and messages to more user-friendly messages.
  * @param {number} status - The HTTP status code from Gemini API.
@@ -158,6 +200,7 @@ function mapGeminiError(status, message) {
   };
   return errorMappings[status] || message || 'An unknown error occurred with the AI service.';
 }
+
 app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, validateGeminiRequest, async (req, res) => {
     logger.info(`POST /api/v1/gemini/generate - Request from User ID: ${req.user?.id || 'Anonymous'}, IP: ${req.ip}`);
     const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -169,7 +212,7 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
     if (generationConfig && generationConfig.responseMimeType) {
       delete generationConfig.responseMimeType;
     }
-    const effectiveModelName = modelName || 'gemini-1.5-flash-latest';
+    const effectiveModelName = modelName || MODEL_FREE;
     const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${effectiveModelName}:generateContent?key=${geminiApiKey}`;
     const fullTools = [{
         functionDeclarations: [{
@@ -210,12 +253,21 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
     try {
         let conversationHistory = [...contents];
         let userInitiatedDiceResults = null;
-        // Priority 1: User-initiated roll from a suggested action. This is a specific, non-discretionary request.
         if (dice_roll_request && Array.isArray(dice_roll_request) && dice_roll_request.length > 0) {
             logger.info(`User-initiated dice roll request received:`, dice_roll_request);
             const diceResults = executeRolls(dice_roll_request);
-            userInitiatedDiceResults = diceResults; // To be attached to final response
-            // Inject the result into the conversation for the AI to react to.
+            userInitiatedDiceResults = diceResults;
+            conversationHistory.push({
+                role: "model",
+                parts: [{
+                    functionCall: {
+                        name: "rollDice",
+                        args: {
+                            rollConfigs: dice_roll_request
+                        }
+                    }
+                }]
+            });
             conversationHistory.push({
                 role: "tool",
                 parts: [{
@@ -227,9 +279,8 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
                     }
                 }]
             });
-            logger.debug(`Added user-initiated dice roll results to conversation history.`);
+            logger.debug(`Added simulated function call and response for user-initiated dice roll to conversation history.`);
         }
-        // Priority 2: Force Roll button. No specific roll, so we instruct the AI to make one.
         else if (force_dice_roll) {
             if (systemInstruction?.parts?.[0]?.text) {
                 systemInstruction.parts[0].text += `\n\n**MANDATORY ACTION FOR THIS TURN:** The player has manually forced a dice roll. You MUST call the 'rollDice' function tool. Analyze the player's action and the current narrative context to determine an appropriate roll (e.g., '1d20', 'a2d20+2') and a challenging but fair Difficulty Class (DC) based on the provided gameplay mechanics. Your narrative must then be based on the outcome of this roll.`;
@@ -239,10 +290,17 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
         let finalResponseData = null;
         let lastAiDiceRollResults = null;
         const MAX_TURNS = 5;
+        const initialPayloadForDebug = {
+            contents: conversationHistory,
+            tools: suppress_ai_dice_roll ? [] : fullTools,
+            ...(generationConfig && { generationConfig }),
+            ...(safetySettings && { safetySettings }),
+            ...(systemInstruction && { systemInstruction }),
+        };
+        await saveDebugFile('latest_ai_prompt.json', initialPayloadForDebug);
         for (let turn = 0; turn < MAX_TURNS; turn++) {
             const payload = {
                 contents: conversationHistory,
-                 // Priority 3: Suppress roll. If true, send no tools. Otherwise, send full tools.
                 tools: suppress_ai_dice_roll ? [] : fullTools,
                 ...(generationConfig && { generationConfig }),
                 ...(safetySettings && { safetySettings }),
@@ -257,6 +315,7 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
             };
             const googleResponse = await fetch(GOOGLE_API_URL, fetchOptions);
             const responseText = await googleResponse.text();
+            await saveDebugFile('latest_ai_response.json', responseText);
             let currentTurnResponseData;
             try {
                 currentTurnResponseData = JSON.parse(responseText);
@@ -334,11 +393,13 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
         res.status(500).json({ error: { message: 'Failed to communicate with external AI service.', code: 'EXTERNAL_API_COMMUNICATION_ERROR' } });
     }
 });
+
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/gamestates', gameStateRoutes);
 app.use('/api/v1/themes', themeInteractionRoutes);
 app.use('/api/v1', worldShardRoutes);
+
 app.get(/^\/(?!api\/)(?!.*\.\w{2,5}$).*$/, (req, res) => {
   logger.debug(`SPA Fallback: Serving index.html for GET ${req.path}`);
   res.sendFile(path.join(__dirname, '..', 'index.html'), (err) => {
@@ -350,6 +411,7 @@ app.get(/^\/(?!api\/)(?!.*\.\w{2,5}$).*$/, (req, res) => {
     }
   });
 });
+
 app.use((req, res) => {
   logger.warn(`404 - Route not found: ${req.method} ${req.path}`);
   res.status(404).json({
@@ -361,6 +423,7 @@ app.use((req, res) => {
     },
   });
 });
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   logger.error('Unhandled application error:', {
@@ -380,6 +443,7 @@ app.use((err, req, res, next) => {
     },
   });
 });
+
 process.on('SIGTERM', () => {
   logger.info('SIGTERM received. Shutting down gracefully...');
   server.close(() => {
@@ -387,6 +451,7 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
+
 process.on('SIGINT', () => {
   logger.info('SIGINT received. Shutting down gracefully...');
   server.close(() => {
@@ -394,13 +459,16 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
+
 process.on('uncaughtException', (error) => {
   logger.error('Uncaught Exception. Shutting down application:', error);
   process.exit(1);
 });
+
 const server = app.listen(PORT, () => {
   logger.info(`🚀 Server listening on http://localhost:${PORT}`);
   logger.info(`📱 Frontend accessible at http://localhost:${PORT}`);
@@ -410,6 +478,7 @@ const server = app.listen(PORT, () => {
     logger.warn('⚠️  Server is running in development mode. Rate limits are more permissive.');
   }
 });
+
 server.on('error', (error) => {
   if (error.code === 'EADDRINUSE') {
     logger.error(`❌ Port ${PORT} is already in use.`);
@@ -418,4 +487,5 @@ server.on('error', (error) => {
   }
   process.exit(1);
 });
+
 export default app;

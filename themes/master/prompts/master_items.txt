@@ -63,7 +63,7 @@ ${suggestedActionsFormat_master_texts}
 ---
 ## 4. RESPONSE FORMAT
 Your entire response MUST be a single, valid JSON object.
-${validJson_master_texts}
+${validJsonOutput_master_texts}
 
 {
     "narrative": "string (The scene describing the acquisition of the item, written in ${currentNarrativeLanguage.toUpperCase()})",

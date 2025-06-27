@@ -4,6 +4,7 @@ import prisma from '../db.js';
 import logger from '../utils/logger.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { generatePlayerSummarySnippet, evolveWorldLore, integrateShardIntoLore } from '../utils/aiHelper.js';
+import { MODEL_FREE } from '../middleware/usageLimiter.js';
 import { getResolvedBaseThemeLore, getResolvedThemeName } from '../utils/themeDataManager.js';
 
 const router = express.Router();
@@ -12,7 +13,6 @@ const router = express.Router();
 const RECENT_INTERACTION_WINDOW_SIZE = 10; // For sending to main AI
 const RAW_HISTORY_BUFFER_MAX_SIZE = 25;    // Max raw turns in DB before summarization
 const SUMMARIZATION_CHUNK_SIZE = 15;       // Oldest turns to summarize from buffer
-const FREE_MODEL_NAME = process.env.FREE_MODEL_NAME || "gemini-1.5-flash-latest";
 
 // --- GameState Validation Middleware ---
 const validateGameStatePayload = (req, res, next) => {
@@ -93,7 +93,7 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
     session_inventory, equipped_items,
   } = req.body;
   const userId = req.user.id;
-  const determinedModelName = req.user.preferred_model_name || FREE_MODEL_NAME;
+  const determinedModelName = req.user.preferred_model_name || MODEL_FREE;
   const gameStateClientPayload = {
     player_identifier, last_dashboard_updates, last_game_state_indicators,
     current_prompt_type, current_narrative_language, last_suggested_actions,

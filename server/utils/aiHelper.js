@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 import logger from './logger.js';
 
-const SUMMARIZATION_MODEL_NAME = process.env.SUMMARIZATION_MODEL_NAME || "gemini-1.5-flash-latest";
+const SUMMARIZATION_MODEL_NAME = process.env.SUMMARIZATION_MODEL_NAME || (process.env.MODEL_NAME_FREE || 'gemini-2.0-flash-exp');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const NPM_PACKAGE_VERSION = process.env.npm_package_version || '1.0.0';
 

@@ -452,9 +452,24 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
         if (playerActionText.trim() === selectedActionText.trim()) {
             // Player clicked a suggested action and did not modify the text.
             if (typeof selectedAction === 'object' && selectedAction.dice_roll) {
-                // The action has a specific dice roll defined.
-                payload.dice_roll_request = [selectedAction.dice_roll];
-                log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+                const diceRollData = selectedAction.dice_roll;
+                let rollConfigsToSend = null;
+
+                // Case 1: The dice_roll object contains the rollConfigs array.
+                if (Array.isArray(diceRollData.rollConfigs) && diceRollData.rollConfigs.length > 0) {
+                    rollConfigsToSend = diceRollData.rollConfigs;
+                // Case 2: The dice_roll object IS the config object itself.
+                } else if (diceRollData.notation && typeof diceRollData.target === 'number') {
+                    rollConfigsToSend = [diceRollData]; // Wrap it in an array for the backend.
+                }
+
+                if (rollConfigsToSend) {
+                    payload.dice_roll_request = rollConfigsToSend;
+                    log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+                } else {
+                    payload.suppress_ai_dice_roll = true;
+                    log(LOG_LEVEL_WARN, 'Selected action had a dice_roll object but it was not in a valid format. Suppressing roll.', diceRollData);
+                }
             } else {
                 // The action has NO dice roll defined. Suppress AI from rolling.
                 payload.suppress_ai_dice_roll = true;
@@ -480,9 +495,16 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
     if (responseData.promptFeedback?.blockReason) {
       throw new Error(`Content blocked by AI: ${responseData.promptFeedback.blockReason}.`);
     }
-    const aiText = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!aiText) throw new Error("No valid candidate or text found in AI response.");
-    const parsedAIResponse = _parseJsonResponse(aiText);
+    const parts = responseData.candidates?.[0]?.content?.parts;
+    if (!parts || !Array.isArray(parts) || parts.length === 0) {
+      throw new Error("No valid candidate or parts found in AI response.");
+    }
+    // Combine all text parts to handle responses split into multiple chunks.
+    const combinedAiText = parts.map(p => p.text || '').join('');
+    if (!combinedAiText) {
+        throw new Error("AI response parts were empty.");
+    }
+    const parsedAIResponse = _parseJsonResponse(combinedAiText);
     if (!parsedAIResponse?.narrative || typeof parsedAIResponse.dashboard_updates !== 'object' || !Array.isArray(parsedAIResponse.suggested_actions)) {
       throw new Error("Invalid JSON structure from AI: missing core fields.");
     }

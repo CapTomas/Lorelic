@@ -25,21 +25,49 @@ export const LANDING_SELECTED_GRID_THEME_KEY = 'lorelicLandingSelectedGridTheme'
 export const LOG_LEVEL_STORAGE_KEY = 'lorelicLogLevel';
 
 // --- AI Model Configuration ---
+// These are initialized with defaults and will be overwritten by values fetched from the server.
 /** The model name for standard, free-tier users. */
-export const FREE_MODEL_NAME = 'gemini-1.5-flash-latest';
-/** The model name for logged-in, free-tier users who can access a better model. */
-export const PRO_MODEL_NAME = 'gemini-2.5-flash-preview-04-17';
+export let FREE_MODEL_NAME = 'gemini-2.0-flash-exp';
+/** The model name for logged-in, pro-tier users. */
+export let PRO_MODEL_NAME = 'gemini-2.5-flash-lite-preview-06-17';
 /** The model name for premium, top-tier users. */
-export const ULTRA_MODEL_NAME = 'gemini-2.5-flash-preview-05-20';
+export let ULTRA_MODEL_NAME = 'gemini-2.5-flash';
+
 /**
  * Defines the API usage limits for anonymous users, mirroring the backend configuration.
  * Used for displaying limits in the UI when no user is logged in.
+ * This is also updated dynamically when model configuration is fetched.
  */
-export const ANONYMOUS_API_USAGE_LIMITS = {
+export let ANONYMOUS_API_USAGE_LIMITS = {
   [FREE_MODEL_NAME]: {
     daily: { limit: 25 },
   },
 };
+
+/**
+ * Updates the AI model names and related configurations from data fetched from the server.
+ * @param {object} config - The configuration object from the `/api/v1/config/models` endpoint.
+ * @param {string} config.FREE_MODEL_NAME - The name of the free tier model.
+ * @param {string} config.PRO_MODEL_NAME - The name of the pro tier model.
+ * @param {string} config.ULTRA_MODEL_NAME - The name of the ultra tier model.
+ */
+export function setModelConfiguration(config) {
+  if (config.FREE_MODEL_NAME) {
+    FREE_MODEL_NAME = config.FREE_MODEL_NAME;
+  }
+  if (config.PRO_MODEL_NAME) {
+    PRO_MODEL_NAME = config.PRO_MODEL_NAME;
+  }
+  if (config.ULTRA_MODEL_NAME) {
+    ULTRA_MODEL_NAME = config.ULTRA_MODEL_NAME;
+  }
+  // Re-construct the limits object with the new model name
+  ANONYMOUS_API_USAGE_LIMITS = {
+    [FREE_MODEL_NAME]: {
+      daily: { limit: 25 },
+    },
+  };
+}
 // --- Player Progression ---
 /**
  * Defines the total cumulative XP required to reach each level.

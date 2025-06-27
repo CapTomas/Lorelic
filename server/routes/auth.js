@@ -9,7 +9,7 @@ import {
   generateSecureToken,
   generateTokenExpiry,
 } from "../utils/tokenUtils.js";
-import { USER_TIERS, constructApiUsageResponse } from '../middleware/usageLimiter.js';
+import { MODEL_FREE, constructApiUsageResponse } from '../middleware/usageLimiter.js';
 const router = express.Router();
 const SALT_ROUNDS = 10;
 const TRIAL_DURATION_DAYS = 14;
@@ -120,7 +120,7 @@ router.post("/register", async (req, res) => {
         newsletter_opt_in: newsletter_opt_in || false,
         preferred_app_language: preferred_app_language || "en",
         preferred_narrative_language: preferred_narrative_language || "en",
-        preferred_model_name: preferred_model_name || "gemini-1.5-flash-latest", // Default model
+        preferred_model_name: preferred_model_name || MODEL_FREE,
         email_confirmed: false,
         email_confirmation_token: confirmationToken,
         email_confirmation_expires_at: confirmationTokenExpiresAt,

@@ -6,8 +6,8 @@
 
 // --- Core ---
 import * as state from './core/state.js';
+import * as config from './core/config.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_WARN, LOG_LEVEL_DEBUG, setLogLevel as setCoreLogLevel } from './core/logger.js';
-import { LOG_LEVEL_STORAGE_KEY, DEFAULT_LANGUAGE } from './core/config.js';
 
 // --- Services ---
 import * as themeService from './services/themeService.js';
@@ -118,8 +118,8 @@ async function _handleUrlChangeOrInitialLoad() {
 async function _initializeApp() {
   log(LOG_LEVEL_INFO, 'Lorelic Application initializing...');
   // 1. Set logger level from localStorage or default
-  const storedLogLevel = localStorage.getItem(LOG_LEVEL_STORAGE_KEY);
-  setCoreLogLevel(storedLogLevel || (DEFAULT_LANGUAGE === 'cs' ? 'debug' : 'info'));
+  const storedLogLevel = localStorage.getItem(config.LOG_LEVEL_STORAGE_KEY);
+  setCoreLogLevel(storedLogLevel || (config.DEFAULT_LANGUAGE === 'cs' ? 'debug' : 'info'));
   // 2. Check for critical DOM elements
   if (!dom.appRoot || !dom.leftPanel || !dom.rightPanel || !dom.themeGridContainer || !dom.storyLogViewport) {
     log(LOG_LEVEL_ERROR, 'Critical DOM elements missing. Application cannot start.');
@@ -137,6 +137,15 @@ async function _initializeApp() {
       titleKey: 'alert_title_error',
       messageKey: 'error_initial_theme_data_load_failed',
     });
+  }
+  try {
+    log(LOG_LEVEL_INFO, 'Fetching server model configuration...');
+    const modelConfig = await apiService.fetchModelConfiguration();
+    config.setModelConfiguration(modelConfig);
+    log(LOG_LEVEL_INFO, 'Server model configuration applied.', modelConfig);
+  } catch (error) {
+    log(LOG_LEVEL_ERROR, 'Failed to fetch server model configuration. Falling back to default values.', error);
+    // App will continue with hardcoded defaults in config.js
   }
   gameController.initGameController({ userThemeControlsManager });
   landingPageManager.initLandingPageManager(gameController, userThemeControlsManager);

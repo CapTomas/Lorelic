@@ -314,6 +314,13 @@ export const downgradeToFree = (token) => _callApi('/api/v1/users/me/downgrade-t
  */
 export const finalizeUpgrade = (token, tier, sessionId) => _callApi('/api/v1/users/me/finalize-upgrade', 'POST', { tier, sessionId }, token);
 
+// --- Application Configuration Endpoints ---
+/**
+ * Fetches the application's AI model configuration from the backend.
+ * @returns {Promise<object>} The model configuration object.
+ */
+export const fetchModelConfiguration = () => _callApi('/api/v1/config/models', 'GET');
+
 // --- AI Proxy Endpoint ---
 
 /**

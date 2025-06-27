@@ -6,32 +6,37 @@ import prisma from '../db.js';
 import logger from '../utils/logger.js';
 // In-memory store for anonymous user usage, keyed by IP address.
 const anonymousUsage = new Map();
+// --- Centralized Model Definitions from Environment Variables ---
+export const MODEL_FREE = process.env.MODEL_NAME_FREE || 'gemini-2.0-flash-exp';
+export const MODEL_PRO = process.env.MODEL_NAME_PRO || 'gemini-2.5-flash-lite-preview-06-17';
+export const MODEL_ULTRA = process.env.MODEL_NAME_ULTRA || 'gemini-2.5-flash';
 /**
  * Defines API limits and allowed models for each user tier.
+ * Reads model names from environment variables for easy configuration.
  * @constant {object}
  */
 export const USER_TIERS = {
   anonymous: {
     allowedModels: {
-      'gemini-1.5-flash-latest': { dailyLimit: 25 },
+      [MODEL_FREE]: { dailyLimit: 25 },
     },
   },
   free: {
     allowedModels: {
-      'gemini-1.5-flash-latest': { dailyLimit: 100 },
+      [MODEL_FREE]: { dailyLimit: 100 },
     },
   },
   pro: {
     allowedModels: {
-      'gemini-1.5-flash-latest': { dailyLimit: 100 },
-      'gemini-2.5-flash-preview-04-17': { dailyLimit: 200 },
+      [MODEL_FREE]: { dailyLimit: 100 },
+      [MODEL_PRO]: { dailyLimit: 200 },
     },
   },
   ultra: {
     allowedModels: {
-      'gemini-1.5-flash-latest': { dailyLimit: 100 },
-      'gemini-2.5-flash-preview-04-17': { dailyLimit: 50 },
-      'gemini-2.5-flash-preview-05-20': { dailyLimit: 50 },
+      [MODEL_FREE]: { dailyLimit: 100 },
+      [MODEL_PRO]: { dailyLimit: 200 },
+      [MODEL_ULTRA]: { dailyLimit: 200 },
     },
   },
 };

@@ -10,7 +10,7 @@ import {
   getCurrentTheme,
   getCurrentUserApiUsage,
 } from '../core/state.js';
-import { PRO_MODEL_NAME, FREE_MODEL_NAME, ULTRA_MODEL_NAME, ANONYMOUS_API_USAGE_LIMITS } from '../core/config.js';
+import * as config from '../core/config.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_DEBUG, LOG_LEVEL_WARN } from '../core/logger.js';
 import * as authService from '../services/authService.js';
 import { getUIText } from '../services/localizationService.js';
@@ -19,22 +19,26 @@ import { attachTooltip, refreshCurrentTooltip } from './tooltipManager.js';
 let _storyLogManagerRef = null;
 const LOW_API_CALL_THRESHOLD = 10;
 /**
- * Defines the available models for each user tier in their cycle order.
- * @constant {object}
+ * Returns a map defining which models are available for each user tier,
+ * using the latest model names from the config.
+ * @returns {object} The allowed models configuration.
+ * @private
  */
-const MODELS_BY_TIER = {
-  ultra: [
-    { model: FREE_MODEL_NAME, nameKey: 'option_model_free' },
-    { model: PRO_MODEL_NAME, nameKey: 'option_model_pro' },
-    { model: ULTRA_MODEL_NAME, nameKey: 'option_model_ultra' },
-  ],
-  pro: [
-    { model: FREE_MODEL_NAME, nameKey: 'option_model_free' },
-    { model: PRO_MODEL_NAME, nameKey: 'option_model_pro' },
-  ],
-  free: [{ model: FREE_MODEL_NAME, nameKey: 'option_model_free' }],
-  anonymous: [{ model: FREE_MODEL_NAME, nameKey: 'option_model_free' }],
-};
+function _getModelsByTier() {
+  return {
+    ultra: [
+      { model: config.FREE_MODEL_NAME, nameKey: 'option_model_free' },
+      { model: config.PRO_MODEL_NAME, nameKey: 'option_model_pro' },
+      { model: config.ULTRA_MODEL_NAME, nameKey: 'option_model_ultra' },
+    ],
+    pro: [
+      { model: config.FREE_MODEL_NAME, nameKey: 'option_model_free' },
+      { model: config.PRO_MODEL_NAME, nameKey: 'option_model_pro' },
+    ],
+    free: [{ model: config.FREE_MODEL_NAME, nameKey: 'option_model_free' }],
+    anonymous: [{ model: config.FREE_MODEL_NAME, nameKey: 'option_model_free' }],
+  };
+}
 // --- INITIALIZATION ---
 /**
  * Initializes the ModelToggleManager with optional dependencies.
@@ -59,15 +63,16 @@ export function updateModelToggleButtonAppearance() {
   const currentUser = getCurrentUser();
   modelToggleButton.style.display = 'inline-flex';
   const apiUsage = getCurrentUserApiUsage() || {};
+  const modelsByTier = _getModelsByTier();
   if (!currentUser) {
     // --- Anonymous User Logic ---
     modelToggleButton.disabled = true;
-    const modelInfo = MODELS_BY_TIER.anonymous[0];
+    const modelInfo = modelsByTier.anonymous[0];
     const modelName = getUIText(modelInfo.nameKey);
     modelToggleButton.textContent = modelName;
     const baseTooltipText = getUIText('tooltip_model_toggle_anon_base');
     const usageForModel = apiUsage[modelInfo.model] || { daily: { count: 0, limit: 0 } };
-    const anonLimits = ANONYMOUS_API_USAGE_LIMITS[modelInfo.model] || { daily: { limit: 'N/A' } };
+    const anonLimits = config.ANONYMOUS_API_USAGE_LIMITS[modelInfo.model] || { daily: { limit: 'N/A' } };
     const tooltipText = getUIText('tooltip_model_toggle_usage_anon', {
       BASE_TEXT: baseTooltipText,
       DAILY_COUNT: usageForModel.daily.count,
@@ -79,7 +84,7 @@ export function updateModelToggleButtonAppearance() {
   }
   // --- Logged-In User Logic ---
   const userTier = currentUser.tier || 'free';
-  const availableModels = MODELS_BY_TIER[userTier] || MODELS_BY_TIER.free;
+  const availableModels = modelsByTier[userTier] || modelsByTier.free;
   // Build usage string for tooltip
   const usageLines = availableModels.map(m => {
     const usage = apiUsage[m.model] || { daily: { count: 0, limit: 'N/A' } };
@@ -137,8 +142,9 @@ export async function handleModelToggle() {
     log(LOG_LEVEL_WARN, 'Model toggle attempted by anonymous user. This should not happen.');
     return;
   }
+  const modelsByTier = _getModelsByTier();
   const userTier = currentUser.tier || 'free';
-  const availableModels = MODELS_BY_TIER[userTier] || MODELS_BY_TIER.free;
+  const availableModels = modelsByTier[userTier] || modelsByTier.free;
   if (availableModels.length <= 1) {
     log(LOG_LEVEL_DEBUG, 'Model toggle clicked, but no other models available for this tier.');
     return;

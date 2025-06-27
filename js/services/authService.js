@@ -5,31 +5,24 @@
 
 import * as apiService from '../core/apiService.js';
 import * as state from '../core/state.js';
-import {
-  JWT_STORAGE_KEY,
-  DEFAULT_LANGUAGE,
-  FREE_MODEL_NAME,
-  PRO_MODEL_NAME,
-  ULTRA_MODEL_NAME,
-  LANGUAGE_PREFERENCE_STORAGE_KEY,
-  NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY,
-  MODEL_PREFERENCE_STORAGE_KEY,
-  CURRENT_THEME_STORAGE_KEY,
-  LANDING_SELECTED_GRID_THEME_KEY,
-} from '../core/config.js';
+import * as config from '../core/config.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_WARN, LOG_LEVEL_DEBUG } from '../core/logger.js';
 import { getUIText } from './localizationService.js';
 
 /**
- * A map defining which models are available for each user tier.
+ * Returns a map defining which models are available for each user tier,
+ * using the latest model names from the config.
+ * @returns {object} The allowed models configuration.
  * @private
  */
-const ALLOWED_MODELS_BY_TIER = {
-  ultra: [FREE_MODEL_NAME, PRO_MODEL_NAME, ULTRA_MODEL_NAME],
-  pro: [FREE_MODEL_NAME, PRO_MODEL_NAME],
-  free: [FREE_MODEL_NAME],
-  anonymous: [FREE_MODEL_NAME],
-};
+function _getAllowedModelsByTier() {
+  return {
+    ultra: [config.FREE_MODEL_NAME, config.PRO_MODEL_NAME, config.ULTRA_MODEL_NAME],
+    pro: [config.FREE_MODEL_NAME, config.PRO_MODEL_NAME],
+    free: [config.FREE_MODEL_NAME],
+    anonymous: [config.FREE_MODEL_NAME],
+  };
+}
 
 /**
  * Checks if the current user is on a free tier but has an active trial period.
@@ -110,7 +103,7 @@ export async function handleLogin(email, password) {
       state.setCurrentTheme(null);
     }
 
-    localStorage.setItem(JWT_STORAGE_KEY, token);
+    localStorage.setItem(config.JWT_STORAGE_KEY, token);
     state.setCurrentUser({ ...userData, token });
     log(LOG_LEVEL_INFO, `Login successful for ${userData.email}. Token stored. User state updated.`);
 
@@ -132,13 +125,13 @@ export function handleLogout() {
   log(LOG_LEVEL_INFO, `User logging out: ${state.getCurrentUser()?.email || 'Unknown User'}`);
 
   // Clear authentication token
-  localStorage.removeItem(JWT_STORAGE_KEY);
+  localStorage.removeItem(config.JWT_STORAGE_KEY);
   state.setCurrentUser(null);
 
   // Reset to anonymous preferences from localStorage or defaults
-  const anonAppLang = localStorage.getItem(LANGUAGE_PREFERENCE_STORAGE_KEY) || DEFAULT_LANGUAGE;
-  const anonNarrLang = localStorage.getItem(NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY) || anonAppLang;
-  const anonModel = localStorage.getItem(MODEL_PREFERENCE_STORAGE_KEY) || FREE_MODEL_NAME;
+  const anonAppLang = localStorage.getItem(config.LANGUAGE_PREFERENCE_STORAGE_KEY) || config.DEFAULT_LANGUAGE;
+  const anonNarrLang = localStorage.getItem(config.NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY) || anonAppLang;
+  const anonModel = localStorage.getItem(config.MODEL_PREFERENCE_STORAGE_KEY) || config.FREE_MODEL_NAME;
 
   state.setCurrentAppLanguage(anonAppLang);
   state.setCurrentNarrativeLanguage(anonNarrLang);
@@ -165,7 +158,7 @@ export function handleLogout() {
  * @returns {Promise<boolean>} True if user is successfully authenticated, false otherwise.
  */
 export async function checkAuthStatusOnLoad() {
-  const token = localStorage.getItem(JWT_STORAGE_KEY);
+  const token = localStorage.getItem(config.JWT_STORAGE_KEY);
   if (token) {
     log(LOG_LEVEL_INFO, 'Token found. Verifying session...');
     try {
@@ -204,7 +197,7 @@ export async function loadUserPreferences() {
       state.setCurrentAppLanguage(userPrefs.preferred_app_language || DEFAULT_LANGUAGE);
       state.setCurrentNarrativeLanguage(userPrefs.preferred_narrative_language || state.getCurrentAppLanguage());
       const userTier = getEffectiveUserTier();
-      const allowedModels = ALLOWED_MODELS_BY_TIER[userTier] || ALLOWED_MODELS_BY_TIER.free;
+      const allowedModels = _getAllowedModelsByTier()[userTier] || _getAllowedModelsByTier().free;
       if (userPrefs.preferred_model_name && allowedModels.includes(userPrefs.preferred_model_name)) {
         state.setCurrentModelName(userPrefs.preferred_model_name);
       } else {
@@ -223,9 +216,9 @@ export async function loadUserPreferences() {
     }
   } else {
     log(LOG_LEVEL_INFO, 'Loading preferences for anonymous user.');
-    state.setCurrentAppLanguage(localStorage.getItem(LANGUAGE_PREFERENCE_STORAGE_KEY) || DEFAULT_LANGUAGE);
-    state.setCurrentNarrativeLanguage(localStorage.getItem(NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY) || state.getCurrentAppLanguage());
-    state.setCurrentModelName(localStorage.getItem(MODEL_PREFERENCE_STORAGE_KEY) || FREE_MODEL_NAME);
+    state.setCurrentAppLanguage(localStorage.getItem(config.LANGUAGE_PREFERENCE_STORAGE_KEY) || config.DEFAULT_LANGUAGE);
+    state.setCurrentNarrativeLanguage(localStorage.getItem(config.NARRATIVE_LANGUAGE_PREFERENCE_STORAGE_KEY) || state.getCurrentAppLanguage());
+    state.setCurrentModelName(localStorage.getItem(config.MODEL_PREFERENCE_STORAGE_KEY) || config.FREE_MODEL_NAME);
   }
 }
 

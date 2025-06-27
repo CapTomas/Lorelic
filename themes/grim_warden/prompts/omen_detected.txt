@@ -51,7 +51,7 @@ ${suggestedActionsFormat_master_texts}
 ---
 ## 3. RESPONSE FORMAT
 Your entire response MUST be a single, valid JSON object.
-${validJson_master_texts}
+${validJsonOutput_master_texts}
 
 {
     "narrative": "string (Your atmospheric and chilling description of the omen, in ${currentNarrativeLanguage.toUpperCase()})",

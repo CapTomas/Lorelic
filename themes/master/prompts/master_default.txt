@@ -105,7 +105,7 @@ Follow these steps methodically to build the JSON response for this turn.
 ---
 ## 4. RESPONSE FORMAT
 Your entire response MUST be a single, valid JSON object.
-${validJson_master_texts}
+${validJsonOutput_master_texts}
 
 {
     "narrative": "string (Your immersive narrative for this turn, written in ${currentNarrativeLanguage.toUpperCase()})",
