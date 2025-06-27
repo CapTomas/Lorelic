@@ -431,49 +431,43 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
         .filter(turn => turn.role === 'user' || turn.role === 'model')
         .map(turn => ({ role: turn.role, parts: turn.parts.map(part => ({ text: part.text })) }))
         .slice(-RECENT_INTERACTION_WINDOW_SIZE);
-
-    const selectedAction = state.getSelectedSuggestedAction();
-    let suppressAiRoll = false;
-
-    // Check if a suggested action was clicked and NOT edited.
-    if (selectedAction) {
-        const selectedActionText = (typeof selectedAction === 'object' && selectedAction.text) ? selectedAction.text : selectedAction;
-        // Use trim to account for any minor whitespace discrepancies.
-        if (playerActionText.trim() === selectedActionText.trim()) {
-            // If the text matches exactly, check if the action had NO roll specified.
-            const hasNoDiceRoll = (typeof selectedAction === 'string') || (typeof selectedAction === 'object' && !selectedAction.dice_roll);
-            if (hasNoDiceRoll && !state.getIsForceRollToggled()) {
-                suppressAiRoll = true;
-                log(LOG_LEVEL_INFO, 'Suppressing AI discretionary roll for a selected non-rolling action.');
-            }
-        }
-    }
-
     const payload = {
       contents: historyForAI,
       generationConfig: DEFAULT_GENERATION_CONFIG,
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
       modelName: state.getCurrentModelName(),
-      suppress_ai_dice_roll: suppressAiRoll,
     };
-    // Check for a user-initiated dice roll from a selected suggested action.
-    if (selectedAction && typeof selectedAction === 'object' && selectedAction.dice_roll) {
-        payload.dice_roll_request = [selectedAction.dice_roll];
-        log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+    const selectedAction = state.getSelectedSuggestedAction();
+    const isForceRollToggled = state.getIsForceRollToggled();
+    // --- Dice Roll Logic Implementation ---
+    if (isForceRollToggled) {
+        // Priority 1: Force Roll button is active.
+        payload.force_dice_roll = true;
+        log(LOG_LEVEL_INFO, 'Attaching user-forced dice roll request to payload.');
+    } else if (selectedAction) {
+        // Priority 2 & 3: A suggested action was clicked. Check if it was modified.
+        const selectedActionText = (typeof selectedAction === 'object' && selectedAction.text) ? selectedAction.text : selectedAction;
+        if (playerActionText.trim() === selectedActionText.trim()) {
+            // Player clicked a suggested action and did not modify the text.
+            if (typeof selectedAction === 'object' && selectedAction.dice_roll) {
+                // The action has a specific dice roll defined.
+                payload.dice_roll_request = [selectedAction.dice_roll];
+                log(LOG_LEVEL_INFO, 'Attaching user-initiated dice roll request to payload:', payload.dice_roll_request);
+            } else {
+                // The action has NO dice roll defined. Suppress AI from rolling.
+                payload.suppress_ai_dice_roll = true;
+                log(LOG_LEVEL_INFO, 'Suppressing AI discretionary roll for a selected non-rolling action.');
+            }
+        }
+        // Priority 4 (else case): The input text was modified or is custom. Let the AI decide.
     }
-    // Check for the force roll toggle
-    if (state.getIsForceRollToggled()) {
-      payload.force_dice_roll = true;
-      log(LOG_LEVEL_INFO, 'Attaching user-forced dice roll request to payload.');
-    }
-    // Clear the latched action after it has been attached to the current turn's payload.
-    // This ensures it is only used once.
+    // Clear the latched action after it has been used for this turn's payload.
     state.setSelectedSuggestedAction(null);
     const token = state.getCurrentUser()?.token || null;
     const responseData = await apiService.callGeminiProxy(payload, token);
     // After a successful API call, if a forced roll was requested, reset the toggle
-    if (payload.force_dice_roll) {
+    if (isForceRollToggled) {
       state.setIsForceRollToggled(false);
       uiUtils.updateForceRollToggleButton();
     }

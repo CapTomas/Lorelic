@@ -210,29 +210,12 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
     try {
         let conversationHistory = [...contents];
         let userInitiatedDiceResults = null;
-        if (force_dice_roll) {
-            const genericRollConfig = [{ notation: '1d20', target: 12, comparison: '>=' }];
-            const diceResults = executeRolls(genericRollConfig);
-            userInitiatedDiceResults = diceResults;
-            conversationHistory.push({
-                role: "tool",
-                parts: [{
-                    functionResponse: {
-                        name: "rollDice",
-                        response: {
-                            content: JSON.stringify(diceResults),
-                        }
-                    }
-                }]
-            });
-            if (systemInstruction?.parts?.[0]?.text) {
-                systemInstruction.parts[0].text += `\n\n**MANDATORY ACTION FOR THIS TURN:** The player has manually forced a dice roll. The result of a generic '1d20 vs 12' roll has been provided to you as a tool response. You MUST incorporate this roll result into your narrative, interpreting its success or failure in the context of the player's action.`;
-                logger.info(`[DiceRoll] Executed and injected a forced generic dice roll for user ${req.user?.id || 'Anonymous'}.`);
-            }
-        } else if (dice_roll_request && Array.isArray(dice_roll_request) && dice_roll_request.length > 0) {
+        // Priority 1: User-initiated roll from a suggested action. This is a specific, non-discretionary request.
+        if (dice_roll_request && Array.isArray(dice_roll_request) && dice_roll_request.length > 0) {
             logger.info(`User-initiated dice roll request received:`, dice_roll_request);
             const diceResults = executeRolls(dice_roll_request);
-            userInitiatedDiceResults = diceResults;
+            userInitiatedDiceResults = diceResults; // To be attached to final response
+            // Inject the result into the conversation for the AI to react to.
             conversationHistory.push({
                 role: "tool",
                 parts: [{
@@ -246,12 +229,20 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
             });
             logger.debug(`Added user-initiated dice roll results to conversation history.`);
         }
+        // Priority 2: Force Roll button. No specific roll, so we instruct the AI to make one.
+        else if (force_dice_roll) {
+            if (systemInstruction?.parts?.[0]?.text) {
+                systemInstruction.parts[0].text += `\n\n**MANDATORY ACTION FOR THIS TURN:** The player has manually forced a dice roll. You MUST call the 'rollDice' function tool. Analyze the player's action and the current narrative context to determine an appropriate roll (e.g., '1d20', 'a2d20+2') and a challenging but fair Difficulty Class (DC) based on the provided gameplay mechanics. Your narrative must then be based on the outcome of this roll.`;
+                logger.info(`[DiceRoll] Instructing AI to perform a mandatory dice roll for user ${req.user?.id || 'Anonymous'}.`);
+            }
+        }
         let finalResponseData = null;
         let lastAiDiceRollResults = null;
         const MAX_TURNS = 5;
         for (let turn = 0; turn < MAX_TURNS; turn++) {
             const payload = {
                 contents: conversationHistory,
+                 // Priority 3: Suppress roll. If true, send no tools. Otherwise, send full tools.
                 tools: suppress_ai_dice_roll ? [] : fullTools,
                 ...(generationConfig && { generationConfig }),
                 ...(safetySettings && { safetySettings }),
