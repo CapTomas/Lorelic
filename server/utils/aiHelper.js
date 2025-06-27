@@ -101,6 +101,7 @@ async function callSilentGeminiAPI(contents, systemInstruction, modelName, taskD
 
 /**
  * Integrates a new lore shard into the existing world lore using an AI call.
+ * This function has been enhanced to encourage bolder, more meaningful lore evolution.
  * @param {string} currentLore - The current full lore text.
  * @param {{title: string, content: string}} shardData - The title and content of the new shard.
  * @param {string} themeName - The name of the theme for the prompt context.
@@ -114,27 +115,22 @@ export async function integrateShardIntoLore(currentLore, shardData, themeName, 
       text: `Current World Lore:\n${currentLore}\n\nNewly Unlocked Shard:\nTitle: ${shardData.title}\nContent: ${shardData.content}`
     }]
   }];
-
-  const systemPrompt = `You are a world-building assistant for the text-based RPG "${themeName}".
-Your task is to **subtly modify** the 'Current World Lore' by integrating the key idea from the 'Newly Unlocked Shard'. The change should be minimal and precise.
+  const systemPrompt = `You are a World Historian for the text-based RPG "${themeName}".
+Your task is to **meaningfully evolve** the 'Current World Lore' by weaving in the 'Newly Unlocked Shard'. The goal is to make the player feel their discovery has had a tangible impact on the world's story.
 
 **Instructions:**
-- **Surgical Precision is Key:** Do NOT rewrite entire paragraphs or add long, expository sections. Your goal is to add or alter only one or two sentences to seamlessly blend the new information.
-- **Tag Correctly:** You MUST wrap ONLY the newly added or significantly modified text related to the shard in a special tag: \`<shard-update shard-title="${shardData.title}">...</shard-update>\`. The 'shard-title' attribute must be the exact title of the shard.
-- **Preserve Tone:** Maintain the original tone and style of the lore.
-- **Handle Empty Lore:** If the "Current World Lore" is empty, treat the shard content as the starting point and wrap the entire content in the tag.
-- **Output Raw Text:** Your entire response MUST be the full, updated lore text, and nothing else. No JSON, no explanations. Just the raw text.
+- **Be a Storyteller, Not a Surgeon:** Do not just add one sentence. You MUST rewrite, expand, or re-contextualize existing paragraphs to seamlessly and logically incorporate the new information. The change should feel significant and earned. If a paragraph about a "quiet forest" now needs to reflect the discovery of an "ancient, sentient tree," rewrite that paragraph to reflect its newfound mystery and importance.
+- **Maintain Tone & Style:** The new, evolved lore must perfectly match the tone and style of the original.
+- **Tag the Core Update:** You MUST wrap the new or most significantly altered sentences related to the shard's core idea in a special tag: \`<shard-update shard-title="${shardData.title}">...</shard-update>\`. The 'shard-title' attribute must be the exact title of the shard. This tag should encapsulate the heart of the change.
+- **Handle Empty Lore:** If "Current World Lore" is empty or just contains base lore, treat the shard's content as a foundational event and write a new, compelling paragraph around it, wrapping the entire paragraph in the tag.
+- **Output Raw Text:** Your entire response MUST be the full, updated lore text, and nothing else. No JSON, no explanations, no apologies. Just the raw, evolved text.
 - **Language:** The output text must be in ${currentNarrativeLanguage.toUpperCase()}.
 
-**Example of GOOD, concise integration:**
-- **Current Lore:** "The forests of Whisperwood are ancient and quiet."
+**Example of GOOD, impactful integration:**
+- **Current Lore:** "The forests of Whisperwood are ancient and quiet, largely ignored by the nearby barony."
 - **Shard:** Title: "The Silent Watchers", Content: "The oldest trees in Whisperwood are not truly asleep. They have witnessed the rise and fall of empires, and they remember."
-- **Correct Output:** "The forests of Whisperwood are ancient and quiet. <shard-update shard-title="The Silent Watchers">It is said the oldest trees are not truly asleep, but are silent witnesses to history, remembering the rise and fall of empires.</shard-update>"
-
-**Example of BAD, verbose integration:**
-- **Incorrect Output:** "The forests of Whisperwood, known for their profound and ancient silence, are not as empty as they seem. <shard-update shard-title="The Silent Watchers">A new discovery reveals that the eldest trees, titans of bark and leaf, possess a form of consciousness. They are the Silent Watchers, eternal chroniclers who have observed countless empires turn to dust. Their quietude is not emptiness, but the deep contemplation of ages...</shard-update>"
-- **Reasoning:** This is too long, rewrites existing text unnecessarily, and adds flowery language. Avoid this. Be brief and to the point.`;
-
+- **Correct Output:** "The forests of Whisperwood, long thought by the barony to be merely ancient and quiet, are now understood to hold a deeper secret. <shard-update shard-title="The Silent Watchers">It's whispered that the oldest trees are not truly asleep, but are silent, conscious witnesses to history. They have watched empires turn to dust, and they remember everything.</shard-update> This revelation has made the locals both fearful and curious, with some now leaving offerings at the forest's edge."
+- **Reasoning:** This is a good example because it doesn't just add the new info; it *changes the world's reaction to it*, making the discovery feel more impactful.`;
   // This is a specialized, silent call that should not be expensive. Using the summarization model.
   const modelToUse = SUMMARIZATION_MODEL_NAME;
   let attempt = 0;

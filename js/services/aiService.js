@@ -12,6 +12,7 @@ import * as themeService from '../services/themeService.js';
 import * as localizationService from '../services/localizationService.js';
 import * as storyLogManager from '../ui/storyLogManager.js';
 import * as uiUtils from '../ui/uiUtils.js';
+import * as suggestedActionsManager from '../ui/suggestedActionsManager.js';
 
 
 
@@ -515,9 +516,10 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
 }
 
 /**
- * Handles the "Mull Over Shard" action by making a specialized AI call.
+ * Handles the "Mull Over Shard" action by making a specialized AI call for a deep dive,
+ * then presents the narrative and resulting implications as interactive choices.
  * @param {object} shardData - The data of the World Shard to reflect upon.
- * @returns {Promise<string|null>} The narrative string from the AI, or null on failure.
+ * @returns {Promise<object|null>} The parsed AI response object, or null on failure.
  */
 export async function handleMullOverShardAction(shardData) {
   if (!shardData?.title || !shardData.content) {
@@ -525,33 +527,57 @@ export async function handleMullOverShardAction(shardData) {
     return null;
   }
   log(LOG_LEVEL_INFO, "Handling Mull Over Shard action for:", shardData.title);
-
+  // Show loading state
+  uiUtils.setGMActivityIndicator(true);
+  storyLogManager.showLoadingIndicator();
+  suggestedActionsManager.clearSuggestedActions(); // Clear old actions
   try {
     const systemPromptText = getSystemPromptForDeepDive(shardData);
     const payload = {
       contents: [],
-      generationConfig: { ...DEFAULT_GENERATION_CONFIG, temperature: 0.65, maxOutputTokens: 1024 },
+      generationConfig: { ...DEFAULT_GENERATION_CONFIG, temperature: 0.7, maxOutputTokens: 1024 }, // Slightly higher temp for more creative implications
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
       modelName: state.getCurrentModelName(),
     };
-
     const token = state.getCurrentUser()?.token || null;
     const responseData = await apiService.callGeminiProxy(payload, token);
     const aiText = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!aiText) throw new Error("No valid candidate in Deep Dive AI response.");
-
     const parsedResponse = _parseJsonResponse(aiText);
-    if (!parsedResponse?.deep_dive_narrative) throw new Error("Deep dive AI response missing 'deep_dive_narrative' field.");
-
+    if (!parsedResponse?.deep_dive_narrative || !Array.isArray(parsedResponse.implications)) {
+      throw new Error("Deep dive AI response missing 'deep_dive_narrative' or 'implications' field.");
+    }
+    storyLogManager.removeLoadingIndicator();
+    // Add narrative to the log as a special message
+    storyLogManager.addMessageToLog(parsedResponse.deep_dive_narrative, "system system-emphasized");
+    // Save the turn to history for consistency
     state.addTurnToGameHistory({
       role: "model",
       parts: [{ text: JSON.stringify({ narrative: parsedResponse.deep_dive_narrative, isDeepDive: true, relatedShardTitle: shardData.title }) }]
     });
-
-    return parsedResponse.deep_dive_narrative;
+    // Display implications as new suggested actions
+    const implicationActions = parsedResponse.implications.map(impText => ({
+        text: impText,
+        isLoreImplication: true, // Custom flag to identify these actions if needed later
+    }));
+    const headerText = localizationService.getUIText('lore_implication_header', { SHARD_TITLE: shardData.title });
+    suggestedActionsManager.displaySuggestedActions(implicationActions, { headerText });
+    // Keep GM busy, but allow player to click the new actions
+    uiUtils.setPlayerInputEnabled(false); // Disable free text input
+    // The GM indicator stays on, but buttons are enabled.
+    const suggestedActionButtons = document.querySelectorAll('#suggested-actions-wrapper .ui-button');
+    suggestedActionButtons.forEach(btn => { btn.disabled = false; });
+    // The game flow will now wait for the player to click an implication.
+    // The click handler in suggestedActionsManager will populate the input,
+    // and gameController.processPlayerAction will handle it as a normal turn.
+    return parsedResponse; // Return the full object for potential future use
   } catch (error) {
     log(LOG_LEVEL_ERROR, "handleMullOverShardAction failed:", error.message);
-    throw error;
+    storyLogManager.removeLoadingIndicator();
+    uiUtils.setGMActivityIndicator(false); // Restore full UI control on error
+    storyLogManager.addMessageToLog(localizationService.getUIText("error_api_call_failed", { ERROR_MSG: error.message }), "system system-error");
+    // We don't re-throw here because it's a non-critical flow. The user can just continue playing.
+    return null;
   }
 }
