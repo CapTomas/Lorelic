@@ -12,10 +12,10 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 24
+        "Damage": "1d4+1"
       },
       "cs": {
-        "Zranění": 24
+        "Zranění": "1d4+1"
       }
     },
     "abilities": {
@@ -23,8 +23,8 @@
       "cs": []
     },
     "itemEffectDescription": {
-      "en": "24 Dmg",
-      "cs": "24 Zraň"
+      "en": "1d4+1 Damage",
+      "cs": "1d4+1 Zranění"
     },
     "level": 1,
     "buyPrice": 23,
@@ -43,10 +43,10 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 26
+        "Damage": "1d6+2"
       },
       "cs": {
-        "Zranění": 26
+        "Zranění": "1d6+2"
       }
     },
     "abilities": {
@@ -54,12 +54,12 @@
       "cs": []
     },
     "itemEffectDescription": {
-      "en": "26 Dmg",
-      "cs": "26 Zraň"
+      "en": "1d6+2 Damage",
+      "cs": "1d6+2 Zranění"
     },
     "level": 2,
-    "buyPrice": 42,
-    "sellPrice": 13
+    "buyPrice": 38,
+    "sellPrice": 11
   },
   {
     "id": "gw_blade_notched_shortsword_l3",
@@ -74,27 +74,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 31
+        "Damage": "1d8+2"
       },
       "cs": {
-        "Zranění": 31
+        "Zranění": "1d8+2"
       }
     },
     "abilities": {
       "en": [
-        "Jagged Edge"
+        "On a critical hit, the jagged edge tears a deep wound, dealing an additional 1d6 damage immediately."
       ],
       "cs": [
-        "Zubaté Ostří"
+        "Při kritickém zásahu zubaté ostří způsobí hlubokou ránu a udělí okamžitě 1d6 zranění navíc."
       ]
     },
     "itemEffectDescription": {
-      "en": "31 Dmg, Jagged Edge",
-      "cs": "31 Zraň, Zubaté Ostří"
+      "en": "1d8+2 Damage, Crit: +1d6 Dmg",
+      "cs": "1d8+2 Zranění, Krit: +1d6 Zraň."
     },
     "level": 3,
-    "buyPrice": 53,
-    "sellPrice": 16
+    "buyPrice": 48,
+    "sellPrice": 14
   },
   {
     "id": "gw_blade_militia_spearhead_l4",
@@ -109,27 +109,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 30
+        "Damage": "1d8+2"
       },
       "cs": {
-        "Zranění": 30
+        "Zranění": "1d8+2"
       }
     },
     "abilities": {
       "en": [
-        "Piercing"
+        "Grants Advantage on attack rolls against foes with heavy armor."
       ],
       "cs": [
-        "Průrazný"
+        "Poskytuje Výhodu při hodech na útok proti nepřátelům v těžké zbroji."
       ]
     },
     "itemEffectDescription": {
-      "en": "30 Dmg, Piercing",
-      "cs": "30 Zraň, Průrazný"
+      "en": "1d8+2 Damage, Armor Piercing",
+      "cs": "1d8+2 Zranění, Průrazná zbroj"
     },
     "level": 4,
-    "buyPrice": 65,
-    "sellPrice": 20
+    "buyPrice": 58,
+    "sellPrice": 17
   },
   {
     "id": "gw_blade_barbed_cleaver_l5",
@@ -144,27 +144,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 33
+        "Damage": "1d10+3"
       },
       "cs": {
-        "Zranění": 33
+        "Zranění": "1d10+3"
       }
     },
     "abilities": {
       "en": [
-        "Causes Bleeding"
+        "On hit, the barbs catch and tear, dealing an immediate extra 1d4 damage."
       ],
       "cs": [
-        "Způsobuje Krvácení"
+        "Při zásahu se ostny zachytí a trhají, což způsobí okamžité 1d4 zranění navíc."
       ]
     },
     "itemEffectDescription": {
-      "en": "33 Dmg, Bleed",
-      "cs": "33 Zraň, Krvácení"
+      "en": "1d10+3 Dmg, +1d4 on hit",
+      "cs": "1d10+3 Zraň, +1d4 při zásahu"
     },
     "level": 5,
-    "buyPrice": 83,
-    "sellPrice": 25
+    "buyPrice": 70,
+    "sellPrice": 21
   },
   {
     "id": "gw_blade_grim_falchion_l6",
@@ -179,27 +179,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 36
+        "Damage": "1d12+3"
       },
       "cs": {
-        "Zranění": 36
+        "Zranění": "1d12+3"
       }
     },
     "abilities": {
       "en": [
-        "Heavy Blow"
+        "On hit, target must make a DC 12 Resilience save or be knocked prone."
       ],
       "cs": [
-        "Těžký Úder"
+        "Při zásahu musí cíl uspět v Záchranném hodu na Odolnost (DC 12), jinak je sražen k zemi."
       ]
     },
     "itemEffectDescription": {
-      "en": "36 Dmg, Heavy Blow",
-      "cs": "36 Zraň, Těžký Úder"
+      "en": "1d12+3 Damage, Knockdown Chance",
+      "cs": "1d12+3 Zranění, Šance na Sražení"
     },
     "level": 6,
-    "buyPrice": 91,
-    "sellPrice": 27
+    "buyPrice": 80,
+    "sellPrice": 24
   },
   {
     "id": "gw_blade_witchfinder_stiletto_l7",
@@ -214,27 +214,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 41
+        "Damage": "1d6+5"
       },
       "cs": {
-        "Zranění": 41
+        "Zranění": "1d6+5"
       }
     },
     "abilities": {
       "en": [
-        "Precise Strike"
+        "Scores a critical hit on a roll of 19-20."
       ],
       "cs": [
-        "Přesný Úder"
+        "Způsobí kritický zásah při hodu 19-20."
       ]
     },
     "itemEffectDescription": {
-      "en": "41 Dmg, Precise Strike",
-      "cs": "41 Zraň, Přesný Úder"
+      "en": "1d6+5 Damage, Improved Critical",
+      "cs": "1d6+5 Zranění, Zlepšený Krit."
     },
     "level": 7,
-    "buyPrice": 122,
-    "sellPrice": 37
+    "buyPrice": 90,
+    "sellPrice": 27
   },
   {
     "id": "gw_blade_bone_saw_l8",
@@ -249,27 +249,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 47
+        "Damage": "2d6+5"
       },
       "cs": {
-        "Zranění": 47
+        "Zranění": "2d6+5"
       }
     },
     "abilities": {
       "en": [
-        "Grievous Wounds"
+        "On hit, target's maximum Integrity is reduced by the damage dealt until healed. (AI to narrate effect)."
       ],
       "cs": [
-        "Těžké Rány"
+        "Při zásahu se maximální Integrita cíle sníží o udělené zranění, dokud není vyléčen. (AI popíše efekt)."
       ]
     },
     "itemEffectDescription": {
-      "en": "47 Dmg, Grievous Wounds",
-      "cs": "47 Zraň, Těžké Rány"
+      "en": "2d6+5 Damage, Grievous Wounds",
+      "cs": "2d6+5 Zranění, Těžké Rány"
     },
     "level": 8,
-    "buyPrice": 150,
-    "sellPrice": 45
+    "buyPrice": 100,
+    "sellPrice": 30
   },
   {
     "id": "gw_blade_silvered_arming_sword_l9",
@@ -284,27 +284,27 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 45
+        "Damage": "2d8+3"
       },
       "cs": {
-        "Zranění": 45
+        "Zranění": "2d8+3"
       }
     },
     "abilities": {
       "en": [
-        "Silvered Edge"
+        "Damage is considered magical. Deals +1d6 damage to Blighted creatures."
       ],
       "cs": [
-        "Stříbrné Ostří"
+        "Zranění je považováno za magické. Způsobuje +1d6 zranění Zkaženým tvorům."
       ]
     },
     "itemEffectDescription": {
-      "en": "45 Dmg, Silvered",
-      "cs": "45 Zraň, Postříbřené"
+      "en": "2d8+3 Damage, +1d6 vs Blighted",
+      "cs": "2d8+3 Zranění, +1d6 vs Zkažení"
     },
     "level": 9,
-    "buyPrice": 154,
-    "sellPrice": 46
+    "buyPrice": 120,
+    "sellPrice": 36
   },
   {
     "id": "gw_blade_wardens_resolve_l10",
@@ -319,28 +319,26 @@
     "itemType": "wardens_blade",
     "attributes": {
       "en": {
-        "Damage": 51
+        "Damage": "2d8+4"
       },
       "cs": {
-        "Zranění": 51
+        "Zranění": "2d8+4"
       }
     },
     "abilities": {
       "en": [
-        "True Strike",
-        "Effective vs Blighted"
+        "+1 to attack rolls. Damage is considered magical for overcoming resistances."
       ],
       "cs": [
-        "Jistý Úder",
-        "Efektivní proti Zkaženým"
+        "+1 k hodům na útok. Zranění je považováno za magické pro překonání odolností."
       ]
     },
     "itemEffectDescription": {
-      "en": "51 Dmg, True Strike, vs Blighted",
-      "cs": "51 Zraň, Jistý Úder, vs Zkažení"
+      "en": "2d8+4 Damage, +1 to Hit",
+      "cs": "2d8+4 Zranění, +1 k Zásahu"
     },
     "level": 10,
-    "buyPrice": 185,
-    "sellPrice": 56
+    "buyPrice": 130,
+    "sellPrice": 39
   }
 ]

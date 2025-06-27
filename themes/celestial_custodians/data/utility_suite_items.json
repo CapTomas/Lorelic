@@ -11,20 +11,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 21 },
-      "cs": { "Zvýšení Soudržnosti": 21 }
+      "en": {
+        "Integrity Bonus": "+5"
+      },
+      "cs": {
+        "Bonus k Integritě": "+5"
+      }
     },
     "abilities": {
-      "en": ["Resists minor tea spills"],
-      "cs": ["Odolává menšímu rozlití čaje"]
+      "en": [
+        "Grants a +1 bonus to Resilience saves against minor environmental mishaps (like tea spills)."
+      ],
+      "cs": [
+        "Poskytuje bonus +1 k Záchranným hodům na Odolnost proti menším environmentálním nehodám (jako je rozlitý čaj)."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+21 Cohesion, Tea Resistant",
-      "cs": "+21 Soudržnost, Odolné čaji"
+      "en": "+5 Integrity, +1 vs Mishaps",
+      "cs": "+5 Integrita, +1 vs Nehody"
     },
     "level": 1,
-    "buyPrice": 24,
-    "sellPrice": 6
+    "buyPrice": 25,
+    "sellPrice": 7
   },
   {
     "id": "cc_us_reinforced_galoshes_l02",
@@ -38,20 +46,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 36 },
-      "cs": { "Zvýšení Soudržnosti": 36 }
+      "en": {
+        "Integrity Bonus": "+8"
+      },
+      "cs": {
+        "Bonus k Integritě": "+8"
+      }
     },
     "abilities": {
-      "en": ["Prevents existential dampness"],
-      "cs": ["Zabraňuje existenční vlhkosti"]
+      "en": [
+        "Gain Advantage on Willpower saves against effects that cause despair or confusion."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům, které způsobují zoufalství nebo zmatek."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+36 Cohesion, Dampness Prevention",
-      "cs": "+36 Soudržnost, Prevence vlhkosti"
+      "en": "+8 Integrity, Resist Despair",
+      "cs": "+8 Integrita, Odolnost vůči Zoufalství"
     },
     "level": 2,
-    "buyPrice": 41,
-    "sellPrice": 10
+    "buyPrice": 36,
+    "sellPrice": 9
   },
   {
     "id": "cc_us_padded_boiler_suit_l03",
@@ -65,20 +81,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 52 },
-      "cs": { "Zvýšení Soudržnosti": 52 }
+      "en": {
+        "Integrity Bonus": "+9"
+      },
+      "cs": {
+        "Bonus k Integritě": "+9"
+      }
     },
     "abilities": {
-      "en": ["Slightly muffles the sound of screaming voids"],
-      "cs": ["Lehce tlumí zvuk křičících prázdnot"]
+      "en": [
+        "Gain Advantage on Willpower saves against fear or madness-inducing effects."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům vyvolávajícím strach nebo šílenství."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+52 Cohesion, Muffles Voids",
-      "cs": "+52 Soudržnost, Tlumí prázdnoty"
+      "en": "+9 Integrity, Resist Fear/Madness",
+      "cs": "+9 Integrita, Odolnost Strachu/Šílenství"
     },
     "level": 3,
-    "buyPrice": 53,
-    "sellPrice": 13
+    "buyPrice": 46,
+    "sellPrice": 12
   },
   {
     "id": "cc_us_asbestos_lined_apron_l04",
@@ -92,20 +116,30 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 65 },
-      "cs": { "Zvýšení Soudržnosti": 65 }
+      "en": {
+        "Integrity Bonus": "+11"
+      },
+      "cs": {
+        "Bonus k Integritě": "+11"
+      }
     },
     "abilities": {
-      "en": ["Questionably safe", "Adds a vintage charm"],
-      "cs": ["Pochybně bezpečná", "Dodává vintage šarm"]
+      "en": [
+        "Reduce incoming fire or energy damage by 1d4.",
+        "Imposes Disadvantage on saves vs. poison."
+      ],
+      "cs": [
+        "Snižuje příchozí ohnivé nebo energetické zranění o 1d4.",
+        "Uvaluje Nevýhodu na záchranné hody proti jedu."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+65 Cohesion, Questionably Safe",
-      "cs": "+65 Soudržnost, Pochybně bezpečná"
+      "en": "+11 Integrity, -1d4 Fire Dmg, Poison Weakness",
+      "cs": "+11 Integrita, -1d4 Ohnivé Zran., Slabost na Jed"
     },
     "level": 4,
-    "buyPrice": 75,
-    "sellPrice": 19
+    "buyPrice": 56,
+    "sellPrice": 17
   },
   {
     "id": "cc_us_anti_static_jumpsuit_l05",
@@ -119,20 +153,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 74 },
-      "cs": { "Zvýšení Soudržnosti": 74 }
+      "en": {
+        "Integrity Bonus": "+13"
+      },
+      "cs": {
+        "Bonus k Integritě": "+13"
+      }
     },
     "abilities": {
-      "en": ["Prevents minor reality shocks"],
-      "cs": ["Zabraňuje menším šokům z reality"]
+      "en": [
+        "Once per session, reduce damage from a single energy-based attack by 1d8."
+      ],
+      "cs": [
+        "Jednou za sezení sniž poškození z jednoho energetického útoku o 1d8."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+74 Cohesion, Prevents Shocks",
-      "cs": "+74 Soudržnost, Zabraňuje šokům"
+      "en": "+13 Integrity, 1/session Energy Shield",
+      "cs": "+13 Integrita, 1/sezení Energ. Štít"
     },
     "level": 5,
-    "buyPrice": 89,
-    "sellPrice": 22
+    "buyPrice": 68,
+    "sellPrice": 20
   },
   {
     "id": "cc_us_gravity_wellies_l06",
@@ -146,20 +188,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 95 },
-      "cs": { "Zvýšení Soudržnosti": 95 }
+      "en": {
+        "Integrity Bonus": "+15"
+      },
+      "cs": {
+        "Bonus k Integritě": "+15"
+      }
     },
     "abilities": {
-      "en": ["Resists sudden upward movement"],
-      "cs": ["Odolává náhlému pohybu vzhůru"]
+      "en": [
+        "Gain Advantage on checks to resist being moved or knocked prone by physical forces."
+      ],
+      "cs": [
+        "Získáš Výhodu při hodech na odolání pohybu nebo sražení k zemi fyzickými silami."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+95 Cohesion, Resists Up",
-      "cs": "+95 Soudržnost, Odolává vzhůru"
+      "en": "+15 Integrity, Resist Knockdown",
+      "cs": "+15 Integrita, Odolnost Sražení"
     },
     "level": 6,
-    "buyPrice": 99,
-    "sellPrice": 25
+    "buyPrice": 78,
+    "sellPrice": 23
   },
   {
     "id": "cc_us_self_ironing_tunic_l07",
@@ -173,20 +223,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 108 },
-      "cs": { "Zvýšení Soudržnosti": 108 }
+      "en": {
+        "Integrity Bonus": "+18"
+      },
+      "cs": {
+        "Bonus k Integritě": "+18"
+      }
     },
     "abilities": {
-      "en": ["Boosts morale through neatness"],
-      "cs": ["Zvyšuje morálku úhledností"]
+      "en": [
+        "Once per session, restore 1d8 Willpower by taking a moment to appreciate your own professional appearance."
+      ],
+      "cs": [
+        "Jednou za sezení obnov 1d8 Vůle tím, že si na chvíli vychutnáš svůj profesionální vzhled."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+108 Cohesion, Morale Boost",
-      "cs": "+108 Soudržnost, Zvyšuje morálku"
+      "en": "+18 Integrity, 1/session Willpower Restore",
+      "cs": "+18 Integrita, 1/sezení Obnova Vůle"
     },
     "level": 7,
-    "buyPrice": 125,
-    "sellPrice": 31
+    "buyPrice": 88,
+    "sellPrice": 26
   },
   {
     "id": "cc_us_bureaucratic_bulwark_l08",
@@ -200,20 +258,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 121 },
-      "cs": { "Zvýšení Soudržnosti": 121 }
+      "en": {
+        "Integrity Bonus": "+20"
+      },
+      "cs": {
+        "Bonus k Integritě": "+20"
+      }
     },
     "abilities": {
-      "en": ["Confuses auditors", "Smells faintly of ink"],
-      "cs": ["Mate auditory", "Slabě voní inkoustem"]
+      "en": [
+        "Gain Advantage on checks made to deceive or bypass bureaucratic systems or entities."
+      ],
+      "cs": [
+        "Získáš Výhodu při hodech na oklamání nebo obejití byrokratických systémů či entit."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+121 Cohesion, Confuses Auditors",
-      "cs": "+121 Soudržnost, Mate auditory"
+      "en": "+20 Integrity, Advantage vs Bureaucracy",
+      "cs": "+20 Integrita, Výhoda vs Byrokracie"
     },
     "level": 8,
-    "buyPrice": 145,
-    "sellPrice": 36
+    "buyPrice": 98,
+    "sellPrice": 29
   },
   {
     "id": "cc_us_pocket_protector_plus_l09",
@@ -227,20 +293,28 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 135 },
-      "cs": { "Zvýšení Soudržnosti": 135 }
+      "en": {
+        "Integrity Bonus": "+22"
+      },
+      "cs": {
+        "Bonus k Integritě": "+22"
+      }
     },
     "abilities": {
-      "en": ["Impervious to ink-based lifeforms"],
-      "cs": ["Nepropustný pro životní formy na bázi inkoustu"]
+      "en": [
+        "Gain resistance to acid damage (halve damage taken)."
+      ],
+      "cs": [
+        "Získáš odolnost vůči poškození kyselinou (poloviční poškození)."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+135 Cohesion, Ink-Proof",
-      "cs": "+135 Soudržnost, Odolné inkoustu"
+      "en": "+22 Integrity, Acid Resistance",
+      "cs": "+22 Integrita, Odolnost vůči Kyselině"
     },
     "level": 9,
-    "buyPrice": 158,
-    "sellPrice": 40
+    "buyPrice": 115,
+    "sellPrice": 35
   },
   {
     "id": "cc_us_hazard_pay_vest_l10",
@@ -254,19 +328,27 @@
     },
     "itemType": "utility_suite",
     "attributes": {
-      "en": { "Cohesion Boost": 149 },
-      "cs": { "Zvýšení Soudržnosti": 149 }
+      "en": {
+        "Integrity Bonus": "+25"
+      },
+      "cs": {
+        "Bonus k Integritě": "+25"
+      }
     },
     "abilities": {
-      "en": ["Slightly reduces papercut severity"],
-      "cs": ["Mírně snižuje závažnost říznutí papírem"]
+      "en": [
+        "Provides a +2 bonus to all Resilience saving throws."
+      ],
+      "cs": [
+        "Poskytuje bonus +2 ke všem Záchranným hodům na Odolnost."
+      ]
     },
     "itemEffectDescription": {
-      "en": "+149 Cohesion, Reduces Papercuts",
-      "cs": "+149 Soudržnost, Snižuje říznutí"
+      "en": "+25 Integrity, +2 Resilience Saves",
+      "cs": "+25 Integrita, +2 k Záchr. hodům na Odol."
     },
     "level": 10,
-    "buyPrice": 176,
-    "sellPrice": 44
+    "buyPrice": 125,
+    "sellPrice": 38
   }
 ]

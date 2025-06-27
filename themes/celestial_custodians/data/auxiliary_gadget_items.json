@@ -11,17 +11,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Minor Distraction", "Charges": 1 },
-      "cs": { "Účinek": "Menší Rozptýlení", "Náboje": 1 }
+      "en": {
+        "Effect": "Impose Disadvantage on one target",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Uvalí Nevýhodu na jeden cíl",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Briefly confuses simple-minded entities", "Feels oddly reassuring in your pocket"],
-      "cs": ["Krátce zmate jednoduché bytosti", "V kapse působí podivně uklidňujícím dojmem"]
+      "en": [
+        "Causes one target to have Disadvantage on its next action or check as it contemplates the lint."
+      ],
+      "cs": [
+        "Jeden cíl získá Nevýhodu na svou příští akci nebo hod, protože bude rozjímat nad žmolky."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Minor Distraction", "cs": "1x Menší Rozptýlení" },
+    "itemEffectDescription": {
+      "en": "1-Use: Target gets Disadvantage",
+      "cs": "1x Použití: Cíl získá Nevýhodu"
+    },
     "level": 1,
     "buyPrice": 5,
-    "sellPrice": 1
+    "sellPrice": 2
   },
   {
     "id": "cc_ag_questionable_tea_l02",
@@ -35,16 +48,31 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Minor Willpower Recovery", "Charges": 1 },
-      "cs": { "Účinek": "Menší Obnova Vůle", "Náboje": 1 }
+      "en": {
+        "Recovery": "1d4+1 Willpower",
+        "Charges": 1
+      },
+      "cs": {
+        "Obnova": "1d4+1 Vůle",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Restores a tiny amount of Gumption", "Tastes vaguely of Thursdays"],
-      "cs": ["Obnoví nepatrné množství Kuráže", "Chutná neurčitě po čtvrtcích"]
+      "en": [
+        "Instantly restores a small amount of Gumption (Willpower).",
+        "Tastes vaguely of Thursdays."
+      ],
+      "cs": [
+        "Okamžitě obnoví malé množství Kuráže (Vůle).",
+        "Chutná neurčitě po čtvrtcích."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Minor Gumption Restore", "cs": "1x Menší Obnova Kuráže" },
+    "itemEffectDescription": {
+      "en": "1-Use: Restore 1d4+1 Gumption",
+      "cs": "1x Použití: Obnoví 1d4+1 Kuráže"
+    },
     "level": 2,
-    "buyPrice": 8,
+    "buyPrice": 7,
     "sellPrice": 2
   },
   {
@@ -59,16 +87,29 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Briefly Solves Minor Bureaucracy", "Charges": 1 },
-      "cs": { "Účinek": "Krátce Řeší Drobnou Byrokracii", "Náboje": 1 }
+      "en": {
+        "Effect": "Advantage on one bureaucracy check",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Výhoda na jeden byrokratický hod",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Can be used to bypass a single, trivial administrative hurdle"],
-      "cs": ["Lze použít k obejití jediné, triviální administrativní překážky"]
+      "en": [
+        "Gain Advantage on your next Aptitude check to deal with paperwork or social regulations."
+      ],
+      "cs": [
+        "Získáš Výhodu na svůj příští hod na Schopnosti, který se týká papírování nebo sociálních předpisů."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Bureaucratic Bypass", "cs": "1x Byrokratický Bypass" },
+    "itemEffectDescription": {
+      "en": "1-Use: Advantage vs. Bureaucracy",
+      "cs": "1x Použití: Výhoda vs. Byrokracie"
+    },
     "level": 3,
-    "buyPrice": 12,
+    "buyPrice": 9,
     "sellPrice": 3
   },
   {
@@ -83,17 +124,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Pauses Minor Anomalies", "Charges": 1 },
-      "cs": { "Účinek": "Pozastaví Menší Anomálie", "Náboje": 1 }
+      "en": {
+        "Effect": "Chance to Stun Anomaly",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Šance na Omráčení Anomálie",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Causes a brief metaphysical pause in one local anomaly", "Squeaks"],
-      "cs": ["Způsobí krátkou metafyzickou pauzu v jedné místní anomálii", "Píská"]
+      "en": [
+        "Target entity must make a DC 12 Willpower save or be Stunned for its next action."
+      ],
+      "cs": [
+        "Cílová entita musí uspět v Záchranném hodu na Vůli (DC 12), jinak je na svou příští akci Omráčena."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Anomaly Pause", "cs": "1x Pozastavení Anomálie" },
+    "itemEffectDescription": {
+      "en": "1-Use: Chance to Stun",
+      "cs": "1x Použití: Šance na Omráčení"
+    },
     "level": 4,
-    "buyPrice": 15,
-    "sellPrice": 4
+    "buyPrice": 11,
+    "sellPrice": 3
   },
   {
     "id": "cc_ag_bureaucratic_singularity_l05",
@@ -107,17 +161,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Stalls Paperwork", "Duration": "Brief", "Charges": 1 },
-      "cs": { "Účinek": "Zdrží Papírování", "Trvání": "Krátké", "Náboje": 1 }
+      "en": {
+        "Effect": "Auto-succeed on one minor paperwork check",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Automatický úspěch na jeden menší hod na papírování",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Temporarily neutralizes one source of administrative dread"],
-      "cs": ["Dočasně neutralizuje jeden zdroj administrativní hrůzy"]
+      "en": [
+        "Automatically succeed on one check to overcome a minor bureaucratic obstacle."
+      ],
+      "cs": [
+        "Automaticky uspěješ v jednom hodu na překonání menší byrokratické překážky."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Paperwork Stall", "cs": "1x Zdržení Papírů" },
+    "itemEffectDescription": {
+      "en": "1-Use: Auto-succeed vs Paperwork",
+      "cs": "1x Použití: Aut. úspěch vs Papírování"
+    },
     "level": 5,
-    "buyPrice": 16,
-    "sellPrice": 5
+    "buyPrice": 14,
+    "sellPrice": 4
   },
   {
     "id": "cc_ag_anti_prose_lozenge_l06",
@@ -131,17 +198,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Mental Fortitude Boost (Dialogue)", "Charges": 1 },
-      "cs": { "Účinek": "Posílení Psychické Odolnosti (Dialog)", "Náboje": 1 }
+      "en": {
+        "Effect": "Advantage on save vs. confusing dialogue",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Výhoda na záchr. hod proti matoucímu dialogu",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Grants temporary immunity to tedious exposition"],
-      "cs": ["Poskytuje dočasnou imunitu vůči zdlouhavým expozicím"]
+      "en": [
+        "Gain Advantage on your next Willpower save against effects caused by tedious or confusing dialogue."
+      ],
+      "cs": [
+        "Získáš Výhodu na svůj příští Záchranný hod na Vůli proti efektům způsobeným nudným nebo matoucím dialogem."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Tedium Immunity", "cs": "1x Imunita vůči Nudě" },
+    "itemEffectDescription": {
+      "en": "1-Use: Advantage vs. Tedium",
+      "cs": "1x Použití: Výhoda vs. Nuda"
+    },
     "level": 6,
-    "buyPrice": 21,
-    "sellPrice": 6
+    "buyPrice": 15,
+    "sellPrice": 5
   },
   {
     "id": "cc_ag_sentient_pudding_l07",
@@ -155,17 +235,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Single-Target Pacification", "Charges": 1 },
-      "cs": { "Účinek": "Jednocílová Pacifikace", "Náboje": 1 }
+      "en": {
+        "Effect": "Chance to Distract Target",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Šance na Rozptýlení Cíle",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Distracts one entity with existential questions"],
-      "cs": ["Rozptýlí jednu entitu existenciálními otázkami"]
+      "en": [
+        "Target must succeed a DC 13 Willpower save or spend its next action contemplating the pudding."
+      ],
+      "cs": [
+        "Cíl musí uspět v Záchranném hodu na Vůli (DC 13), jinak stráví svou příští akci rozjímáním nad pudinkem."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Pudding Pacifier", "cs": "1x Pudinkový Pacifikátor" },
+    "itemEffectDescription": {
+      "en": "1-Use: Chance to Distract",
+      "cs": "1x Použití: Šance na Rozptýlení"
+    },
     "level": 7,
-    "buyPrice": 23,
-    "sellPrice": 7
+    "buyPrice": 18,
+    "sellPrice": 5
   },
   {
     "id": "cc_ag_plausible_deniability_mist_l08",
@@ -179,17 +272,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Shifts Blame (Social)", "Charges": 1 },
-      "cs": { "Účinek": "Přesouvá Vinu (Sociální)", "Náboje": 1 }
+      "en": {
+        "Effect": "Advantage on next Deception check",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod na Klamání",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Temporarily deflects responsibility for one (1) minor mishap"],
-      "cs": ["Dočasně odkloní odpovědnost za jednu (1) menší nehodu"]
+      "en": [
+        "Gain Advantage on your next check to avoid blame for a minor incident."
+      ],
+      "cs": [
+        "Získáš Výhodu na svůj příští hod k vyhnutí se vině za menší incident."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Blame Shift", "cs": "1x Přesun Viny" },
+    "itemEffectDescription": {
+      "en": "1-Use: Advantage on Deception",
+      "cs": "1x Použití: Výhoda na Klamání"
+    },
     "level": 8,
-    "buyPrice": 29,
-    "sellPrice": 9
+    "buyPrice": 19,
+    "sellPrice": 6
   },
   {
     "id": "cc_ag_gravity_recalibration_unit_l09",
@@ -203,17 +309,30 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Briefly Normalizes Gravity", "Charges": 1 },
-      "cs": { "Účinek": "Krátce Normalizuje Gravitaci", "Náboje": 1 }
+      "en": {
+        "Effect": "Advantage on next gravity-related check",
+        "Charges": 1
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod související s gravitací",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Temporarily restores standard gravitational pull in a small area"],
-      "cs": ["Dočasně obnoví standardní gravitační přitažlivost v malé oblasti"]
+      "en": [
+        "For your next action, ignore penalties from abnormal gravity and gain Advantage on the related check."
+      ],
+      "cs": [
+        "Pro tvou příští akci ignoruj postihy z abnormální gravitace a získej Výhodu na související hod."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Gravity Normalizer", "cs": "1x Normalizátor Gravitace" },
+    "itemEffectDescription": {
+      "en": "1-Use: Advantage vs. Gravity",
+      "cs": "1x Použití: Výhoda vs. Gravitace"
+    },
     "level": 9,
-    "buyPrice": 31,
-    "sellPrice": 9
+    "buyPrice": 22,
+    "sellPrice": 7
   },
   {
     "id": "cc_ag_motivational_poster_l10",
@@ -227,16 +346,29 @@
     },
     "itemType": "auxiliary_gadget",
     "attributes": {
-      "en": { "Effect": "Moderate Willpower Recovery", "Charges": 1 },
-      "cs": { "Účinek": "Střední Obnova Vůle", "Náboje": 1 }
+      "en": {
+        "Recovery": "2d4+2 Willpower",
+        "Charges": 1
+      },
+      "cs": {
+        "Obnova": "2d4+2 Vůle",
+        "Náboje": 1
+      }
     },
     "abilities": {
-      "en": ["Instantly restores a moderate amount of Gumption"],
-      "cs": ["Okamžitě obnoví střední množství Kuráže"]
+      "en": [
+        "Instantly restores a moderate amount of Gumption (Willpower)."
+      ],
+      "cs": [
+        "Okamžitě obnoví střední množství Kuráže (Vůle)."
+      ]
     },
-    "itemEffectDescription": { "en": "1-Use Gumption Restore", "cs": "1x Obnova Kuráže" },
+    "itemEffectDescription": {
+      "en": "1-Use: Restore 2d4+2 Gumption",
+      "cs": "1x Použití: Obnoví 2d4+2 Kuráže"
+    },
     "level": 10,
-    "buyPrice": 35,
-    "sellPrice": 11
+    "buyPrice": 24,
+    "sellPrice": 7
   }
 ]

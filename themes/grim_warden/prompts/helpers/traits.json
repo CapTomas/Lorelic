@@ -2,181 +2,181 @@
   "scrounger": {
     "en": {
       "name": "Scrounger",
-      "description": "You have a knack for finding extra resources—coin, reagents, or supplies—where others see only refuse."
+      "description": "You have a knack for finding extra resources. You gain Advantage on all checks made to search for hidden supplies, reagents, or coin."
     },
     "cs": {
       "name": "Šmejdil",
-      "description": "Máte talent na nacházení dodatečných zdrojů – mincí, činidel nebo zásob – tam, kde ostatní vidí jen odpad."
+      "description": "Máš talent na nacházení dodatečných zdrojů. Získáváš Výhodu při všech hodech na hledání skrytých zásob, činidel nebo mincí."
     }
   },
   "tough_as_nails": {
     "en": {
       "name": "Tough as Nails",
-      "description": "You can endure more punishment than most before breaking. Your Integrity is effectively higher when calculating damage from blows."
+      "description": "You can endure more punishment than most. Reduce all incoming physical damage by 2."
     },
     "cs": {
       "name": "Tvrdý jako hřebík",
-      "description": "Vydržíte více trestů než většina ostatních, než se zlomíte. Vaše Integrita je efektivně vyšší při výpočtu poškození z úderů."
+      "description": "Vydržíš více trestů než většina ostatních. Sniž veškeré příchozí fyzické zranění o 2."
     }
   },
   "unseen_sense": {
     "en": {
       "name": "Unseen Sense",
-      "description": "A chilling prickle on your neck or a whisper in the static of your mind often warns you of immediate, hidden dangers like traps or ambushes."
+      "description": "A chilling prickle on your neck often warns you of immediate, hidden dangers. You have Advantage on checks to detect traps and on saving throws to avoid being surprised by ambushes."
     },
     "cs": {
       "name": "Neviděný smysl",
-      "description": "Mrazivé mravenčení na krku nebo šepot ve statickém šumu vaší mysli vás často varuje před bezprostředními, skrytými nebezpečími, jako jsou pasti nebo léčky."
+      "description": "Mrazivé mravenčení na krku tě často varuje před bezprostředními, skrytými nebezpečími. Máš Výhodu při hodech na odhalení pastí a při záchranných hodech proti překvapivým útokům."
     }
   },
   "alchemical_blood": {
     "en": {
       "name": "Alchemical Blood",
-      "description": "Your blood, altered by Warden rituals, grants you a natural resistance to common poisons and the slower, creeping effects of Blight exposure."
+      "description": "Your blood, altered by Warden rituals, grants you a natural resistance. You have Advantage on Resilience saving throws against poison and Blight effects."
     },
     "cs": {
       "name": "Alchymistická krev",
-      "description": "Vaše krev, změněná rituály Strážců, vám poskytuje přirozenou odolnost vůči běžným jedům a pomalejším, plíživým účinkům Zkázy."
+      "description": "Tvá krev, změněná rituály Strážců, ti poskytuje přirozenou odolnost. Máš Výhodu při záchranných hodech na Odolnost proti jedům a účinkům Zkázy."
     }
   },
   "grave_walker": {
     "en": {
       "name": "Grave Walker",
-      "description": "You move with an unnatural quietness, making you harder to detect when sneaking through ruins or blighted wilds."
+      "description": "You move with an unnatural quietness. You have Advantage on all checks made to move silently or remain unseen in shadows."
     },
     "cs": {
       "name": "Chodec hrobu",
-      "description": "Pohybujete se s nepřirozenou tichostí, což ztěžuje vaše odhalení při plížení se ruinami nebo zkaženou divočinou."
+      "description": "Pohybuješ se s nepřirozenou tichostí. Máš Výhodu při všech hodech na tichý pohyb nebo na to, abys zůstal neviděn ve stínech."
     }
   },
   "beast_slayer": {
     "en": {
       "name": "Beast Slayer",
-      "description": "Your deep knowledge of monstrous anatomy allows you to find weak points more easily, granting an edge when fighting non-humanoid abominations."
+      "description": "Your deep knowledge of monstrous anatomy allows you to find weak points. You deal an extra 1d6 damage with all attacks against non-humanoid beasts and Blighted monsters."
     },
     "cs": {
       "name": "Zabiják bestií",
-      "description": "Vaše hluboké znalosti anatomie nestvůr vám umožňují snadněji nacházet slabá místa, což vám dává výhodu v boji proti nelidským ohavnostem."
+      "description": "Tvé hluboké znalosti anatomie nestvůr ti umožňují nacházet slabá místa. Způsobuješ dodatečné 1d6 zranění všemi útoky proti nelidským bestiím a Zkaženým monstrům."
     }
   },
   "witch_hunter": {
     "en": {
       "name": "Witch Hunter",
-      "description": "You have honed your senses to detect the subtle signs of human corruption, making you more effective against Blight-cultists and their ilk."
+      "description": "You have honed your senses to detect human corruption. You deal an extra 1d6 damage with all attacks against human cultists and other malevolent humanoids."
     },
     "cs": {
       "name": "Lovec čarodějnic",
-      "description": "Vycvičili jste své smysly k odhalování jemných známek lidské zkaženosti, což vás činí efektivnějšími proti kultistům Zkázy a jim podobným."
+      "description": "Vycvičil jsi své smysly k odhalování lidské zkaženosti. Způsobuješ dodatečné 1d6 zranění všemi útoky proti lidským kultistům a jiným zlovolným humanoidům."
     }
   },
   "iron_will": {
     "en": {
       "name": "Iron Will",
-      "description": "The horrors you've witnessed have forged your mind into a fortress, granting you superior resistance to fear, madness, and the psychic assaults of powerful Blighted entities."
+      "description": "The horrors you've witnessed have forged your mind into a fortress. You have Advantage on Willpower saving throws against effects that cause fear or madness."
     },
     "cs": {
       "name": "Železná vůle",
-      "description": "Hrůzy, které jste zažili, ukovaly vaši mysl v pevnost, což vám poskytuje vyšší odolnost vůči strachu, šílenství a psychickým útokům mocných Zkažených entit."
+      "description": "Hrůzy, které jsi zažil, ukovaly tvou mysl v pevnost. Máš Výhodu při záchranných hodech na Vůli proti efektům, které způsobují strach nebo šílenství."
     }
   },
   "dour_visage": {
     "en": {
       "name": "Dour Visage",
-      "description": "Your grim countenance and scarred features are naturally intimidating, making threats more effective but friendly persuasion nearly impossible."
+      "description": "Your grim countenance is naturally intimidating. You have Advantage on Intimidation checks, but Disadvantage on Persuasion checks."
     },
     "cs": {
       "name": "Ponurá tvář",
-      "description": "Vaše ponurá tvář a zjizvené rysy jsou přirozeně zastrašující, což činí výhrůžky účinnějšími, ale přátelské přesvědčování téměř nemožným."
+      "description": "Tvá ponurá tvář je přirozeně zastrašující. Máš Výhodu při hodech na Zastrašování, ale Nevýhodu při hodech na Přesvědčování."
     }
   },
   "folk_hero": {
     "en": {
       "name": "Folk Hero",
-      "description": "Despite the Order's decline, whispers of your deeds precede you. Common folk are more likely to offer you shelter, information, or a bit of trust."
+      "description": "Whispers of your deeds precede you. You have Advantage on checks to persuade or gather information from common folk."
     },
     "cs": {
       "name": "Lidový hrdina",
-      "description": "Navzdory úpadku Řádu vás předcházejí šepoty o vašich činech. Obyčejní lidé vám pravděpodobněji nabídnou úkryt, informace nebo trochu důvěry."
+      "description": "Šepoty o tvých činech tě předcházejí. Máš Výhodu při hodech na přesvědčování nebo získávání informací od obyčejných lidí."
     }
   },
   "orders_scholar": {
     "en": {
       "name": "Order's Scholar",
-      "description": "You have a rare talent for deciphering the crumbling texts and faded symbols of the old Warden Order, potentially unlocking forgotten knowledge."
+      "description": "You have a rare talent for deciphering crumbling texts. You have Advantage on checks made to decipher ancient texts, recognize Warden symbols, or recall historical lore."
     },
     "cs": {
       "name": "Řádový učenec",
-      "description": "Máte vzácný talent na luštění drolících se textů a vybledlých symbolů starého Řádu Strážců, což vám může odemknout zapomenuté vědomosti."
+      "description": "Máš vzácný talent na luštění drolících se textů. Máš Výhodu při hodech na luštění starých textů, rozpoznávání symbolů Strážců nebo vzpomínání na historické vědomosti."
     }
   },
   "night_eyed": {
     "en": {
       "name": "Night-Eyed",
-      "description": "Your eyes have adapted to the gloom of the frontier, allowing you to see more clearly in near-total darkness than a normal human."
+      "description": "Your eyes have adapted to the gloom. You no longer suffer Disadvantage on checks made in dim light or darkness."
     },
     "cs": {
       "name": "Noční zrak",
-      "description": "Vaše oči se přizpůsobily šeru pohraničí, což vám umožňuje vidět v téměř úplné tmě jasněji než normální člověk."
+      "description": "Tvé oči se přizpůsobily šeru. Již netrpíš Nevýhodou při hodech prováděných v šeru nebo tmě."
     }
   },
   "resilient_digestion": {
     "en": {
       "name": "Resilient Digestion",
-      "description": "A life on the road, eating whatever can be scavenged, has given you an iron stomach, able to consume questionable food and drink with little ill effect."
+      "description": "A life on the road has given you an iron stomach. You have Advantage on Resilience saving throws against ingested poisons and diseases."
     },
     "cs": {
       "name": "Odolné trávení",
-      "description": "Život na cestách a konzumace všeho, co se dá najít, vám daly železný žaludek, schopný strávit pochybné jídlo a pití s malými následky."
+      "description": "Život na cestách ti dal železný žaludek. Máš Výhodu při záchranných hodech na Odolnost proti požitým jedům a nemocem."
     }
   },
   "pain_fueled": {
     "en": {
       "name": "Pain-Fueled",
-      "description": "When grievously wounded, your desperation and adrenaline can surge, granting you a momentary burst of surprising strength or speed."
+      "description": "When grievously wounded, your desperation surges. While your Integrity is below 50%, you gain a +1d4 bonus to all your damage rolls."
     },
     "cs": {
       "name": "Poháněn bolestí",
-      "description": "Když jste těžce zraněni, vaše zoufalství a adrenalin mohou explodovat a poskytnout vám chvilkový výbuch překvapivé síly nebo rychlosti."
+      "description": "Když jsi těžce zraněn, tvé zoufalství exploduje. Dokud je tvá Integrita pod 50 %, získáváš bonus +1d4 ke všem hodům na zranění."
     }
   },
   "blight_sniffer": {
     "en": {
       "name": "Blight-Sniffer",
-      "description": "You possess an unnerving, almost animalistic ability to smell concentrations of Blight, sometimes allowing you to detect hidden corruption or the lairs of tainted creatures."
+      "description": "You possess an unnerving ability to smell concentrations of Blight. You have Advantage on checks made to detect the presence of hidden Blight corruption."
     },
     "cs": {
       "name": "Čichač Zkázy",
-      "description": "Máte znepokojivou, téměř zvířecí schopnost cítit koncentrace Zkázy, což vám někdy umožňuje odhalit skrytou nákazu nebo doupata zkažených tvorů."
+      "description": "Máš znepokojivou schopnost cítit koncentrace Zkázy. Máš Výhodu při hodech na odhalení přítomnosti skryté nákazy Zkázy."
     }
   },
   "last_stand": {
     "en": {
       "name": "Last Stand",
-      "description": "When pushed to the brink of death, you can channel your remaining life force into one final, heroic effort, be it a mighty blow or a desperate escape."
+      "description": "When pushed to the brink of death, you can channel your remaining life force. Once per session, when your Integrity is below 25%, you can choose to automatically succeed on one attack roll or saving throw."
     },
     "cs": {
       "name": "Poslední vzdor",
-      "description": "Když jste na pokraji smrti, můžete soustředit svou zbývající životní sílu do jednoho posledního, hrdinského úsilí, ať už je to mocný úder nebo zoufalý únik."
+      "description": "Když jsi na pokraji smrti, můžeš soustředit svou zbývající sílu. Jednou za sezení, když je tvá Integrita pod 25 %, si můžeš zvolit automatický úspěch při jednom hodu na útok nebo záchranném hodu."
     }
   },
   "stoic_mind": {
     "en": {
       "name": "Stoic Mind",
-      "description": "You have mastered the art of emotional detachment, making you less susceptible to despair-inducing omens or the psychological ploys of intelligent foes."
+      "description": "You have mastered the art of emotional detachment. You gain a +2 bonus to all Willpower saving throws against illusions and despair-inducing effects."
     },
     "cs": {
       "name": "Stoická mysl",
-      "description": "Ovládli jste umění emočního odstupu, což vás činí méně náchylnými k zoufalství vyvolávajícím znamením nebo psychologickým trikům inteligentních nepřátel."
+      "description": "Ovládl jsi umění emočního odstupu. Získáváš bonus +2 ke všem záchranným hodům na Vůli proti iluzím a efektům vyvolávajícím zoufalství."
     }
   },
   "wardens_anatomy": {
     "en": {
       "name": "Warden's Anatomy",
-      "description": "The alchemical rites of your initiation have hardened your body, making you resistant to mundane diseases and allowing minor wounds to clot with unnatural speed."
+      "description": "The alchemical rites of your initiation have hardened your body. You have Advantage on Resilience saving throws against non-magical diseases and naturally restore 1d4 Integrity after a short rest."
     },
     "cs": {
       "name": "Anatomie Strážce",
-      "description": "Alchymistické rituály vaší iniciace zocelily vaše tělo, učinily vás odolnými vůči běžným nemocem a umožnily, aby se menší rány srážely s nepřirozenou rychlostí."
+      "description": "Alchymistické rituály tvé iniciace zocelily tvé tělo. Máš Výhodu při záchranných hodech na Odolnost proti nemagickým nemocem a přirozeně si obnovíš 1d4 Integrita po krátkém odpočinku."
     }
   }
 }

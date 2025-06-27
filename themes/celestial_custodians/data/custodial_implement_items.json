@@ -12,10 +12,10 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 24
+        "Weirdness Inversion": "1d6+1"
       },
       "cs": {
-        "Inverze Podivnosti": 24
+        "Inverze Podivnosti": "1d6+1"
       }
     },
     "abilities": {
@@ -27,11 +27,11 @@
       ]
     },
     "itemEffectDescription": {
-      "en": "24 Weirdness Inv.",
-      "cs": "24 Inverze Podiv."
+      "en": "1d6+1 Weirdness Inversion",
+      "cs": "1d6+1 Inverze Podivnosti"
     },
     "level": 1,
-    "buyPrice": 23,
+    "buyPrice": 25,
     "sellPrice": 7
   },
   {
@@ -47,29 +47,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 26
+        "Weirdness Inversion": "1d8+1"
       },
       "cs": {
-        "Inverze Podivnosti": 26
+        "Inverze Podivnosti": "1d8+1"
       }
     },
     "abilities": {
       "en": [
-        "Re-aligns Stubborn Machinery",
-        "Slightly Dents Reality"
+        "Grants Advantage on Aptitude checks to repair simple machinery by hitting it."
       ],
       "cs": [
-        "Znovu Zarovnává Vzdorné Stroje",
-        "Lehce Promáčkne Realitu"
+        "Poskytuje Výhodu při hodech na Schopnosti k opravě jednoduchých strojů úderem."
       ]
     },
     "itemEffectDescription": {
-      "en": "26 Weirdness Inv, Re-aligns Machinery",
-      "cs": "26 Inverze Podiv., Zarovnává Stroje"
+      "en": "1d8+1 Weirdness Inv, Percussive Repair",
+      "cs": "1d8+1 Inverze Podiv., Perkusivní Oprava"
     },
     "level": 2,
-    "buyPrice": 42,
-    "sellPrice": 13
+    "buyPrice": 35,
+    "sellPrice": 10
   },
   {
     "id": "cc_impl_squeakyhammer_l03",
@@ -84,29 +82,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 28
+        "Weirdness Inversion": "1d8+2"
       },
       "cs": {
-        "Inverze Podivnosti": 28
+        "Inverze Podivnosti": "1d8+2"
       }
     },
     "abilities": {
       "en": [
-        "Squeaks Menacingly",
-        "Annoys Paradoxes into Submission"
+        "Grants Advantage on Willpower checks to resolve or stabilize minor paradoxes."
       ],
       "cs": [
-        "Hrozivě Píská",
-        "Otravuje Paradoxy k Poslušnosti"
+        "Poskytuje Výhodu při hodech na Vůli k řešení nebo stabilizaci menších paradoxů."
       ]
     },
     "itemEffectDescription": {
-      "en": "28 Weirdness Inv, Annoys Paradoxes",
-      "cs": "28 Inverze Podiv., Otravuje Paradoxy"
+      "en": "1d8+2 Weirdness Inv, Annoys Paradoxes",
+      "cs": "1d8+2 Inverze Podiv., Otravuje Paradoxy"
     },
     "level": 3,
-    "buyPrice": 53,
-    "sellPrice": 16
+    "buyPrice": 45,
+    "sellPrice": 13
   },
   {
     "id": "cc_impl_universalremote_l04",
@@ -121,29 +117,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 31
+        "Weirdness Inversion": "1d10+2"
       },
       "cs": {
-        "Inverze Podivnosti": 31
+        "Inverze Podivnosti": "1d10+2"
       }
     },
     "abilities": {
       "en": [
-        "Unpredictable Channel Surfing",
-        "May Cause Mild Existential Reboot"
+        "Using this on an anomaly may have unpredictable, narrative-driven side effects."
       ],
       "cs": [
-        "Nepředvídatelné Přepínání Kanálů",
-        "Může Způsobit Mírný Existenční Restart"
+        "Použití na anomálii může mít nepředvídatelné, příběhem řízené vedlejší účinky."
       ]
     },
     "itemEffectDescription": {
-      "en": "31 Weirdness Inv, Unpredictable",
-      "cs": "31 Inverze Podiv., Nepředvídatelný"
+      "en": "1d10+2 Weirdness Inv, Unpredictable",
+      "cs": "1d10+2 Inverze Podiv., Nepředvídatelný"
     },
     "level": 4,
-    "buyPrice": 65,
-    "sellPrice": 20
+    "buyPrice": 55,
+    "sellPrice": 16
   },
   {
     "id": "cc_impl_heisenbergsqueegee_l05",
@@ -158,29 +152,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 35
+        "Weirdness Inversion": "1d10+3"
       },
       "cs": {
-        "Inverze Podivnosti": 35
+        "Inverze Podivnosti": "1d10+3"
       }
     },
     "abilities": {
       "en": [
-        "Reduces Quantum Foam Buildup",
-        "Simultaneously Cleans and Smudges"
+        "Reduces Quantum Foam Buildup. Once per session, you can reroll one failed check related to cleaning."
       ],
       "cs": [
-        "Redukuje Nánosy Kvantové Pěny",
-        "Současně Čistí i Špiní"
+        "Redukuje Nánosy Kvantové Pěny. Jednou za sezení si můžeš přehodit jeden neúspěšný hod související s úklidem."
       ]
     },
     "itemEffectDescription": {
-      "en": "35 Weirdness Inv, Quantum Cleaning",
-      "cs": "35 Inverze Podiv., Kvantové Čištění"
+      "en": "1d10+3 Weirdness Inv, 1/session Reroll",
+      "cs": "1d10+3 Inverze Podiv., 1/sezení Přehod"
     },
     "level": 5,
-    "buyPrice": 88,
-    "sellPrice": 26
+    "buyPrice": 65,
+    "sellPrice": 19
   },
   {
     "id": "cc_impl_sentimentalduster_l06",
@@ -195,29 +187,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 39
+        "Weirdness Inversion": "1d12+3"
       },
       "cs": {
-        "Inverze Podivnosti": 39
+        "Inverze Podivnosti": "1d12+3"
       }
     },
     "abilities": {
       "en": [
-        "Applies Emotional Guilt to Grime",
-        "Sobs Quietly"
+        "Grants Advantage on checks to pacify or confuse simple-minded, non-hostile entities."
       ],
       "cs": [
-        "Aplikuje Emoční Vinu na Špínu",
-        "Tiše Vzlyká"
+        "Poskytuje Výhodu při hodech na uklidnění nebo zmatení jednoduchých, ne-nepřátelských entit."
       ]
     },
     "itemEffectDescription": {
-      "en": "39 Weirdness Inv, Guilt-Based Cleaning",
-      "cs": "39 Inverze Podiv., Čištění na Bázi Viny"
+      "en": "1d12+3 Weirdness Inv, Pacify",
+      "cs": "1d12+3 Inverze Podiv., Uklidnění"
     },
     "level": 6,
-    "buyPrice": 95,
-    "sellPrice": 28
+    "buyPrice": 75,
+    "sellPrice": 22
   },
   {
     "id": "cc_impl_sonicspork_l07",
@@ -232,29 +222,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 42
+        "Weirdness Inversion": "2d6+4"
       },
       "cs": {
-        "Inverze Podivnosti": 42
+        "Inverze Podivnosti": "2d6+4"
       }
     },
     "abilities": {
       "en": [
-        "De-Crystallizes Jams",
-        "Harmonically Stirs Beverages"
+        "Can be used to dislodge one minor physical or metaphysical obstacle without a check."
       ],
       "cs": [
-        "Dekrystalizuje Džemy",
-        "Harmonicky Míchá Nápoje"
+        "Lze použít k uvolnění jedné menší fyzické nebo metafyzické překážky bez hodu."
       ]
     },
     "itemEffectDescription": {
-      "en": "42 Weirdness Inv, De-Crystallizes Jam",
-      "cs": "42 Inverze Podiv., Dekrystalizuje Džem"
+      "en": "2d6+4 Weirdness Inv, Dislodges Obstacles",
+      "cs": "2d6+4 Inverze Podiv., Uvolňuje Překážky"
     },
     "level": 7,
-    "buyPrice": 115,
-    "sellPrice": 35
+    "buyPrice": 85,
+    "sellPrice": 25
   },
   {
     "id": "cc_impl_rubberchicken_l08",
@@ -269,29 +257,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 45
+        "Weirdness Inversion": "2d6+5"
       },
       "cs": {
-        "Inverze Podivnosti": 45
+        "Inverze Podivnosti": "2d6+5"
       }
     },
     "abilities": {
       "en": [
-        "Induces Existential Confusion",
-        "A Source of Bafflement"
+        "Once per session, force a reality-bending entity to make a DC 14 Willpower save or be Stunned for one action."
       ],
       "cs": [
-        "Vyvolává Existenční Zmatek",
-        "Zdroj Zmatení"
+        "Jednou za sezení donuť realitu ohýbající entitu k Záchrannému hodu na Vůli (DC 14), jinak je na jednu akci Omráčena."
       ]
     },
     "itemEffectDescription": {
-      "en": "45 Weirdness Inv, Induces Confusion",
-      "cs": "45 Inverze Podiv., Vyvolává Zmatek"
+      "en": "2d6+5 Weirdness Inv, 1/session Stun",
+      "cs": "2d6+5 Inverze Podiv., 1/sezení Omráčení"
     },
     "level": 8,
-    "buyPrice": 145,
-    "sellPrice": 44
+    "buyPrice": 95,
+    "sellPrice": 28
   },
   {
     "id": "cc_impl_bureaucraticclipboard_l09",
@@ -306,29 +292,27 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 49
+        "Weirdness Inversion": "2d8+4"
       },
       "cs": {
-        "Inverze Podivnosti": 49
+        "Inverze Podivnosti": "2d8+4"
       }
     },
     "abilities": {
       "en": [
-        "Weaponized Bureaucracy",
-        "Causes Intense Apathy in Anomalies"
+        "Grants Advantage on checks to intimidate or confuse bureaucratic entities or constructs."
       ],
       "cs": [
-        "Zbraňová Byrokracie",
-        "Způsobuje Intenzivní Apatii v Anomáliích"
+        "Poskytuje Výhodu při hodech na zastrašení nebo zmatení byrokratických entit či konstruktů."
       ]
     },
     "itemEffectDescription": {
-      "en": "49 Weirdness Inv, Weaponized Bureaucracy",
-      "cs": "49 Inverze Podiv., Zbraň. Byrokracie"
+      "en": "2d8+4 Weirdness Inv, Weaponized Bureaucracy",
+      "cs": "2d8+4 Inverze Podiv., Zbraň. Byrokracie"
     },
     "level": 9,
-    "buyPrice": 150,
-    "sellPrice": 45
+    "buyPrice": 110,
+    "sellPrice": 33
   },
   {
     "id": "cc_impl_phasicspatula_l10",
@@ -343,28 +327,26 @@
     "itemType": "custodial_implement",
     "attributes": {
       "en": {
-        "Weirdness Inversion": 50
+        "Weirdness Inversion": "2d8+5"
       },
       "cs": {
-        "Inverze Podivnosti": 50
+        "Inverze Podivnosti": "2d8+5"
       }
     },
     "abilities": {
       "en": [
-        "Unsticks Stubborn Paradoxes",
-        "Flips Spacetime Subtly"
+        "When dealing with a temporal or spatial anomaly, you may spend 5 Willpower to gain Advantage on your next action to resolve it."
       ],
       "cs": [
-        "Uvolňuje Zaseknuté Paradoxy",
-        "Jemně Převrací Časoprostor"
+        "Při řešení časové nebo prostorové anomálie můžeš utratit 5 Vůle a získat Výhodu na svou další akci k jejímu vyřešení."
       ]
     },
     "itemEffectDescription": {
-      "en": "50 Weirdness Inv, Unsticks Paradoxes",
-      "cs": "50 Inverze Podiv., Uvolňuje Paradoxy"
+      "en": "2d8+5 Weirdness Inv, Unsticks Paradoxes",
+      "cs": "2d8+5 Inverze Podiv., Uvolňuje Paradoxy"
     },
     "level": 10,
-    "buyPrice": 185,
-    "sellPrice": 56
+    "buyPrice": 120,
+    "sellPrice": 36
   }
 ]

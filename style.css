@@ -2719,6 +2719,7 @@ button.ui-button.danger:hover {
     border: 2px solid var(--color-text-muted);
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-input-field);
+		background-image: url(images/app/background_noise.png);
     transition: all 0.5s ease-out;
 }
 
@@ -2743,6 +2744,7 @@ button.ui-button.danger:hover {
     height: 35px;
     background-color: var(--color-bg-panel);
     border: 1px solid transparent; /* Simple inner border */
+		background-image: url(images/app/background_noise.png);
     border-radius: var(--radius-xs);
     display: flex;
     align-items: center;

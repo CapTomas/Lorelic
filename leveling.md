@@ -20,7 +20,6 @@ Every player character, significant entity, or even vessel is defined by four co
 
 1.  **Integrity (INT)**
     *   **Base Value:** 100 at Level 1.
-    *   **Per Level Gain:** Automatically increases by **10 points** per character level.
     *   **Concept:** Represents the entity's capacity to maintain wholeness—be it physical, mental, conceptual, or structural—when faced with adversarial forces, environmental hazards, or existential pressures.
     *   **Loss:** Can stem from physical injury, psychic damage, reality fragmentation, ship hull breaches, or severe bureaucratic entanglement, depending on the theme.
     *   **Consequence of Zero:** Reaching zero Integrity signifies the entity is broken, incapacitated, destroyed, or otherwise narratively "taken out of action" according to the theme's context.
@@ -28,7 +27,6 @@ Every player character, significant entity, or even vessel is defined by four co
 
 2.  **Willpower (WIL)**
     *   **Base Value:** 50 at Level 1.
-    *   **Per Level Gain:** Automatically increases by **5 points** per character level.
     *   **Concept:** A finite reservoir of focused energy, mental fortitude, resolve, or sheer audacity.
     *   **Expenditure:** Actively expended by the player to fuel potent abilities, perform strenuous or extraordinary actions (physical, mental, or conceptual), channel unique energies (alchemical, psychic, shanty-powered), or resist insidious influences.
     *   **Recovery:** Recovers through rest, thematic consumables (e.g., potions, tea, grog, data-pills), or moments of profound thematic resonance (e.g., successful problem-solving, inspiring leadership).
@@ -36,12 +34,12 @@ Every player character, significant entity, or even vessel is defined by four co
 3.  **Aptitude (APT)**
     *   **Base Value:** 10 at Level 1.
     *   **Concept:** A measure of inherent talent, honed skill, precision, insight, and effectiveness in executing deliberate actions. This is a passive modifier that influences the *quality and degree of success* of actions.
-    *   **Effect:** Aptitude enhances the positive impact of actions. A higher Aptitude leads to more effective outcomes, overcoming greater difficulties, or achieving more nuanced results. *AI Interpretation: The AI considers Aptitude as a key factor in determining how well an action succeeds (e.g., `Base Action Magnitude * (Character_Aptitude / 10)` can be a conceptual guide for the AI).*
+    *   **Effect:** Aptitude enhances the positive impact of actions. A higher Aptitude leads to more effective outcomes, overcoming greater difficulties, or achieving more nuanced results. *AI Interpretation: The AI considers Aptitude as a key factor in determining how well an action succeeds (e.g., `Base Action Magnitude + ((Character_Aptitude - 10) / 5)` can be a conceptual guide for the AI).*
 
 4.  **Resilience (RES)**
     *   **Base Value:** 10 at Level 1.
     *   **Concept:** A defensive modifier reflecting inner grit, inherent toughness (physical, mental, or conceptual), and the ability to passively endure or mitigate hostile effects.
-    *   **Effect:** Higher Resilience can reduce the impact of negative consequences, increase chances to resist debilitating conditions (e.g., fear, corruption, curses, confusion), or maintain composure under pressure. *AI Interpretation: Resilience helps diminish the severity of adverse effects (e.g., `Incoming Negative Magnitude * (10 / Character_Resilience)` can be a conceptual guide for the AI).*
+    *   **Effect:** Higher Resilience can reduce the impact of negative consequences, increase chances to resist debilitating conditions (e.g., fear, corruption, curses, confusion), or maintain composure under pressure. *AI Interpretation: Resilience helps diminish the severity of adverse effects (e.g., `Incoming Negative Magnitude + ((Character_Resilience- 10) / 5)` can be a conceptual guide for the AI).*
 
 ---
 
@@ -55,10 +53,9 @@ Progression is marked by gaining Experience Points (XP) through overcoming chall
     *   The cumulative XP required for each level is predefined (as per the "Character Progression & Challenge Benchmarks" reference table).
 
 2.  **Level-Up Benefits:**
-    *   **Automatic Gains:** Max Integrity increases by 10, Max Willpower by 5.
     *   **Attribute Point:** The character gains **1 Attribute Point** to allocate, enhancing one of the following:
-        *   Max Integrity by an additional **20 points**.
-        *   Max Willpower by an additional **10 points**.
+        *   Max Integrity by an additional **10 points**.
+        *   Max Willpower by an additional **5 points**.
         *   Aptitude by **1 point**.
         *   Resilience by **1 point**.
     *   **Trait Selection:** The character is presented with **three randomly selected Traits** relevant to their current theme. They may choose **one** to permanently add to their repertoire. Chosen traits are **persistent for that theme character** until a full character reset for that theme. This allows for emergent character builds and a more personalized progression across multiple game runs within the same theme.
@@ -141,44 +138,14 @@ The inventory and economy systems provide a dynamic loop for character enhanceme
 
 5.  **Item & Currency Reward Generation (Config-Driven Backend Logic):**
     *   The AI Game Master facilitates item and currency rewards, which are granted on a **session-specific basis**.
-    *   **Awarding Items:**
-        *   **Compendium-Based Items:** For pre-defined item types (e.g., a "Warden's Blade," a "Health Potion"), the AI sets the relevant `reward_trigger` game state indicator (defined in `equipment_slots`) to `true`.
-            *   **Backend Process:** Upon receiving a `GameState` with such a trigger, the backend identifies the `itemType`. It consults the theme's item compendium, randomly selects an item of that type appropriate for the player's current character level (using the distribution table below), and adds it to the player's `session_inventory` for the current game run.
-                | Player Levels | Item Level Distribution                               |
-                | :------------ | :---------------------------------------------------- |
-                | 1–10          | 40% PlayerLvl, 35% PlayerLvl+1, 15% PlayerLvl+2, 10% PlayerLvl-1 |
-                | 11–25         | 50% PlayerLvl, 25% PlayerLvl+1, 8% PlayerLvl+2, 17% PlayerLvl-1  |
-                | 26–45         | 60% PlayerLvl, 15% PlayerLvl+1, 5% PlayerLvl+2, 20% PlayerLvl-1  |
-                | 46–50         | 70% PlayerLvl, 5% PlayerLvl+1, 3% PlayerLvl+2, 22% PlayerLvl-1   |
-                *(Note: Item levels are clamped. If PlayerLvl-1 < 1, Lvl 1 items chosen. If PlayerLvl+X > max item level, max level items chosen.)*
-        *   **AI-Generated Unique Items:** The AI has the capability to narratively introduce and define entirely new items during a game session.
-            *   When awarding such an item, the AI must construct its complete data structure (conforming to the JSON format specified in Section IV.2), including all localized names, descriptions, attributes, and abilities. This item will exist only for the current session.
-            *   This generated item object is placed by the AI into a designated game state field, such as `state.pending_generated_item_reward`.
-            *   **Backend Process:** The backend retrieves this custom item data, adds the item to the player's `session_inventory` for the current run, and then clears the `pending_generated_item_reward` field.
-    *   **Awarding Currency:**
-        *   The AI signals a currency reward by setting the `reward_trigger` for the `type: "money"` slot to `true`.
-        *   **Backend Process:** The backend determines an appropriate amount based on the Objective's scale (Minor, Standard, etc., referencing the "Currency per Std. Obj." column in the progression table as a guideline) and adds it to the player's current session's currency total (managed via the dashboard item linked to the `type: "money"` slot).
-    *   **Reward Acknowledgment:** The `reward_trigger` game state indicator (for compendium items or currency) is reset to `false` by the AI in its *next* turn response after acknowledging the reward.
-    *   All awarded items and currency are for the current game session only and are not carried over to subsequent runs.
-
+    *
 6.  **Item Consumption:**
     *   For items equipped in slots marked `type: "consumable"`:
         *   The AI's narrative description of the item being fully used is the trigger.
         *   The AI **must** update the relevant dashboard item (e.g., `equipped_alchemical_concoction_effect`) to an "empty" or "charges depleted" state.
         *   Client-side logic in `gameController.js` detects this state change and removes the item from `session_inventory` and `equipped_items` for the current session.
 
-7.  **The Store:**
-    *   **Unlock:** Becomes available to the player upon reaching **character Level 3** for a specific theme.
-    *   **Functionality:**
-        *   **Sell:** Players can sell `static` items and any unconsumed `consumable` items from their current session's `session_inventory`. The sell price is typically 20-30% of the item's `buyPrice`. Fully consumed items or currency itself cannot be sold.
-        *   **Buy:** Players can purchase items offered by the store using their current session's thematic currency. Items are bought at their listed `buyPrice`.
-    *   **Currency:** Thematic currency (e.g., "Silver Shards," "Imperial Credits") is acquired through quest rewards (as per `reward_trigger` for `type: "money"` slots), selling items, or other AI-narrated means (finding, stealing, etc. – where the AI would trigger the currency `reward_trigger`). All currency is session-specific.
-    *   **Stock Rotation:** The Store's inventory refreshes with new items **every 12 real-world hours**. (A backend timestamp mechanism will manage this.)
-    *   **Stock Generation:** Each refresh, the Store offers **three randomly selected items**.
-        *   Items can be of any `itemType` defined in the theme's item compendiums (e.g., weapons, armor, consumables).
-        *   The level of offered items is determined using the same player level-based distribution table as quest rewards.
-
-8.  **Inventory Interaction (UI):**
+7.  **Inventory Interaction (UI):**
     *   A dedicated Inventory Modal will display items from the current `session_inventory`, grouped by `itemType`.
     *   Each item shows `name`, `attributes` (localized), and `description` (localized).
     *   "Equip" button: Updates `state.equippedItems`, updates the dashboard via `dashboardManager.updateDashboardFromEquippedItems()`, re-renders modal, triggers save.
@@ -203,8 +170,8 @@ Progression is driven by engaging with and overcoming thematic challenges and co
 
 The AI Game Master interprets player actions within the context of their attributes, traits, strain, conditions, and equipment.
 
-1.  **Aptitude's Role:** Higher Aptitude should lead the AI to narrate more successful, impactful, or nuanced outcomes for player actions. The conceptual formula `Base Action Magnitude * (Character_Aptitude / 10)` (adjusted by Strain) guides the AI's judgment of effectiveness.
-2.  **Resilience's Role:** Higher Resilience should lead the AI to narrate mitigated negative consequences from challenges or environmental effects. The conceptual formula `Incoming Negative Magnitude * (10 / Character_Resilience)` (adjusted by Strain) guides the AI's judgment.
+1.  **Aptitude's Role:** Higher Aptitude should lead the AI to narrate more successful, impactful, or nuanced outcomes for player actions. The conceptual formula `Base Action Magnitude + ((Character_Aptitude - 10) / 5)` (adjusted by Strain) guides the AI's judgment of effectiveness.
+2.  **Resilience's Role:** Higher Resilience should lead the AI to narrate mitigated negative consequences from challenges or environmental effects. The conceptual formula `Incoming Negative Magnitude + ((Character_Resilience - 10) / 5)` (adjusted by Strain) guides the AI's judgment.
 3.  **"Player Efforts to Overcome Challenge":** A conceptual measure of how many significant, successful actions are typically needed to resolve a challenge.
 4.  **"Setback Magnitude":** The "cost" of failure or opposition (e.g., Integrity loss, Willpower drain, new Complication).
 

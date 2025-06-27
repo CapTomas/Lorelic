@@ -56,7 +56,7 @@
         "type": "meter",
         "meter_type": "health",
         "maps_to_run_stat": "currentIntegrity",
-        "short_description": "The Warden's physical and spiritual wholeness. Lost to wounds and horrors. At zero, the body or will is broken."
+        "short_description": "The Warden's physical and spiritual wholeness. Lost to wounds and horrors. At zero, the body or will is broken. Crucial to update every time health is changed."
       },
       {
         "id": "willpower",

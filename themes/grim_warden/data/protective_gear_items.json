@@ -12,27 +12,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 20
+        "Integrity Bonus": "+5"
       },
       "cs": {
-        "Zbroj": 20
+        "Bonus k Integritě": "+5"
       }
     },
     "abilities": {
       "en": [
-        "Slightly Dampens Sound"
+        "Grants Advantage on checks to move silently."
       ],
       "cs": [
-        "Lehce tlumí zvuk"
+        "Poskytuje Výhodu při hodech na tichý pohyb."
       ]
     },
     "itemEffectDescription": {
-      "en": "20 Arm, Dampens Sound",
-      "cs": "20 Zbr, Tlumí Zvuk"
+      "en": "+5 Integrity, Advantage on Stealth",
+      "cs": "+5 Integrita, Výhoda na Plížení"
     },
     "level": 1,
     "buyPrice": 25,
-    "sellPrice": 8
+    "sellPrice": 7
   },
   {
     "id": "gw_pg_hidepatches_l02",
@@ -47,27 +47,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 34
+        "Integrity Bonus": "+7"
       },
       "cs": {
-        "Zbroj": 34
+        "Bonus k Integritě": "+7"
       }
     },
     "abilities": {
       "en": [
-        "Minor Cold Resistance"
+        "Gain Advantage on Resilience saves against cold weather effects."
       ],
       "cs": [
-        "Menší odolnost proti chladu"
+        "Získáš Výhodu při Záchranných hodech na Odolnost proti efektům chladného počasí."
       ]
     },
     "itemEffectDescription": {
-      "en": "34 Arm, Minor Cold Resist",
-      "cs": "34 Zbr, Menší Odol. Chladu"
+      "en": "+7 Integrity, Cold Resistance",
+      "cs": "+7 Integrita, Odolnost vůči Chladu"
     },
     "level": 2,
-    "buyPrice": 40,
-    "sellPrice": 12
+    "buyPrice": 36,
+    "sellPrice": 10
   },
   {
     "id": "gw_pg_rustedlinks_l03",
@@ -82,27 +82,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 48
+        "Integrity Bonus": "+10"
       },
       "cs": {
-        "Zbroj": 48
+        "Bonus k Integritě": "+10"
       }
     },
     "abilities": {
       "en": [
-        "Deters Small Vermin"
+        "Imposes Disadvantage on checks to move silently."
       ],
       "cs": [
-        "Odrazuje havěť"
+        "Uvaluje Nevýhodu na hody pro tichý pohyb."
       ]
     },
     "itemEffectDescription": {
-      "en": "48 Arm, Deters Vermin",
-      "cs": "48 Zbr, Odrazuje Havěť"
+      "en": "+10 Integrity, Noisy",
+      "cs": "+10 Integrita, Hlučné"
     },
     "level": 3,
-    "buyPrice": 55,
-    "sellPrice": 17
+    "buyPrice": 47,
+    "sellPrice": 14
   },
   {
     "id": "gw_pg_thicktunic_l04",
@@ -117,27 +117,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 62
+        "Integrity Bonus": "+12"
       },
       "cs": {
-        "Zbroj": 62
+        "Bonus k Integritě": "+12"
       }
     },
     "abilities": {
       "en": [
-        "Provides Warmth"
+        "Reduce incoming Bludgeoning damage by 1."
       ],
       "cs": [
-        "Poskytuje teplo"
+        "Snižuje příchozí Drtivé zranění o 1."
       ]
     },
     "itemEffectDescription": {
-      "en": "62 Arm, Warmth",
-      "cs": "62 Zbr, Teplo"
+      "en": "+12 Integrity, -1 Bludgeoning Dmg",
+      "cs": "+12 Integrita, -1 Drtivé Zraň."
     },
     "level": 4,
-    "buyPrice": 70,
-    "sellPrice": 21
+    "buyPrice": 52,
+    "sellPrice": 15
   },
   {
     "id": "gw_pg_bonewraps_l05",
@@ -152,27 +152,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 76
+        "Integrity Bonus": "+14"
       },
       "cs": {
-        "Zbroj": 76
+        "Bonus k Integritě": "+14"
       }
     },
     "abilities": {
       "en": [
-        "Causes Unease in Animals"
+        "Grants +1d4 bonus on Intimidation checks."
       ],
       "cs": [
-        "Vyvolává neklid u zvířat"
+        "Poskytuje bonus +1d4 k hodům na Zastrašování."
       ]
     },
     "itemEffectDescription": {
-      "en": "76 Arm, Unease Animals",
-      "cs": "76 Zbr, Neklid Zvířat"
+      "en": "+14 Integrity, +1d4 Intimidation",
+      "cs": "+14 Integrita, +1d4 Zastrašování"
     },
     "level": 5,
-    "buyPrice": 85,
-    "sellPrice": 26
+    "buyPrice": 68,
+    "sellPrice": 20
   },
   {
     "id": "gw_pg_leatherjerkin_l06",
@@ -187,27 +187,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 90
+        "Integrity Bonus": "+16"
       },
       "cs": {
-        "Zbroj": 90
+        "Bonus k Integritě": "+16"
       }
     },
     "abilities": {
       "en": [
-        "Resists Minor Cuts"
+        "Reduce incoming Slashing damage by 2."
       ],
       "cs": [
-        "Odolává drobným řezům"
+        "Snižuje příchozí Sekající zranění o 2."
       ]
     },
     "itemEffectDescription": {
-      "en": "90 Arm, Cut Resist",
-      "cs": "90 Zbr, Odol. Řezům"
+      "en": "+16 Integrity, -2 Slashing Dmg",
+      "cs": "+16 Integrita, -2 Sekající Zraň."
     },
     "level": 6,
-    "buyPrice": 100,
-    "sellPrice": 30
+    "buyPrice": 78,
+    "sellPrice": 23
   },
   {
     "id": "gw_pg_paddedgambeson_l07",
@@ -222,27 +222,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 104
+        "Integrity Bonus": "+18"
       },
       "cs": {
-        "Zbroj": 104
+        "Bonus k Integritě": "+18"
       }
     },
     "abilities": {
       "en": [
-        "Reduces Blunt Trauma"
+        "Reduces damage from critical hits by 1d6."
       ],
       "cs": [
-        "Snižuje tupé trauma"
+        "Snižuje zranění z kritických zásahů o 1d6."
       ]
     },
     "itemEffectDescription": {
-      "en": "104 Arm, Blunt Trauma Resist",
-      "cs": "104 Zbr, Odol. Tup. Traumatu"
+      "en": "+18 Integrity, Crit Dmg Reduction",
+      "cs": "+18 Integrita, Redukce Krit. Zranění"
     },
     "level": 7,
-    "buyPrice": 120,
-    "sellPrice": 36
+    "buyPrice": 82,
+    "sellPrice": 25
   },
   {
     "id": "gw_pg_ironcap_l08",
@@ -257,27 +257,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 118
+        "Integrity Bonus": "+20"
       },
       "cs": {
-        "Zbroj": 118
+        "Bonus k Integritě": "+20"
       }
     },
     "abilities": {
       "en": [
-        "Deflects Glancing Blows to Shoulder"
+        "Once per combat, you can force an attacker to reroll one successful hit against you."
       ],
       "cs": [
-        "Odklání letmé údery"
+        "Jednou za boj můžeš donutit útočníka, aby si přehodil jeden úspěšný zásah proti tobě."
       ]
     },
     "itemEffectDescription": {
-      "en": "118 Arm, Deflects Shoulder Blows",
-      "cs": "118 Zbr, Odklání Údery na Rameno"
+      "en": "+20 Integrity, Force Reroll",
+      "cs": "+20 Integrita, Vynutit Přehod"
     },
     "level": 8,
-    "buyPrice": 140,
-    "sellPrice": 42
+    "buyPrice": 99,
+    "sellPrice": 30
   },
   {
     "id": "gw_pg_watchcloak_l09",
@@ -292,27 +292,27 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 132
+        "Integrity Bonus": "+22"
       },
       "cs": {
-        "Zbroj": 132
+        "Bonus k Integritě": "+22"
       }
     },
     "abilities": {
       "en": [
-        "Water Resistant"
+        "Gain Advantage on Resilience saves against environmental hazards (rain, wind, etc.)."
       ],
       "cs": [
-        "Voděodolný"
+        "Získáš Výhodu při Záchranných hodech na Odolnost proti environmentálním rizikům (déšť, vítr atd.)."
       ]
     },
     "itemEffectDescription": {
-      "en": "132 Arm, Water Resist",
-      "cs": "132 Zbr, Voděodolný"
+      "en": "+22 Integrity, Environment Resist",
+      "cs": "+22 Integrita, Odol. Prostředí"
     },
     "level": 9,
-    "buyPrice": 160,
-    "sellPrice": 48
+    "buyPrice": 115,
+    "sellPrice": 34
   },
   {
     "id": "gw_pg_ringmail_l10",
@@ -327,26 +327,26 @@
     "itemType": "protective_gear",
     "attributes": {
       "en": {
-        "Armor": 146
+        "Integrity Bonus": "+25"
       },
       "cs": {
-        "Zbroj": 146
+        "Bonus k Integritě": "+25"
       }
     },
     "abilities": {
       "en": [
-        "Minor Ward Against Spirits"
+        "Gain Advantage on Willpower saves against fear or charm effects from supernatural entities."
       ],
       "cs": [
-        "Menší ochrana proti duchům"
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům strachu nebo okouzlení od nadpřirozených entit."
       ]
     },
     "itemEffectDescription": {
-      "en": "146 Arm, Minor Spirit Ward",
-      "cs": "146 Zbr, Menší Ochr. Duchů"
+      "en": "+25 Integrity, Spirit Ward",
+      "cs": "+25 Integrita, Ochrana před Duchy"
     },
     "level": 10,
-    "buyPrice": 180,
-    "sellPrice": 54
+    "buyPrice": 125,
+    "sellPrice": 37
   }
 ]

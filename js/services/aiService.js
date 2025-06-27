@@ -41,31 +41,77 @@ const DEFAULT_SAFETY_SETTINGS = [
 const _isValidPromptText = (text) => text && !text.startsWith("ERROR:") && !text.startsWith("HELPER_FILE_NOT_FOUND:");
 
 /**
+ * Builds the JSON payload for the character's acquired traits.
+ * This payload includes the name and description for the current narrative language.
+ * @returns {string} The formatted JSON string of acquired traits.
+ * @private
+ */
+function _buildAcquiredTraitsPayload() {
+  const currentThemeId = state.getCurrentTheme();
+  if (!currentThemeId) return "{}";
+
+  const allThemeTraits = themeService.getThemeTraits(currentThemeId);
+  if (!allThemeTraits) return "{}";
+
+  const acquiredTraitKeys = state.getAcquiredTraitKeys();
+  if (acquiredTraitKeys.length === 0) return "{}";
+
+  const narrativeLang = state.getCurrentNarrativeLanguage();
+  const traitsPayload = {};
+
+  acquiredTraitKeys.forEach(key => {
+    const traitData = allThemeTraits[key];
+    if (traitData) {
+      const localizedTraitData = traitData[narrativeLang] ?? traitData['en'];
+      if (localizedTraitData) {
+        traitsPayload[key] = {
+          name: localizedTraitData.name,
+          description: localizedTraitData.description
+        };
+      }
+    }
+  });
+
+  return JSON.stringify(traitsPayload, null, 2);
+}
+
+/**
  * Builds the string payload for currently equipped items.
- * @returns {string} The formatted string of equipped items.
+ * This now provides a filtered JSON of equipped items, containing only the
+ * data relevant to the current narrative language.
+ * @returns {string} The formatted JSON string of equipped items.
  * @private
  */
 function _buildEquippedItemsPayload() {
   const equippedItems = state.getEquippedItems();
+  const narrativeLang = state.getCurrentNarrativeLanguage();
+
   if (Object.keys(equippedItems).length === 0) {
-    return "The character has no notable equipment.";
+    return "{}";
   }
 
-  const lang = state.getCurrentNarrativeLanguage();
-  const intro = state.getIsInitialGameLoad()
-    ? "The character begins with the following equipment based on their current level. This gear is fixed for the start of the game and should be reflected in the dashboard. Do not change it unless the player acquires new items.\n"
-    : "The character is currently equipped with the following:\n";
+  const filteredPayload = {};
 
-  const itemsList = Object.values(equippedItems).map(item => {
-    if (!item?.name) return '';
-    const itemName = item.name[lang] || item.name.en || 'Unknown Item';
-    const itemEffect = item.itemEffectDescription?.[lang] || item.itemEffectDescription?.en || 'No effect description.';
-    return `- ${itemName} (${itemEffect})`;
-  }).filter(Boolean).join('\n');
+  for (const slotKey in equippedItems) {
+    if (Object.prototype.hasOwnProperty.call(equippedItems, slotKey)) {
+      const originalItem = equippedItems[slotKey];
+      if (!originalItem) continue;
 
-  return intro + itemsList;
+      const filteredItem = {
+        id: originalItem.id,
+        name: originalItem.name?.[narrativeLang] || originalItem.name?.['en'],
+        itemType: originalItem.itemType,
+        attributes: originalItem.attributes?.[narrativeLang] || originalItem.attributes?.['en'],
+        abilities: originalItem.abilities?.[narrativeLang] || originalItem.abilities?.['en'],
+        itemEffectDescription: originalItem.itemEffectDescription?.[narrativeLang] || originalItem.itemEffectDescription?.['en'],
+        level: originalItem.level,
+      };
+      filteredPayload[slotKey] = filteredItem;
+    }
+  }
+
+  return JSON.stringify(filteredPayload, null, 2);
 }
-
 /**
  * Generates descriptive strings for dashboard panels to be used in the AI prompt.
  * @param {string} themeId - The ID of the current theme.
@@ -193,30 +239,33 @@ function _parseJsonResponse(aiResponseString) {
 export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
   const currentThemeId = state.getCurrentTheme();
   if (!currentThemeId) throw new Error("Active theme is missing for prompt generation.");
-
   const themeConfig = themeService.getThemeConfig(currentThemeId);
   const narrativeLang = state.getCurrentNarrativeLanguage();
-
   // 1. Determine the base prompt template
   const isInitialLoad = state.getIsInitialGameLoad();
   const isGeneratingItem = state.getLastKnownGameStateIndicators()?.generate_item_reward;
   let basePromptKey = isInitialLoad ? "master_initial" : (isGeneratingItem ? "master_items" : state.getCurrentPromptType());
   let basePromptText = themeService.getLoadedPromptText(currentThemeId, basePromptKey);
   if (!_isValidPromptText(basePromptText)) {
-    basePromptText = themeService.getLoadedPromptText("master", basePromptKey.startsWith('master_') ? basePromptKey : 'master_default');
+    const fallbackKey = basePromptKey.startsWith('master_') ? basePromptKey : 'master_default';
+    basePromptText = themeService.getLoadedPromptText("master", fallbackKey);
+    if (_isValidPromptText(basePromptText)) {
+      basePromptKey = fallbackKey;
+    }
   }
   if (!_isValidPromptText(basePromptText)) throw new Error(`Critical prompt file missing for key "${basePromptKey}"`);
   let processedPromptText = basePromptText;
-
   // 2. Inject complex templates (which may contain simple placeholders)
   const coreMechanics = JSON.parse(themeService.getLoadedPromptText('master', 'core_mechanics') || '{}');
   const masterCoreTexts = JSON.parse(themeService.getLoadedPromptText('master', 'core_texts') || '{}');
   const themeCoreTexts = JSON.parse(themeService.getLoadedPromptText(currentThemeId, 'core_texts') || '{}');
+  const playerLevel = state.getPlayerLevel();
+  const levelMechanics = coreMechanics?.levelingTable?.data?.[playerLevel - 1] || {};
+  const columnDefinitions = coreMechanics?.levelingTable?.columnDefinitions || {};
   processedPromptText = _injectJsonPayload(processedPromptText, 'mechanics', coreMechanics);
   processedPromptText = _injectTextFromObject(processedPromptText, 'master_texts', masterCoreTexts);
   processedPromptText = _injectTextFromObject(processedPromptText, 'theme_texts', themeCoreTexts);
   processedPromptText = _injectRandomLineHelpers(processedPromptText, currentThemeId);
-
   // 3. Define all simple value replacements
   const userPreference = state.getCurrentUser()?.story_preference;
     let userPreferenceDescription = 'User has not set a story preference.';
@@ -231,10 +280,27 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
       }
     }
   const descriptions = _generateDashboardDescriptions(currentThemeId, narrativeLang);
-  const themeInstructionsKey = `theme_instructions_${basePromptKey.replace('master_', '')}_${currentThemeId}`;
-  let themeInstructions = localizationService.getUIText(themeInstructionsKey, {}, { explicitThemeContext: currentThemeId });
-  if (themeInstructions === themeInstructionsKey) themeInstructions = "No specific instructions provided.";
-
+  const themeInstructionsKey = `theme_instructions_${basePromptKey}_${currentThemeId}`;
+  let themeInstructions = localizationService.getUIText(themeInstructionsKey, {}, { explicitThemeContext: currentThemeId, explicitLangForTextItself: narrativeLang });
+  if (themeInstructions === themeInstructionsKey) {themeInstructions = "No specific instructions provided.";}
+  const history = state.getGameHistory();
+  const lastModelTurn = history.slice().reverse().find(turn => turn.role === 'model');
+  const lastUserTurn = history.slice().reverse().find(turn => turn.role === 'user');
+  let lastNarrativeBeat = "This is the first turn of the game.";
+  if (lastModelTurn) {
+    try {
+      const modelData = JSON.parse(lastModelTurn.parts[0].text);
+      if (modelData.narrative) {
+        lastNarrativeBeat = modelData.narrative;
+      }
+    } catch (e) {
+      log(LOG_LEVEL_WARN, "Could not parse last model turn to extract narrative beat.", e);
+      lastNarrativeBeat = "Error parsing previous turn's narrative.";
+    }
+  }
+  const lastPlayerAction = lastUserTurn ? lastUserTurn.parts[0].text : "No previous player action.";
+  const lastDashboardUpdates = state.getLastKnownDashboardUpdates();
+  const lastGameStateIndicators = state.getLastKnownGameStateIndicators();
   const valueReplacements = {
     'narrativeLanguageInstruction': themeService.getThemeNarrativeLangPromptPart(currentThemeId, narrativeLang),
     'currentNameForPrompt': state.getPlayerIdentifier() || localizationService.getUIText("unknown"),
@@ -254,12 +320,18 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
     'game_history_lore': state.getLastKnownEvolvedWorldLore() || localizationService.getUIText(themeConfig.lore_key, {}, { explicitThemeContext: currentThemeId }),
     'game_history_summary': state.getLastKnownCumulativePlayerSummary() || "No major long-term events have been summarized yet.",
     'world_shards_json_payload': isInitialLoad ? worldShardsPayloadForInitial : "[]",
+    'player_level_benchmarks_json': JSON.stringify(levelMechanics, null, 2),
+    'level_benchmarks_column_definitions_json': JSON.stringify(columnDefinitions, null, 2),
+    'last_dashboard_updates_json': JSON.stringify(lastDashboardUpdates, null, 2),
+    'last_game_state_indicators_json': JSON.stringify(lastGameStateIndicators, null, 2),
+    'last_narrative_beat': lastNarrativeBeat,
+    'last_player_action': lastPlayerAction,
   };
-
+  Object.assign(valueReplacements, lastDashboardUpdates);
+  Object.assign(valueReplacements, lastGameStateIndicators);
   if (masterCoreTexts?.runtimeValues) {
     valueReplacements['runtimeValues_master_texts'] = masterCoreTexts.runtimeValues;
   }
-
   if (basePromptKey === "master_initial") {
     const startsContent = themeService.getLoadedPromptText(currentThemeId, "starts") || themeService.getLoadedPromptText("master", "starts");
     const fallbackName = localizationService.getUIText(themeConfig.name_key, {}, { explicitThemeContext: currentThemeId });
@@ -275,23 +347,23 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
     valueReplacements['startIdea2'] = selectedStarts[1];
     valueReplacements['startIdea3'] = selectedStarts[2];
   }
-
   // 4. Perform multi-pass replacement to resolve nested placeholders
   let previousText;
   let iterations = 0;
   const runtimeSubstitutions = {
     'playerLevel': String(state.getPlayerLevel()),
+    'currentIntegrity': String(state.getCurrentRunStats().currentIntegrity),
+    'currentWillpower': String(state.getCurrentRunStats().currentWillpower),
     'effectiveMaxIntegrity': String(state.getEffectiveMaxIntegrity()),
     'effectiveMaxWillpower': String(state.getEffectiveMaxWillpower()),
     'effectiveAptitude': String(state.getEffectiveAptitude()),
     'effectiveResilience': String(state.getEffectiveResilience()),
-    'acquiredTraitsJSON': JSON.stringify(state.getAcquiredTraitKeys()),
+    'acquiredTraitsJSON': _buildAcquiredTraitsPayload(),
     'equippedItemsPayload': _buildEquippedItemsPayload(),
     'currentStrainLevel': String(state.getCurrentStrainLevel()),
     'activeConditionsJSON': JSON.stringify(state.getActiveConditions()),
     'currentNarrativeLanguage.toUpperCase()': narrativeLang.toUpperCase(),
   };
-
   do {
     previousText = processedPromptText;
     // First, replace the larger blocks
@@ -304,11 +376,9 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
     }
     iterations++;
   } while (processedPromptText !== previousText && iterations < 5);
-
   if (iterations === 5) {
     log(LOG_LEVEL_WARN, "Prompt replacement reached max iterations. Possible circular dependency.");
   }
-
   return processedPromptText;
 }
 

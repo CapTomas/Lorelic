@@ -12,29 +12,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Minor Restoration": 1
+        "Healing": "1d4+2 Integrity"
       },
       "cs": {
-        "Menší Obnova": 1
+        "Léčení": "1d4+2 Integrita"
       }
     },
     "abilities": {
       "en": [
-        "Soothes Minor Ailments",
-        "Settles Stomach"
+        "Instantly restores a small amount of Integrity."
       ],
       "cs": [
-        "Uklidňuje menší neduhy",
-        "Uklidňuje žaludek"
+        "Okamžitě obnoví malé množství Integrita."
       ]
     },
     "itemEffectDescription": {
-      "en": "Minor Restore, Soothes Ailments",
-      "cs": "Menší Obnova, Uklidňuje Neduhy"
+      "en": "Heals 1d4+2 Integrity",
+      "cs": "Vyléčí 1d4+2 Integrita"
     },
     "level": 1,
     "buyPrice": 5,
-    "sellPrice": 2
+    "sellPrice": 1
   },
   {
     "id": "gw_ac_gravemossinfusion_l02",
@@ -49,30 +47,26 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Sight Boost": 1,
-        "Duration": "Fleeting"
+        "Effect": "Advantage on next Perception check"
       },
       "cs": {
-        "Zlepšení Zraku": 1,
-        "Trvání": "Prchavé"
+        "Účinek": "Výhoda na příští hod na Vnímání"
       }
     },
     "abilities": {
       "en": [
-        "Briefly Sharpens Sight",
-        "Reduces Eye Strain"
+        "Briefly sharpens the senses to notice hidden details."
       ],
       "cs": [
-        "Krátce zostřuje zrak",
-        "Snižuje námahu očí"
+        "Krátce zostřuje smysly k všimnutí si skrytých detailů."
       ]
     },
     "itemEffectDescription": {
-      "en": "+1 Sight (Fleeting), Sharpens Sight",
-      "cs": "+1 Zrak (Prch.), Zostřuje Zrak"
+      "en": "Advantage on next Perception check",
+      "cs": "Výhoda na příští hod na Vnímání"
     },
     "level": 2,
-    "buyPrice": 8,
+    "buyPrice": 7,
     "sellPrice": 2
   },
   {
@@ -88,30 +82,26 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Stamina Boost": 1,
-        "Duration": "Brief"
+        "Recovery": "1d4+1 Willpower"
       },
       "cs": {
-        "Zvýšení Výdrže": 1,
-        "Trvání": "Krátké"
+        "Obnova": "1d4+1 Vůle"
       }
     },
     "abilities": {
       "en": [
-        "Temporarily Invigorates Muscles",
-        "Brief Stamina Boost"
+        "Instantly restores a small amount of Willpower."
       ],
       "cs": [
-        "Dočasně povzbuzuje svaly",
-        "Krátké zvýšení výdrže"
+        "Okamžitě obnoví malé množství Vůle."
       ]
     },
     "itemEffectDescription": {
-      "en": "+1 Stamina (Brief), Invigorates",
-      "cs": "+1 Výdrž (Krátce), Povzbuzuje"
+      "en": "Restores 1d4+1 Willpower",
+      "cs": "Obnoví 1d4+1 Vůli"
     },
     "level": 3,
-    "buyPrice": 11,
+    "buyPrice": 9,
     "sellPrice": 3
   },
   {
@@ -127,30 +117,26 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Sound Muffling": 1,
-        "Duration": "Brief"
+        "Effect": "Advantage on next Stealth check"
       },
       "cs": {
-        "Tlumení Zvuku": 1,
-        "Trvání": "Krátké"
+        "Účinek": "Výhoda na příští hod na Plížení"
       }
     },
     "abilities": {
       "en": [
-        "Briefly Muffles Footsteps",
-        "Aids Minor Stealth"
+        "Briefly muffles footsteps and blends you into shadows."
       ],
       "cs": [
-        "Krátce tlumí kroky",
-        "Pomáhá menšímu plížení"
+        "Krátce tlumí kroky a nechá tě splynout se stíny."
       ]
     },
     "itemEffectDescription": {
-      "en": "Muffles Sound (Brief), Aids Stealth",
-      "cs": "Tlumí Zvuk (Krát.), Pomáhá Plížení"
+      "en": "Advantage on next Stealth check",
+      "cs": "Výhoda na příští hod na Plížení"
     },
     "level": 4,
-    "buyPrice": 14,
+    "buyPrice": 12,
     "sellPrice": 4
   },
   {
@@ -166,29 +152,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Moderate Restoration": 1
+        "Healing": "2d4+2 Integrity"
       },
       "cs": {
-        "Střední Obnova": 1
+        "Léčení": "2d4+2 Integrita"
       }
     },
     "abilities": {
       "en": [
-        "Mends Minor Wounds",
-        "Staunches Bleeding"
+        "Instantly restores a moderate amount of Integrity."
       ],
       "cs": [
-        "Sceluje menší rány",
-        "Zastavuje krvácení"
+        "Okamžitě obnoví střední množství Integrita."
       ]
     },
     "itemEffectDescription": {
-      "en": "Moderate Restore, Mends Wounds",
-      "cs": "Střední Obnova, Sceluje Rány"
+      "en": "Heals 2d4+2 Integrity",
+      "cs": "Vyléčí 2d4+2 Integrita"
     },
     "level": 5,
-    "buyPrice": 17,
-    "sellPrice": 5
+    "buyPrice": 13,
+    "sellPrice": 4
   },
   {
     "id": "gw_ac_stoneskintonic_l06",
@@ -203,31 +187,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Physical Defense": 1,
-        "Duration": "Brief"
+        "Defense": "Reduce damage by 1d6 from the next hit"
       },
       "cs": {
-        "Fyzická Obrana": 1,
-        "Trvání": "Krátké"
+        "Obrana": "Sniž poškození z příštího zásahu o 1d6"
       }
     },
     "abilities": {
       "en": [
-        "Temporarily Hardens Skin",
-        "Resists Minor Impacts"
+        "Temporarily hardens skin against one incoming attack."
       ],
       "cs": [
-        "Dočasně zpevňuje kůži",
-        "Odolává menším nárazům"
+        "Dočasně zpevňuje kůži proti jednomu příchozímu útoku."
       ]
     },
     "itemEffectDescription": {
-      "en": "+1 Phys Def (Brief), Hardens Skin",
-      "cs": "+1 Fyz Obr (Krát.), Zpevňuje Kůži"
+      "en": "Reduce next damage taken by 1d6",
+      "cs": "Sniž příští zranění o 1d6"
     },
     "level": 6,
-    "buyPrice": 20,
-    "sellPrice": 6
+    "buyPrice": 16,
+    "sellPrice": 5
   },
   {
     "id": "gw_ac_foxgloveextract_l07",
@@ -242,31 +222,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Reflex Boost": 1,
-        "Duration": "Brief"
+        "Effect": "Advantage on next Dexterity-based roll"
       },
       "cs": {
-        "Zrychlení Reflexů": 1,
-        "Trvání": "Krátké"
+        "Účinek": "Výhoda na příští hod založený na Obratnosti"
       }
     },
     "abilities": {
       "en": [
-        "Briefly Quickens Reflexes",
-        "Heightens Alertness"
+        "Briefly quickens reflexes for dodging or acting fast."
       ],
       "cs": [
-        "Krátce zrychluje reflexy",
-        "Zvyšuje ostražitost"
+        "Krátce zrychluje reflexy pro úskoky nebo rychlé jednání."
       ]
     },
     "itemEffectDescription": {
-      "en": "+1 Reflex (Brief), Heightens Alertness",
-      "cs": "+1 Reflex (Krát.), Zvyš. Ostražitost"
+      "en": "Advantage on next Dexterity roll",
+      "cs": "Výhoda na příští hod na Obratnost"
     },
     "level": 7,
-    "buyPrice": 24,
-    "sellPrice": 7
+    "buyPrice": 18,
+    "sellPrice": 6
   },
   {
     "id": "gw_ac_nightseyeelixir_l08",
@@ -281,31 +257,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Low-Light Vision": 1,
-        "Duration": "Moderate"
+        "Effect": "Advantage on next check in darkness"
       },
       "cs": {
-        "Vidění v Šeru": 1,
-        "Trvání": "Střední"
+        "Účinek": "Výhoda na příští hod ve tmě"
       }
     },
     "abilities": {
       "en": [
-        "Grants Low-Light Vision",
-        "Improves Night Perception"
+        "Grants superior vision for a single action in darkness."
       ],
       "cs": [
-        "Propůjčuje vidění v šeru",
-        "Zlepšuje noční vnímání"
+        "Propůjčuje vynikající vidění pro jednu akci ve tmě."
       ]
     },
     "itemEffectDescription": {
-      "en": "Low-Light Vision (Mod.), Improves Night Perc.",
-      "cs": "Vidění v Šeru (Stř.), Zlepš. Noční Vním."
+      "en": "Advantage on next check in darkness",
+      "cs": "Výhoda na příští hod ve tmě"
     },
     "level": 8,
-    "buyPrice": 28,
-    "sellPrice": 8
+    "buyPrice": 20,
+    "sellPrice": 6
   },
   {
     "id": "gw_ac_wardingincense_l09",
@@ -320,31 +292,27 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Minor Hex Ward": 1,
-        "Duration": "Brief"
+        "Effect": "Advantage on next save vs. magic"
       },
       "cs": {
-        "Ochrana proti Menším Kletbám": 1,
-        "Trvání": "Krátké"
+        "Účinek": "Výhoda na příští záchr. hod proti magii"
       }
     },
     "abilities": {
       "en": [
-        "Briefly Wards Against Minor Hexes",
-        "Slightly Repels Negative Energy"
+        "Briefly wards against minor hexes and ill will."
       ],
       "cs": [
-        "Krátce chrání před menšími kletbami",
-        "Lehce odpuzuje negativní energii"
+        "Krátce chrání před menšími kletbami a zlou vůlí."
       ]
     },
     "itemEffectDescription": {
-      "en": "Minor Hex Ward (Brief), Repels Neg. Energy",
-      "cs": "Ochr. Menší Kletby (Krát.), Odpuz. Neg. Energii"
+      "en": "Advantage on next magic save",
+      "cs": "Výhoda na příští magický záchr. hod"
     },
     "level": 9,
-    "buyPrice": 32,
-    "sellPrice": 10
+    "buyPrice": 22,
+    "sellPrice": 7
   },
   {
     "id": "gw_ac_ironbiletonic_l10",
@@ -359,30 +327,26 @@
     "itemType": "alchemical_concoction",
     "attributes": {
       "en": {
-        "Minor Poison Resistance": 1,
-        "Duration": "Moderate"
+        "Effect": "Advantage on next save vs. poison"
       },
       "cs": {
-        "Menší Odolnost vůči Jedu": 1,
-        "Trvání": "Střední"
+        "Účinek": "Výhoda na příští záchr. hod proti jedu"
       }
     },
     "abilities": {
       "en": [
-        "Grants Minor Poison Resistance",
-        "Fortifies Against Toxins"
+        "Grants resistance against one dose of poison."
       ],
       "cs": [
-        "Poskytuje menší odolnost vůči jedům",
-        "Posiluje proti toxinům"
+        "Poskytuje odolnost proti jedné dávce jedu."
       ]
     },
     "itemEffectDescription": {
-      "en": "Minor Poison Resist (Mod.), Fortifies vs Toxins",
-      "cs": "Menší Odol. Jedu (Stř.), Posiluje vs Toxiny"
+      "en": "Advantage on next poison save",
+      "cs": "Výhoda na příští záchr. hod proti jedu"
     },
     "level": 10,
-    "buyPrice": 36,
-    "sellPrice": 11
+    "buyPrice": 25,
+    "sellPrice": 8
   }
 ]
