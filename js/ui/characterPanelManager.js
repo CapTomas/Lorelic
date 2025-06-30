@@ -10,7 +10,7 @@ import * as apiService from '../core/apiService.js';
 import * as modalManager from './modalManager.js';
 import * as themeService from '../services/themeService.js';
 import * as uiUtils from './uiUtils.js';
-import { getUIText } from '../services/localizationService.js';
+import { getUIText, getApplicationLanguage } from '../services/localizationService.js';
 import { XP_LEVELS, MAX_PLAYER_LEVEL, MIN_LEVEL_FOR_STORE } from '../core/config.js';
 import { log, LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_WARN, LOG_LEVEL_ERROR } from '../core/logger.js';
 import { attachTooltip, hideCurrentTooltip } from './tooltipManager.js';
@@ -210,16 +210,21 @@ async function _showLoreModal() {
     });
     try {
         const baseLore = getUIText(themeConfig.lore_key, {}, { explicitThemeContext: themeId, viewContext: 'game' });
-        const evolvedLore = state.getLastKnownEvolvedWorldLore();
-        const loreToDisplay = evolvedLore || baseLore;
-
+        const evolvedLoreData = state.getLastKnownEvolvedWorldLore();
+        const currentLang = getApplicationLanguage();
+        let selectedEvolvedLore = null;
+        if (typeof evolvedLoreData === 'object' && evolvedLoreData !== null) {
+            selectedEvolvedLore = evolvedLoreData[currentLang] || evolvedLoreData.en; // Fallback to 'en'
+        } else if (typeof evolvedLoreData === 'string' && evolvedLoreData.trim() !== '') {
+            selectedEvolvedLore = evolvedLoreData; // Legacy support
+        }
+        const loreToDisplay = selectedEvolvedLore || baseLore;
         let shards = [];
         if (currentUser && currentUser.token) {
             const shardsResponse = await apiService.fetchWorldShards(currentUser.token, themeId);
             shards = shardsResponse.worldShards || [];
         }
         modalContent.innerHTML = ''; // Clear loading text
-
         // Evolved Lore Section
         const loreSection = document.createElement('div');
         loreSection.className = 'lore-section';
@@ -230,11 +235,9 @@ async function _showLoreModal() {
         loreText.className = 'lore-text-content';
         loreText.innerHTML = uiUtils.formatDynamicText(loreToDisplay);
         uiUtils.activateShardTooltips(loreText); // Activate tooltips on the new content
-
         loreSection.appendChild(loreTitle);
         loreSection.appendChild(loreText);
         modalContent.appendChild(loreSection);
-
         // World Fragments Section
         const fragmentsSection = document.createElement('div');
         fragmentsSection.className = 'lore-section';

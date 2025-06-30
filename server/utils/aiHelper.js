@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 import logger from './logger.js';
 
-const SUMMARIZATION_MODEL_NAME = process.env.SUMMARIZATION_MODEL_NAME || (process.env.MODEL_NAME_FREE || 'gemini-2.0-flash-exp');
+const SUMMARIZATION_MODEL_NAME = process.env.SUMMARIZATION_MODEL_NAME || (process.env.MODEL_NAME_FREE || 'gemini-2.5-flash-lite-preview-06-17');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const NPM_PACKAGE_VERSION = process.env.npm_package_version || '1.0.0';
 
@@ -34,6 +34,9 @@ async function callSilentGeminiAPI(contents, systemInstruction, modelName, taskD
       topP: 0.95,
       maxOutputTokens: 4096,
       responseMimeType: "text/plain",
+      thinkingConfig: {
+        thinkingBudget: 0,
+      },
     },
     safetySettings: [
       { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },

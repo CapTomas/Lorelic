@@ -40,7 +40,7 @@ import {
 } from '../core/state.js';
 import * as apiService from '../core/apiService.js';
 import * as themeService from '../services/themeService.js';
-import { getUIText } from '../services/localizationService.js';
+import { getUIText, getApplicationLanguage } from '../services/localizationService.js';
 import { MIN_LEVEL_FOR_STORE } from '../core/config.js';
 import { THEMES_MANIFEST } from '../data/themesManifest.js';
 import { log, LOG_LEVEL_INFO, LOG_LEVEL_ERROR, LOG_LEVEL_WARN, LOG_LEVEL_DEBUG } from '../core/logger.js';
@@ -332,14 +332,19 @@ export function updateLandingPagePanelsWithThemeInfo(themeId, animateExpansion =
   if (descTitle) descTitle.textContent = getUIText('landing_theme_description_title', {}, { viewContext: 'landing' });
   const detailsTitle = landingThemeDetailsContainer.querySelector('.panel-box-title');
   if (detailsTitle) detailsTitle.textContent = getUIText('landing_theme_info_title', {}, { viewContext: 'landing' });
-
   // Use evolved lore from state if available, otherwise fall back to base lore
-  const evolvedLore = getLandingSelectedThemeEvolvedLore();
+  const evolvedLoreData = getLandingSelectedThemeEvolvedLore();
+  const currentLang = getApplicationLanguage();
+  let selectedEvolvedLore = null;
+  // Only use the evolved lore if it's a multi-language object.
+  if (typeof evolvedLoreData === 'object' && evolvedLoreData !== null) {
+      selectedEvolvedLore = evolvedLoreData[currentLang] || evolvedLoreData.en; // Fallback to 'en'
+  }
+  // If no multi-language evolved lore is found, use the standard, correctly translated base lore.
   const baseLore = getUIText(themeConfig.lore_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
-  const loreTextToDisplay = evolvedLore || baseLore;
+  const loreTextToDisplay = selectedEvolvedLore || baseLore;
   landingThemeLoreText.innerHTML = `<p>${formatDynamicText(loreTextToDisplay)}</p>`;
   activateShardTooltips(landingThemeLoreText); // Activate tooltips on the new content
-
   const themeDisplayName = getUIText(themeConfig.name_long_key || themeConfig.name_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
   const inspirationText = getUIText(themeConfig.inspiration_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });
   const toneText = getUIText(themeConfig.tone_key, {}, { explicitThemeContext: themeId, viewContext: 'landing' });

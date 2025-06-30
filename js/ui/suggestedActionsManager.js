@@ -87,6 +87,7 @@ export function displaySuggestedActions(actions, options = {}) {
         isBoonChoice = false,
         isTraitChoice = false,
         isDefeatAction = false,
+        isLoreImplication = false, // Added for destructuring
         dice_roll = null,
       } = isObject ? actionObjOrString : {};
       const isBoonOrTrait = isBoonChoice || isTraitChoice;
@@ -98,6 +99,7 @@ export function displaySuggestedActions(actions, options = {}) {
       btn.classList.add('ui-button');
       if (isMullOver) btn.classList.add('mull-over-action');
       if (isBoonOrTrait) btn.classList.add('boon-action');
+      if (isLoreImplication) btn.classList.add('lore-implication-action'); // Added class for styling
       if (isDefeatAction) btn.classList.add('defeat-action-button');
       btn.textContent = buttonDisplayText;
       btn.removeAttribute('title');
@@ -112,7 +114,6 @@ export function displaySuggestedActions(actions, options = {}) {
           rollConfig = dice_roll;
         }
       }
-
       if (rollConfig) {
         const comparison = rollConfig.comparison || '>=';
         const rollString = `Roll: ${rollConfig.notation} ${comparison} ${rollConfig.target}`;
@@ -132,12 +133,12 @@ export function displaySuggestedActions(actions, options = {}) {
           } else {
             log(LOG_LEVEL_ERROR, 'Cannot start new game from defeat action: GameController or themeId not available.');
           }
-        // --- Boon/Trait Selection ---
-        } else if (isBoonOrTrait) {
+        // --- Boon/Trait/Implication Selection (Direct Processing) ---
+        } else if (isBoonOrTrait || isLoreImplication) {
           if (_gameControllerRef?.processPlayerAction) {
             _gameControllerRef.processPlayerAction(actionText); // Pass full text for matching
           } else {
-            log(LOG_LEVEL_ERROR, 'GameController not available to process Boon/Trait choice. Falling back to input population.');
+            log(LOG_LEVEL_ERROR, 'GameController not available to process choice. Falling back to input population.');
             if (playerActionInput) {
               playerActionInput.value = actionText;
               playerActionInput.focus();

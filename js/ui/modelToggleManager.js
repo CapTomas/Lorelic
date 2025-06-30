@@ -83,12 +83,13 @@ export function updateModelToggleButtonAppearance() {
     return;
   }
   // --- Logged-In User Logic ---
-  const userTier = currentUser.tier || 'free';
+  const userTier = authService.getEffectiveUserTier();
   const availableModels = modelsByTier[userTier] || modelsByTier.free;
   // Build usage string for tooltip
   const usageLines = availableModels.map(m => {
-    const usage = apiUsage[m.model] || { daily: { count: 0, limit: 'N/A' } };
-    return `${getUIText(m.nameKey)}: ${usage.daily.count}/${usage.daily.limit}`;
+    const usage = apiUsage[m.model] || { daily: { count: 0, limit: 0 } };
+    const limitText = typeof usage.daily.limit === 'number' ? usage.daily.limit : getUIText('not_available_short');
+    return `${getUIText(m.nameKey)}: ${usage.daily.count}/${limitText}`;
   });
   const usageString = `Daily Usage: ${usageLines.join(' | ')}`;
   if (availableModels.length <= 1) {
@@ -112,22 +113,33 @@ export function updateModelToggleButtonAppearance() {
       log(LOG_LEVEL_ERROR, "Failed to persist model downgrade preference", err);
     });
   }
-  const nextIndex = (currentIndex + 1) % availableModels.length;
-  const nextModelInfo = availableModels[nextIndex];
-  const nextModelShortName = getUIText(nextModelInfo.nameKey);
-  // Determine button text and disabled state based on the NEXT model in the cycle
-  const nextModelUsage = apiUsage[nextModelInfo.model] || { daily: { count: 0, limit: 0 } };
-  const remainingCallsForNext = nextModelUsage.daily.limit - nextModelUsage.daily.count;
-  modelToggleButton.disabled = remainingCallsForNext <= 0;
-  if (remainingCallsForNext <= LOW_API_CALL_THRESHOLD && remainingCallsForNext > 0) {
-    modelToggleButton.textContent = getUIText('button_toggle_to_model_with_count', {
-      MODEL_NAME: nextModelShortName,
-      REMAINING_CALLS: remainingCallsForNext,
-    });
-  } else {
-    modelToggleButton.textContent = getUIText('button_toggle_to_model', { MODEL_NAME: nextModelShortName });
+  // --- Button Text Logic ---
+  const currentModelInfo = availableModels[currentIndex];
+  const currentModelShortName = getUIText(currentModelInfo.nameKey);
+  modelToggleButton.textContent = currentModelShortName;
+  // --- Find Next Available Model to determine disabled state and tooltip ---
+  let nextAvailableIndex = -1;
+  for (let i = 1; i <= availableModels.length; i++) {
+    const potentialIndex = (currentIndex + i) % availableModels.length;
+    const modelToCheck = availableModels[potentialIndex];
+    const usage = apiUsage[modelToCheck.model] || { daily: { count: 0, limit: 0 } };
+    const hasCallsLeft = typeof usage.daily.limit !== 'number' || (usage.daily.limit - usage.daily.count) > 0;
+    if (potentialIndex !== currentIndex && hasCallsLeft) {
+      nextAvailableIndex = potentialIndex;
+      break;
+    }
   }
-  const ariaLabel = `Switch to ${nextModelShortName} model.`;
+  // --- Disabled State Logic ---
+  modelToggleButton.disabled = (nextAvailableIndex === -1);
+  // --- Tooltip & Aria Label Logic ---
+  let ariaLabel;
+  if (modelToggleButton.disabled) {
+      ariaLabel = getUIText('aria_label_no_other_models_available', { CURRENT_MODEL: currentModelShortName });
+  } else {
+      const nextModelInfo = availableModels[nextAvailableIndex];
+      const nextModelShortName = getUIText(nextModelInfo.nameKey);
+      ariaLabel = getUIText('aria_label_toggle_model_specific', { NEXT_MODEL_NAME: nextModelShortName });
+  }
   attachTooltip(modelToggleButton, null, {}, { rawText: `${usageString}\n${ariaLabel}` });
   modelToggleButton.setAttribute('aria-label', ariaLabel);
 }
@@ -143,7 +155,7 @@ export async function handleModelToggle() {
     return;
   }
   const modelsByTier = _getModelsByTier();
-  const userTier = currentUser.tier || 'free';
+  const userTier = authService.getEffectiveUserTier();
   const availableModels = modelsByTier[userTier] || modelsByTier.free;
   if (availableModels.length <= 1) {
     log(LOG_LEVEL_DEBUG, 'Model toggle clicked, but no other models available for this tier.');
@@ -151,9 +163,34 @@ export async function handleModelToggle() {
   }
   const currentModel = getCurrentModelName();
   let currentIndex = availableModels.findIndex(m => m.model === currentModel);
-  if (currentIndex === -1) currentIndex = 0;
-  const nextIndex = (currentIndex + 1) % availableModels.length;
-  const nextModelInfo = availableModels[nextIndex];
+  if (currentIndex === -1) currentIndex = 0; // Fallback
+  const apiUsage = getCurrentUserApiUsage() || {};
+  let nextAvailableIndex = -1;
+  // Start searching from the model after the current one, and loop around.
+  for (let i = 1; i <= availableModels.length; i++) {
+    const potentialIndex = (currentIndex + i) % availableModels.length;
+    const modelToCheck = availableModels[potentialIndex];
+    const usage = apiUsage[modelToCheck.model] || { daily: { count: 0, limit: 0 } };
+    let hasCallsLeft = false;
+    // If limit is not a number (e.g., 'N/A'), assume it's available.
+    if (typeof usage.daily.limit !== 'number') {
+      hasCallsLeft = true;
+    } else {
+      hasCallsLeft = (usage.daily.limit - usage.daily.count) > 0;
+    }
+    if (hasCallsLeft) {
+      nextAvailableIndex = potentialIndex;
+      break; // Found a usable model
+    }
+  }
+  // This case should be prevented by the button's disabled state, but it's a good safeguard.
+  if (nextAvailableIndex === -1) {
+    log(LOG_LEVEL_WARN, 'Model toggle clicked, but no other usable models found. Button should have been disabled.');
+    // Just in case the UI is out of sync, let's update it.
+    updateModelToggleButtonAppearance();
+    return;
+  }
+  const nextModelInfo = availableModels[nextAvailableIndex];
   const newModelName = nextModelInfo.model;
   log(LOG_LEVEL_INFO, `User toggled AI model from ${currentModel} to ${newModelName}.`);
   setCurrentModelName(newModelName);
@@ -170,7 +207,7 @@ export async function handleModelToggle() {
     }
   }
   updateModelToggleButtonAppearance();
-  refreshCurrentTooltip(); // This is the crucial addition to update the live tooltip.
+  refreshCurrentTooltip();
   if (_storyLogManagerRef && getCurrentTheme() && storyLogViewport && storyLogViewport.style.display !== 'none') {
     const newModelShortName = getUIText(nextModelInfo.nameKey);
     _storyLogManagerRef.addMessageToLog(getUIText('system_model_switched', { MODEL_NAME: newModelShortName }), 'system');

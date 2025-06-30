@@ -27,9 +27,9 @@ export const LOG_LEVEL_STORAGE_KEY = 'lorelicLogLevel';
 // --- AI Model Configuration ---
 // These are initialized with defaults and will be overwritten by values fetched from the server.
 /** The model name for standard, free-tier users. */
-export let FREE_MODEL_NAME = 'gemini-2.0-flash-exp';
+export let FREE_MODEL_NAME = 'gemini-2.5-flash-lite-preview-06-17';
 /** The model name for logged-in, pro-tier users. */
-export let PRO_MODEL_NAME = 'gemini-2.5-flash-lite-preview-06-17';
+export let PRO_MODEL_NAME = 'gemini-2.5-flash';
 /** The model name for premium, top-tier users. */
 export let ULTRA_MODEL_NAME = 'gemini-2.5-flash';
 

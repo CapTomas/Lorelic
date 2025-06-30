@@ -28,7 +28,7 @@ ${playerCharacterSheet_master_texts}
 You MUST generate a compelling starter quest. Use the thematic ideas below as a creative spark. A good quest has three components:
 1.  **The Hook:** A compelling reason for the player to act. This should stem from the world's lore, a character's plea, a mysterious discovery, or a direct threat. Make it personal and intriguing.
 2.  **The Objective:** A clear, actionable goal. This MUST be populated in the relevant dashboard field.
-3.  **The Stated Reward:** A clear incentive. You MUST state what the player can expect to receive and populate it in the relevant dashboard field. Use the `rewardPerStdObj` value from the `player_level_benchmarks_json` as a baseline for a thematic currency reward. You can also promise a "valuable item" or "useful gear".
+3.  **The Stated Reward:** A clear incentive. You MUST state what the player can expect to receive. Use the `rewardPerStdObj` value from the `player_level_benchmarks_json` as a baseline for a thematic currency reward. You can also promise a "valuable item" or "useful gear".
 
 ### B. CORE GAMEPLAY MECHANICS
 You MUST use this data to balance the initial scenario's difficulty and the player's starting state.
@@ -41,7 +41,7 @@ You MUST use this data to balance the initial scenario's difficulty and the play
 -   **Noun Invention:** ${nounsInventing_master_texts}
 -   **Player Agency:** ${gmAgencyReminder_master_texts}
 -   **Dice Rolls:** ${diceRollGuardrail_master_texts}
--   **Suggested Actions:** ${suggestedActionsFormat_master_texts}
+-   **Suggested Actions:** ${initialActionsGuideline_master_texts}
 
 ### D. STARTING SCENARIO INSPIRATION
 -   Use one of the following thematic ideas as a creative spark for your quest hook.
@@ -72,8 +72,7 @@ Follow these steps to build the JSON construction for this initial turn.
 -   Avoid "Unknown" or "N/A" where a specific, immersive value is possible.
 
 **Step 4: Provide Initial Suggested Actions.**
--   ${initialActionsGuideline_master_texts}
--   The actions should be logical first steps towards investigating or starting the quest you have just created.
+-   In the `suggested_actions` array, provide 3 distinct, actionable strings. They should be logical first steps focusing on observation, simple interaction, or inquiry.
 
 ---
 ## 4. RESPONSE FORMAT
@@ -98,7 +97,7 @@ ${validJsonOutput_master_texts}
         ${generated_dashboard_description}
     },
     "suggested_actions": [
-        // array of 3 actionable strings. Follow rules in Section 2C
+        // array of 3 actionable strings.
     ],
     "game_state_indicators": {
         // Set the initial state for all boolean indicators.

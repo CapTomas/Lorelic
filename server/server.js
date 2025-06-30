@@ -14,7 +14,7 @@ import gameStateRoutes from './routes/gamestates.js';
 import themeInteractionRoutes from './routes/themeInteractions.js';
 import worldShardRoutes from './routes/worldShards.js';
 import { executeRolls } from './utils/diceRoller.js';
-import { MODEL_FREE, MODEL_PRO, MODEL_ULTRA } from './middleware/usageLimiter.js';
+import { MODEL_FREE, MODEL_PRO, MODEL_ULTRA, getTierCharacterLimit } from './middleware/usageLimiter.js';
 import { protect, authenticateOptionally } from './middleware/authMiddleware.js';
 import { limitApiUsage } from './middleware/usageLimiter.js';
 
@@ -149,7 +149,7 @@ app.get('/api/test', (req, res) => {
  * @param {import('express').NextFunction} next - The Express next middleware function.
  */
 const validateGeminiRequest = (req, res, next) => {
-  const { contents, modelName, force_dice_roll, suppress_ai_dice_roll } = req.body;
+  const { contents, modelName, force_dice_roll, suppress_ai_dice_roll, is_initial_turn } = req.body;
   if (!contents) {
     logger.warn('Missing "contents" in request body for /api/v1/gemini/generate');
     return res.status(400).json({
@@ -180,6 +180,12 @@ const validateGeminiRequest = (req, res, next) => {
           error: { message: '"suppress_ai_dice_roll" must be a boolean.', code: 'INVALID_SUPPRESS_ROLL_FORMAT' },
       });
   }
+  if (is_initial_turn !== undefined && typeof is_initial_turn !== 'boolean') {
+      logger.warn('Invalid "is_initial_turn" format - must be boolean');
+      return res.status(400).json({
+          error: { message: '"is_initial_turn" must be a boolean.', code: 'INVALID_IS_INITIAL_TURN_FORMAT' },
+      });
+  }
   next();
 };
 
@@ -208,8 +214,16 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
         logger.error('GEMINI_API_KEY is not set in environment variables.');
         return res.status(500).json({ error: { message: 'API key not configured on server.', code: 'MISSING_API_KEY' } });
     }
-    const { contents, generationConfig, safetySettings, systemInstruction, modelName, dice_roll_request, force_dice_roll, suppress_ai_dice_roll } = req.body;
-    if (generationConfig && generationConfig.responseMimeType) {
+    const { contents, generationConfig: originalGenerationConfig, safetySettings, systemInstruction, modelName, dice_roll_request, force_dice_roll, suppress_ai_dice_roll, is_initial_turn } = req.body;
+    const charLimit = getTierCharacterLimit(req.user);
+    if (systemInstruction?.parts?.[0]?.text) {
+        const lengthInstruction = `\n\n**CRITICAL NARRATIVE LENGTH INSTRUCTION:** The 'narrative' field in your JSON response MUST be concise and strictly adhere to a maximum character limit of ${charLimit} characters. This is a hard limit. Be brief, evocative, and impactful within this constraint. Do not waste characters on filler. This rule is absolute.`;
+        systemInstruction.parts[0].text += lengthInstruction;
+        logger.info(`Applied narrative character limit of ${charLimit} for user ${req.user?.id || 'Anonymous'}.`);
+    }
+    const generationConfig = { ...(originalGenerationConfig || {}) };
+    generationConfig.thinkingConfig = { thinkingBudget: 0 };
+    if (generationConfig.responseMimeType) {
       delete generationConfig.responseMimeType;
     }
     const effectiveModelName = modelName || MODEL_FREE;
@@ -290,9 +304,12 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
         let finalResponseData = null;
         let lastAiDiceRollResults = null;
         const MAX_TURNS = 5;
+        // Correctly determine if tools should be included.
+        // Tools are disabled ONLY if it's the initial turn or if explicitly suppressed.
+        const useTools = (is_initial_turn !== true) && !suppress_ai_dice_roll;
         const initialPayloadForDebug = {
             contents: conversationHistory,
-            tools: suppress_ai_dice_roll ? [] : fullTools,
+            tools: useTools ? fullTools : [],
             ...(generationConfig && { generationConfig }),
             ...(safetySettings && { safetySettings }),
             ...(systemInstruction && { systemInstruction }),
@@ -301,7 +318,7 @@ app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, valid
         for (let turn = 0; turn < MAX_TURNS; turn++) {
             const payload = {
                 contents: conversationHistory,
-                tools: suppress_ai_dice_roll ? [] : fullTools,
+                tools: useTools ? fullTools : [],
                 ...(generationConfig && { generationConfig }),
                 ...(safetySettings && { safetySettings }),
                 ...(systemInstruction && { systemInstruction }),

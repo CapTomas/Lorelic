@@ -7,8 +7,8 @@ import logger from '../utils/logger.js';
 // In-memory store for anonymous user usage, keyed by IP address.
 const anonymousUsage = new Map();
 // --- Centralized Model Definitions from Environment Variables ---
-export const MODEL_FREE = process.env.MODEL_NAME_FREE || 'gemini-2.0-flash-exp';
-export const MODEL_PRO = process.env.MODEL_NAME_PRO || 'gemini-2.5-flash-lite-preview-06-17';
+export const MODEL_FREE = process.env.MODEL_NAME_FREE || 'gemini-2.5-flash';
+export const MODEL_PRO = process.env.MODEL_NAME_PRO || 'gemini-2.5-flash';
 export const MODEL_ULTRA = process.env.MODEL_NAME_ULTRA || 'gemini-2.5-flash';
 /**
  * Defines API limits and allowed models for each user tier.
@@ -20,17 +20,20 @@ export const USER_TIERS = {
     allowedModels: {
       [MODEL_FREE]: { dailyLimit: 25 },
     },
+    narrativeCharLimit: 500,
   },
   free: {
     allowedModels: {
       [MODEL_FREE]: { dailyLimit: 100 },
     },
+    narrativeCharLimit: 500,
   },
   pro: {
     allowedModels: {
       [MODEL_FREE]: { dailyLimit: 100 },
       [MODEL_PRO]: { dailyLimit: 200 },
     },
+    narrativeCharLimit: 1000,
   },
   ultra: {
     allowedModels: {
@@ -38,6 +41,7 @@ export const USER_TIERS = {
       [MODEL_PRO]: { dailyLimit: 200 },
       [MODEL_ULTRA]: { dailyLimit: 200 },
     },
+    narrativeCharLimit: 1500,
   },
 };
 
@@ -64,6 +68,24 @@ export function constructApiUsageResponse(user) {
         }
     }
     return constructedApiUsage;
+}
+
+/**
+ * Gets the character limit for the narrative response based on the user's effective tier.
+ * @param {object|null|undefined} user - The user object from the request, or null/undefined for anonymous users.
+ * @returns {number} The character limit.
+ */
+export function getTierCharacterLimit(user) {
+    let tier = 'anonymous';
+    let onTrial = false;
+    if (user) {
+        tier = user.tier || 'free';
+        if (tier === 'free' && user.trial_expires_at && new Date(user.trial_expires_at) > new Date()) {
+            onTrial = true;
+        }
+    }
+    const effectiveTier = onTrial ? 'pro' : tier;
+    return USER_TIERS[effectiveTier]?.narrativeCharLimit || USER_TIERS.anonymous.narrativeCharLimit;
 }
 
 /**

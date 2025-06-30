@@ -732,6 +732,7 @@ async function _setupNewGameEnvironment(themeId) {
  */
 export async function processPlayerAction(actionText, isGameStartingAction = false) {
     log(LOG_LEVEL_INFO, `Processing player action: "${actionText.substring(0, 50)}..."`);
+
     if (state.getIsInitialTraitSelectionPending()) {
         const traitAction = state.getCurrentSuggestedActions().find(action => action?.isTraitChoice && action.text === actionText);
         if (traitAction) return _handleInitialTraitSelection(traitAction.traitKey);
@@ -745,6 +746,7 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
         _boonSelectionContext.step.startsWith('secondary') ? _presentSecondaryBoonChoices(_boonSelectionContext.step.replace('secondary_', '')) : _presentPrimaryBoonChoices();
         return;
     }
+
     let worldShardsPayload = "[]";
     if (isGameStartingAction && state.getCurrentNewGameSettings()?.useEvolvedWorld) {
         const currentUser = state.getCurrentUser();
@@ -764,6 +766,7 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             }
         }
     }
+
     if (!isGameStartingAction) {
         storyLogManager.renderMessage(actionText, "player");
         state.addTurnToGameHistory({ role: "user", parts: [{ text: actionText }] });
@@ -772,19 +775,33 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             dom.playerActionInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
     }
+
     uiUtils.setGMActivityIndicator(true);
     suggestedActionsManager.clearSuggestedActions();
     dashboardManager.clearAllDashboardItemDotClasses();
     storyLogManager.showLoadingIndicator();
+
+    let wasMullOverTriggered = false;
+
     try {
         const fullAiResponse = await aiService.processAiTurn(actionText, worldShardsPayload);
-                storyLogManager.removeLoadingIndicator();
+        storyLogManager.removeLoadingIndicator();
         if (fullAiResponse) {
-            // Render dice roll animation if results are present in the response
+            // Check for the special mull-over trigger first. This bypasses the normal turn rendering.
+            if (fullAiResponse.game_state_indicators?.trigger_mull_over) {
+                if (fullAiResponse.new_persistent_lore_unlock) {
+                    log(LOG_LEVEL_INFO, "Received 'trigger_mull_over' flag. Initiating shard reflection flow immediately.");
+                    wasMullOverTriggered = true;
+                    // This function now manages the entire sub-flow: AI call for deep dive, rendering, and showing implication choices.
+                    await aiService.handleMullOverShardAction(fullAiResponse.new_persistent_lore_unlock);
+                    return; // Stop processing this turn; the mull over flow takes over.
+                }
+                log(LOG_LEVEL_WARN, "'trigger_mull_over' was true, but no shard data was provided. Proceeding normally.");
+            }
+            // If not a mull-over trigger, process as a normal turn.
             if (fullAiResponse.dice_roll_results) {
                 await storyLogManager.renderDiceRoll(fullAiResponse.dice_roll_results);
             }
-            // Process response data
             const updatesFromAI = fullAiResponse.dashboard_updates || {};
             if (fullAiResponse.new_item_generated) {
                 const newItem = fullAiResponse.new_item_generated;
@@ -796,21 +813,23 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
                     storyLogManager.addMessageToLog(`Acquired: ${itemName}`, "system system-emphasized");
                 }
             }
+            // If a shard is finalized, it will be in the payload here. Show the notification.
             if (fullAiResponse.new_persistent_lore_unlock) {
                 characterPanelManager.triggerIconAnimation('lore');
-                const shardTitle = fullAiResponse.new_persistent_lore_unlock.title || 'A new truth';
+                const shardData = fullAiResponse.new_persistent_lore_unlock;
+                const shardTitle = shardData.title || 'A new truth';
                 _showAnimatedShardUnlock(shardTitle);
             }
-            state.setLastKnownDashboardUpdates(updatesFromAI);
-            // Render UI
+            // This is the finalization turn. Set the unlock data to be saved to the backend.
+            state.setCurrentTurnUnlockData(fullAiResponse.new_persistent_lore_unlock || null);
+            // Render UI for the turn
             storyLogManager.renderMessage(fullAiResponse.narrative, "gm");
             dashboardManager.updateDashboard(updatesFromAI);
             characterPanelManager.updateCharacterPanel();
-            modelToggleManager.updateModelToggleButtonAppearance(); // Refresh API usage counters on button
+            modelToggleManager.updateModelToggleButtonAppearance();
             state.setCurrentSuggestedActions(fullAiResponse.suggested_actions);
             state.setLastKnownGameStateIndicators(fullAiResponse.game_state_indicators || {});
             state.setCurrentAiPlaceholder(fullAiResponse.input_placeholder || localizationService.getUIText("placeholder_command"));
-            state.setCurrentTurnUnlockData(fullAiResponse.new_persistent_lore_unlock || null);
             if (state.getIsInitialGameLoad()) state.setIsInitialGameLoad(false);
             suggestedActionsManager.displaySuggestedActions(state.getCurrentSuggestedActions());
             handleGameStateIndicatorsChange(state.getLastKnownGameStateIndicators());
@@ -823,6 +842,7 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
             if (fullAiResponse.xp_awarded > 0) {
                 await _handleExperienceAndLevelUp(fullAiResponse.xp_awarded);
             }
+            // Only save the game state if we are NOT in the middle of a special selection flow.
             if (!state.getIsBoonSelectionPending()) {
                 await authService.saveCurrentGameState();
             }
@@ -835,7 +855,7 @@ export async function processPlayerAction(actionText, isGameStartingAction = fal
         }
         if (dom.playerActionInput) dom.playerActionInput.placeholder = localizationService.getUIText("placeholder_command");
     } finally {
-        if (!state.getIsBoonSelectionPending() && !state.getIsInitialTraitSelectionPending()) {
+        if (!state.getIsBoonSelectionPending() && !state.getIsInitialTraitSelectionPending() && !wasMullOverTriggered) {
             uiUtils.setGMActivityIndicator(false);
         }
     }
@@ -947,7 +967,7 @@ export async function resumeGameSession(themeId) {
                     const modelData = JSON.parse(turn.parts[0].text);
                     // Handle special "deep dive" narratives differently
                     if (modelData.isDeepDive) {
-                        storyLogManager.renderMessage(modelData.narrative, "system system-emphasized");
+                        storyLogManager.renderMessage(modelData.narrative, "system system-emphasized shard-deep-dive-narrative");
                     } else {
                         storyLogManager.renderMessage(modelData.narrative, "gm");
                     }

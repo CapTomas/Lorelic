@@ -16,15 +16,15 @@ export const THEMES_MANIFEST = [
     playable: true,
   },
   {
+    id: 'salt_reavers',
+    path: 'themes/salt_reavers/',
+    playable: true,
+  },
+  {
     id: 'celestial_custodians',
     path: 'themes/celestial_custodians/',
     playable: true,
     lockedForAnonymous: true,
-  },
-  {
-    id: 'salt_reavers',
-    path: 'themes/salt_reavers/',
-    playable: true,
   },
   {
     id: 'master',

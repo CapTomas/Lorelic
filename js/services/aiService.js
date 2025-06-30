@@ -34,6 +34,23 @@ const DEFAULT_SAFETY_SETTINGS = [
 // --- PRIVATE HELPERS ---
 
 /**
+ * Selects the correct language string from a potentially bilingual lore object.
+ * @param {object|string} lore - The lore data from state.
+ * @returns {string} The monolingual lore string.
+ * @private
+ */
+function _selectLocalizedLore(lore) {
+    if (typeof lore === 'object' && lore !== null) {
+        const narrativeLang = state.getCurrentNarrativeLanguage();
+        return lore[narrativeLang] || lore['en'] || ''; // Fallback to English if current lang not present
+    }
+    if (typeof lore === 'string') {
+        return lore; // Handle legacy format
+    }
+    return '';
+}
+
+/**
  * Validates if prompt text is loaded and usable.
  * @param {string|null|undefined} text - The prompt text to check.
  * @returns {boolean} True if the text is valid.
@@ -240,12 +257,21 @@ function _parseJsonResponse(aiResponseString) {
 export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
   const currentThemeId = state.getCurrentTheme();
   if (!currentThemeId) throw new Error("Active theme is missing for prompt generation.");
+
   const themeConfig = themeService.getThemeConfig(currentThemeId);
   const narrativeLang = state.getCurrentNarrativeLanguage();
+  const pendingShard = state.getPendingShardForFinalization();
+
   // 1. Determine the base prompt template
   const isInitialLoad = state.getIsInitialGameLoad();
   const isGeneratingItem = state.getLastKnownGameStateIndicators()?.generate_item_reward;
   let basePromptKey = isInitialLoad ? "master_initial" : (isGeneratingItem ? "master_items" : state.getCurrentPromptType());
+
+  // If a shard is pending finalization, we MUST use the default prompt to handle the lore evolution.
+  if (pendingShard) {
+    basePromptKey = 'master_default';
+  }
+
   let basePromptText = themeService.getLoadedPromptText(currentThemeId, basePromptKey);
   if (!_isValidPromptText(basePromptText)) {
     const fallbackKey = basePromptKey.startsWith('master_') ? basePromptKey : 'master_default';
@@ -268,6 +294,28 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
   processedPromptText = _injectTextFromObject(processedPromptText, 'theme_texts', themeCoreTexts);
   processedPromptText = _injectRandomLineHelpers(processedPromptText, currentThemeId);
   // 3. Define all simple value replacements
+  if (pendingShard) {
+      const lastPlayerAction = state.getGameHistory().slice(-1)[0]?.parts[0]?.text || "No specific implication provided.";
+      const finalizationInstruction = `
+### CRITICAL OVERRIDE: WORLD SHARD FINALIZATION
+You have previously proposed a World Shard. The player has now chosen how to interpret this discovery. Your task is to finalize this process.
+
+- **Proposed Shard Title:** ${pendingShard.title}
+- **Proposed Shard Content:** ${pendingShard.content}
+- **Player's Chosen Interpretation:** "${lastPlayerAction}"
+
+**YOUR TASKS FOR THIS TURN:**
+1.  **Evolve the World Lore:** Your HIGHEST PRIORITY is to rewrite the 'Evolved World Lore' to integrate the player's chosen interpretation. This is a permanent change. The world has now changed based on their insight.
+2.  **Regenerate the Unlock Object:** In your JSON response, you MUST include the \`new_persistent_lore_unlock\` object again, using the EXACT same data as the original proposal: \`key_suggestion: "${pendingShard.key_suggestion}", title: "${pendingShard.title}", content: "${pendingShard.content}", unlock_condition_description: "${pendingShard.unlock_condition_description}"\`. This is critical for saving.
+3.  **Continue the Narrative:** Write a new main narrative that flows from this newly established truth.
+`;
+
+      // Inject this instruction at the top of the prompt's rules section.
+      processedPromptText = processedPromptText.replace(
+          '## MISSION',
+          `## MISSION\n\n${finalizationInstruction}`
+      );
+  }
   const userPreference = state.getCurrentUser()?.story_preference;
     let userPreferenceDescription = 'User has not set a story preference.';
     if (userPreference) {
@@ -318,7 +366,7 @@ export function getSystemPrompt(worldShardsPayloadForInitial = "[]") {
     'generated_top_panel_description': descriptions.topPanel,
     'generated_dashboard_description': descriptions.sidePanels,
     'generated_game_state_indicators': descriptions.indicators,
-    'game_history_lore': state.getLastKnownEvolvedWorldLore() || localizationService.getUIText(themeConfig.lore_key, {}, { explicitThemeContext: currentThemeId }),
+    'game_history_lore': _selectLocalizedLore(state.getLastKnownEvolvedWorldLore()) || localizationService.getUIText(themeConfig.lore_key, {}, { explicitThemeContext: currentThemeId }),
     'game_history_summary': state.getLastKnownCumulativePlayerSummary() || "No major long-term events have been summarized yet.",
     'world_shards_json_payload': isInitialLoad ? worldShardsPayloadForInitial : "[]",
     'player_level_benchmarks_json': JSON.stringify(levelMechanics, null, 2),
@@ -426,7 +474,8 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
   try {
     const systemPromptText = getSystemPrompt(worldShardsPayloadForInitial);
     if (getLogLevel() === 'debug') console.log("--- SYSTEM PROMPT ---", systemPromptText);
-    const historyForAI = state.getIsInitialGameLoad()
+    const isInitialLoad = state.getIsInitialGameLoad();
+    const historyForAI = isInitialLoad
       ? [{ role: 'user', parts: [{ text: playerActionText }] }]
       : state.getGameHistory()
         .filter(turn => turn.role === 'user' || turn.role === 'model')
@@ -438,6 +487,7 @@ export async function processAiTurn(playerActionText, worldShardsPayloadForIniti
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
       modelName: state.getCurrentModelName(),
+      is_initial_turn: isInitialLoad,
     };
     const selectedAction = state.getSelectedSuggestedAction();
     const isForceRollToggled = state.getIsForceRollToggled();
@@ -556,7 +606,7 @@ export async function handleMullOverShardAction(shardData) {
   try {
     const systemPromptText = getSystemPromptForDeepDive(shardData);
     const payload = {
-      contents: [],
+      contents: [{ role: 'user', parts: [{ text: "Reflect on this new discovery and its implications." }] }],
       generationConfig: { ...DEFAULT_GENERATION_CONFIG, temperature: 0.7, maxOutputTokens: 1024 }, // Slightly higher temp for more creative implications
       safetySettings: DEFAULT_SAFETY_SETTINGS,
       systemInstruction: { parts: [{ text: systemPromptText }] },
@@ -571,12 +621,15 @@ export async function handleMullOverShardAction(shardData) {
       throw new Error("Deep dive AI response missing 'deep_dive_narrative' or 'implications' field.");
     }
     storyLogManager.removeLoadingIndicator();
-    // Add narrative to the log as a special message
-    storyLogManager.addMessageToLog(parsedResponse.deep_dive_narrative, "system system-emphasized");
-    // Save the turn to history for consistency
+    // Add narrative to the log as a special message, prepended with a translated header.
+    const headerRelicText = localizationService.getUIText('shard_deep_dive_header');
+    const fullNarrative = `${headerRelicText}\n\n${parsedResponse.deep_dive_narrative}`;
+    // Render the message directly to the UI, but do not add a 'system_log' entry to history.
+    storyLogManager.renderMessage(fullNarrative, "system system-emphasized shard-deep-dive-narrative");
+    // Save a single, definitive turn to history for this event.
     state.addTurnToGameHistory({
       role: "model",
-      parts: [{ text: JSON.stringify({ narrative: parsedResponse.deep_dive_narrative, isDeepDive: true, relatedShardTitle: shardData.title }) }]
+      parts: [{ text: JSON.stringify({ narrative: fullNarrative, isDeepDive: true, relatedShardTitle: shardData.title }) }]
     });
     // Display implications as new suggested actions
     const implicationActions = parsedResponse.implications.map(impText => ({

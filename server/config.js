@@ -17,33 +17,33 @@ export const USER_TIERS = {
     hourlyLimit: parseInt(process.env.LIMIT_ANON_HOURLY, 10) || 10,
     dailyLimit: parseInt(process.env.LIMIT_ANON_DAILY, 10) || 30,
     allowedModels: [
-      process.env.FREE_MODEL_NAME || 'gemini-1.5-flash-latest',
+      process.env.FREE_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17',
     ],
   },
   free: {
     hourlyLimit: parseInt(process.env.LIMIT_FREE_HOURLY, 10) || 30,
     dailyLimit: parseInt(process.env.LIMIT_FREE_DAILY, 10) || 100,
     allowedModels: [
-      process.env.FREE_MODEL_NAME || 'gemini-1.5-flash-latest',
-      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash-preview-04-17',
+      process.env.FREE_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17',
+      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash',
     ],
   },
   tier1: {
     hourlyLimit: parseInt(process.env.LIMIT_TIER1_HOURLY, 10) || 100,
     dailyLimit: parseInt(process.env.LIMIT_TIER1_DAILY, 10) || 500,
     allowedModels: [
-      process.env.FREE_MODEL_NAME || 'gemini-1.5-flash-latest',
-      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash-preview-04-17',
-      process.env.ULTRA_MODEL_NAME || 'gemini-2.5-flash-preview-05-20',
+      process.env.FREE_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17',
+      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash',
+      process.env.ULTRA_MODEL_NAME || 'gemini-2.5-flash',
     ],
   },
   tier2: {
     hourlyLimit: parseInt(process.env.LIMIT_TIER2_HOURLY, 10) || 300,
     dailyLimit: parseInt(process.env.LIMIT_TIER2_DAILY, 10) || 1500,
     allowedModels: [
-      process.env.FREE_MODEL_NAME || 'gemini-1.5-flash-latest',
-      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash-preview-04-17',
-      process.env.ULTRA_MODEL_NAME || 'gemini-2.5-flash-preview-05-20',
+      process.env.FREE_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17',
+      process.env.PAID_MODEL_NAME || 'gemini-2.5-flash',
+      process.env.ULTRA_MODEL_NAME || 'gemini-2.5-flash',
     ],
   },
 };
@@ -51,9 +51,9 @@ export const USER_TIERS = {
 /**
  * Default model name for free users.
  */
-export const FREE_MODEL_NAME = process.env.FREE_MODEL_NAME || 'gemini-1.5-flash-latest';
+export const FREE_MODEL_NAME = process.env.FREE_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17';
 
 /**
  * Default model name for paid/pro users.
  */
-export const PAID_MODEL_NAME = process.env.PAID_MODEL_NAME || 'gemini-2.5-flash-preview-04-17';
+export const PAID_MODEL_NAME = process.env.PAID_MODEL_NAME || 'gemini-2.5-flash';

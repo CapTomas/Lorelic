@@ -52,6 +52,7 @@ let _currentLandingGridSelection = localStorage.getItem(config.LANDING_SELECTED_
 let _landingSelectedThemeProgress = null; // Progress for the theme selected on the landing page.
 let _landingSelectedThemeEvolvedLore = null; // Evolved lore for the theme selected on the landing page.
 let _dashboardItemMeta = {}; // UI-specific metadata for dashboard items (e.g., { hasRecentUpdate: true }).
+let _pendingShardForFinalization = null; // Holds shard data between discovery and finalization.
 let _currentNewGameSettings = null; // Stores settings for a new game (e.g., { useEvolvedWorld: boolean }).
 // --- Getters & Setters ---
 // --- Core Application State Management ---
@@ -168,6 +169,14 @@ export const setLastKnownCumulativePlayerSummary = (summary) => {
 /** @returns {string} The last known evolved lore for the current world. */
 export const getLastKnownEvolvedWorldLore = () => _lastKnownEvolvedWorldLore;
 export const setLastKnownEvolvedWorldLore = (lore) => {
+  if (typeof lore === 'string' && lore.trim().startsWith('{')) {
+    try {
+      _lastKnownEvolvedWorldLore = JSON.parse(lore);
+      return;
+    } catch (e) {
+      // Not a valid JSON string, treat as plain text for legacy compatibility
+    }
+  }
   _lastKnownEvolvedWorldLore = lore || '';
 };
 /** @returns {boolean} True if the current turn is the very first turn of a new game. */
@@ -291,7 +300,15 @@ export const setLandingSelectedThemeProgress = (progress) => {
 /** @returns {string | null} The evolved lore for the theme selected on the landing page. */
 export const getLandingSelectedThemeEvolvedLore = () => _landingSelectedThemeEvolvedLore;
 export const setLandingSelectedThemeEvolvedLore = (lore) => {
-    _landingSelectedThemeEvolvedLore = lore;
+    if (typeof lore === 'string' && lore.trim().startsWith('{')) {
+        try {
+            _landingSelectedThemeEvolvedLore = JSON.parse(lore);
+            return;
+        } catch (e) {
+            // Not a valid JSON string, treat as plain text for legacy compatibility
+        }
+    }
+    _landingSelectedThemeEvolvedLore = lore || null;
 };
 /** @returns {object} An object containing UI metadata for dashboard items (e.g., update dots). */
 export const getDashboardItemMeta = () => _dashboardItemMeta;
@@ -314,6 +331,14 @@ export const resetAllDashboardItemRecentUpdates = () => {
       _dashboardItemMeta[itemId].hasRecentUpdate = false;
     }
   }
+};
+/** @returns {object | null} The shard data pending finalization after a player's choice. */
+export const getPendingShardForFinalization = () => _pendingShardForFinalization;
+export const setPendingShardForFinalization = (shardData) => {
+  _pendingShardForFinalization = shardData;
+};
+export const clearPendingShardForFinalization = () => {
+  _pendingShardForFinalization = null;
 };
 /** @returns {object | null} Settings for a new game being initiated (e.g., world type). */
 export const getCurrentNewGameSettings = () => _currentNewGameSettings;
@@ -359,5 +384,6 @@ export const clearVolatileGameState = () => {
   _dashboardItemMeta = {};
   _landingSelectedThemeProgress = null;
   _landingSelectedThemeEvolvedLore = null;
+  _pendingShardForFinalization = null;
   clearCurrentNewGameSettings();
 };

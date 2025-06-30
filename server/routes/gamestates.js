@@ -138,22 +138,39 @@ router.post('/', protect, validateGameStatePayload, async (req, res) => {
         if (isPremiumOrTrial) {
             const { key_suggestion, title, content, unlock_condition_description } = new_persistent_lore_unlock;
             if (key_suggestion && title && content && unlock_condition_description) {
-                const themeNameForAI = await getResolvedThemeName(theme_id, current_narrative_language);
-                const updatedLoreFromShard = await integrateShardIntoLore(
-                    finalCurrentWorldLore,
-                    { title, content },
-                    themeNameForAI,
-                    current_narrative_language
-                );
-
-                if (updatedLoreFromShard) {
-                    finalCurrentWorldLore = updatedLoreFromShard;
-                    newlyEvolvedLore = finalCurrentWorldLore; // Store it to return to client
-                    logger.info(`[WorldShard] Lore successfully evolved for user ${userId}, theme ${theme_id} with shard '${title}'`);
-                } else {
-                    logger.warn(`[WorldShard] AI failed to integrate shard '${title}' into lore. Lore will remain unchanged for this update.`);
+                const SUPPORTED_LANGUAGES = ['en', 'cs']; // Scalable: Add future languages here (e.g., 'de', 'fr')
+                const currentLoreByLang = {};
+                // Attempt to parse existing lore as a bilingual object
+                if (finalCurrentWorldLore) {
+                    try {
+                        const parsedLore = JSON.parse(finalCurrentWorldLore);
+                        if (typeof parsedLore === 'object' && parsedLore !== null) {
+                            SUPPORTED_LANGUAGES.forEach(lang => {
+                                if (parsedLore[lang]) currentLoreByLang[lang] = parsedLore[lang];
+                            });
+                        }
+                    } catch (e) {
+                        // If it's not a JSON object, it's a legacy string. Assign it to the current language.
+                        currentLoreByLang[current_narrative_language] = finalCurrentWorldLore;
+                    }
                 }
-
+                logger.info(`[WorldShard] Evolving lore for all supported languages for user ${userId}, theme ${theme_id} with shard '${title}'`);
+                // Create an array of promises to evolve lore for each supported language
+                const loreEvolutionPromises = SUPPORTED_LANGUAGES.map(async (lang) => {
+                    const baseLoreForLang = await getResolvedBaseThemeLore(theme_id, lang);
+                    const currentLore = currentLoreByLang[lang] || baseLoreForLang;
+                    const themeNameForLang = await getResolvedThemeName(theme_id, lang);
+                    return integrateShardIntoLore(currentLore, { title, content }, themeNameForLang, lang);
+                });
+                const evolvedLores = await Promise.all(loreEvolutionPromises);
+                const newLoreObject = {};
+                SUPPORTED_LANGUAGES.forEach((lang, index) => {
+                    const baseLoreForLang = currentLoreByLang[lang] || ''; // Fallback to what we had
+                    newLoreObject[lang] = evolvedLores[index] || baseLoreForLang; // Use new lore if successful, otherwise keep old
+                });
+                finalCurrentWorldLore = JSON.stringify(newLoreObject);
+                newlyEvolvedLore = newLoreObject;
+                logger.info(`[WorldShard] Lore successfully evolved and structured for all languages.`);
                 try {
                   await tx.userThemePersistedLore.create({
                     data: { userId: userId, themeId: theme_id, loreFragmentKey: key_suggestion, loreFragmentTitle: title, loreFragmentContent: content, unlockConditionDescription: unlock_condition_description }
