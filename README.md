@@ -103,20 +103,20 @@ Each theme includes:
    ```
 
 3. **Configure environment variables**
-   
+
    Create a `.env` file in the `server` directory:
    ```env
    # Database
    DATABASE_URL="postgresql://user:password@localhost:5432/lorelic"
    DIRECT_URL="postgresql://user:password@localhost:5432/lorelic"
-   
+
    # Authentication
    JWT_SECRET="your-secure-jwt-secret"
    JWT_EXPIRES_IN="7d"
-   
+
    # Google AI
    GEMINI_API_KEY="your-gemini-api-key"
-   
+
    # Server
    PORT=3000
    NODE_ENV=development
@@ -135,7 +135,7 @@ Each theme includes:
    ```
 
 6. **Access the application**
-   
+
    Open `http://localhost:3000` in your browser.
 
 ### Development Mode
