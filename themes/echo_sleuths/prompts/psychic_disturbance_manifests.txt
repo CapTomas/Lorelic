@@ -21,7 +21,7 @@ YOUR IMMEDIATE TASK – PORTRAY THE MENTAL BREACH (Describe the full impact of t
 1.  **NARRATIVE (IN ${currentNarrativeLanguage.toUpperCase()}):**
     *   **Unleash the Inner Chaos:** Describe the psychic disturbance's complete and undeniable manifestation *now*. What impossible sensory input (e.g., colors that scream, sounds that have texture, phantom smells of forgotten emotions), overwhelming emotional waves, or cacophony of alien thoughts invades the Sleuth's perception with full force?
     *   **Subjective Reality Torn:** Emphasize how this assault distorts the Sleuth's view of their immediate surroundings or their own identity. Do familiar objects warp with new, terrifying meaning? Do memories surface unbidden, twisted and sharp? Is their sense of self fracturing?
-    *   **The Psyche's Toll:** Detail the visceral impact on the Sleuth's mental state. A significant spike in `cognitive_dissonance_pct`, a desperate attempt to cling to their `reality_anchor_item_name` or a core belief. This should feel like a genuine threat to their sanity or coherence.
+    *   **The Psyche's Toll:** Detail the visceral impact on the Sleuth's mental state. A significant spike in `cognitive_dissonance_pct`, a desperate attempt to cling to their `reality_anchor_item` or a core belief. This should feel like a genuine threat to their sanity or coherence.
     *   **Echoes of Reverie:** If fitting, subtly entwine the disturbance with the nature of the current case, a nearby Thought-Faction's influence, or a deeper resonance with Reverie's underlying instability. It should feel like a consequence or feature of this unique world.
 
 2.  **DASHBOARD_UPDATES (JSON Object):**
@@ -60,7 +60,15 @@ Your ENTIRE response MUST be a single, valid JSON object. No introductory text o
   ],
   "game_state_indicators": {
     // Key-value pairs for game state flags. CRITICALLY, `psychic_disturbance_manifests` must be `false`.
-  }
+    },
+    "input_placeholder": "string (A short, context-aware, and subtle hint for the player's next input. Must be in ${currentNarrativeLanguage.toUpperCase()})"
 }
+
+**INPUT_PLACEHOLDER GUIDANCE:**
+    Always provide a short, subtle input_placeholder string in the NARRATIVE LANGUAGE (${currentNarrativeLanguage.toUpperCase()}).
+This placeholder must not reference or suggest any specific action or path.
+It should evoke the inner state, sensory mood, or atmosphere of the scene without implying intent, decision, or direction.
+Keep it under 50 characters, emotionally or descriptively rich, and entirely non-directive.
+Do not echo the available actions. Do not hint at a goal. Do not resolve ambiguity—let it breathe.
 
 This is a moment to truly lean into the surreal and psychological horror aspects of "Echo Sleuths." The player should feel the instability of their own character's mind as much as the instability of Reverie. The narrative should leave them feeling shaken but with a clear path to react or recover.

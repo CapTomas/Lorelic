@@ -5,7 +5,8 @@
     "conceptual_conflict_active": "themes/echo_sleuths/prompts/conceptual_conflict_active.txt",
     "psychic_disturbance_manifests": "themes/echo_sleuths/prompts/psychic_disturbance_manifests.txt",
     "reality_flux_begins": "themes/echo_sleuths/prompts/reality_flux_begins.txt",
-    "starts": "themes/echo_sleuths/prompts/helpers/starts.txt"
+    "starts": "themes/echo_sleuths/prompts/helpers/starts.txt",
+    "traits": "themes/echo_sleuths/prompts/helpers/traits.json"
   },
   "NARRATIVE_LANG_PROMPT_PARTS": {
     "en": "This narrative must be written in rich, evocative English, embodying the style of surreal detective noir. Dialogue should be sharp, introspective, and often laced with philosophical or existential undertones, reflecting characters navigating a fluid, dreamlike reality. Emphasize the bizarre nature of Reverie, the internal struggles of the Sleuth, and the unsettling ambiguity of truth in a city made of thought.",

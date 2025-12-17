@@ -1,0 +1,508 @@
+import express from 'express';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
+import fetch from 'node-fetch';
+import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
+import logger from './utils/logger.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
+import gameStateRoutes from './routes/gamestates.js';
+import themeInteractionRoutes from './routes/themeInteractions.js';
+import worldShardRoutes from './routes/worldShards.js';
+import { executeRolls } from './utils/diceRoller.js';
+import { MODEL_FREE, MODEL_PRO, MODEL_ULTRA, getTierCharacterLimit } from './middleware/usageLimiter.js';
+import { protect, authenticateOptionally } from './middleware/authMiddleware.js';
+import { limitApiUsage } from './middleware/usageLimiter.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config();
+
+const DEBUG_DIR = path.join(__dirname, 'debug');
+
+/**
+ * Saves data to a debug file if debug mode is enabled.
+ * @param {string} fileName - The name of the file to save.
+ * @param {string | object} data - The data to write.
+ */
+async function saveDebugFile(fileName, data) {
+  if (process.env.DEBUG_SAVE_PROMPT !== 'true') {
+    return;
+  }
+  try {
+    await fs.mkdir(DEBUG_DIR, { recursive: true });
+    const filePath = path.join(DEBUG_DIR, fileName);
+    const content = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+    await fs.writeFile(filePath, content, 'utf-8');
+    logger.debug(`[Debug] Saved ${fileName}`);
+  } catch (err) {
+    logger.error(`[Debug] Failed to save debug file ${fileName}:`, err);
+  }
+}
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.ALLOWED_ORIGINS?.split(',') || false
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined', {
+    stream: { write: (message) => logger.info(message.trim()) },
+  }));
+} else {
+  app.use(morgan('dev'));
+}
+const rateLimitConfig = {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Higher limit for dev
+  message: { error: { message: 'Too many requests, please try again later.', code: 'RATE_LIMIT_EXCEEDED' } },
+  standardHeaders: true,
+  legacyHeaders: false,
+};
+const requestCounts = new Map();
+
+/**
+ * Middleware for basic in-memory rate limiting.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ */
+const rateLimitMiddleware = (req, res, next) => {
+  if (!req.path.startsWith('/api/')) {
+    return next();
+  }
+  const clientId = req.ip;
+  const now = Date.now();
+  const windowStart = now - rateLimitConfig.windowMs;
+  let clientTimestamps = requestCounts.get(clientId) || [];
+  clientTimestamps = clientTimestamps.filter(time => time > windowStart);
+  if (clientTimestamps.length >= rateLimitConfig.max) {
+    logger.warn(`Rate limit exceeded for IP: ${clientId} on path ${req.path}`);
+    return res.status(429).json(rateLimitConfig.message);
+  }
+  clientTimestamps.push(now);
+  requestCounts.set(clientId, clientTimestamps);
+  res.setHeader('X-RateLimit-Limit', rateLimitConfig.max);
+  res.setHeader('X-RateLimit-Remaining', Math.max(0, rateLimitConfig.max - clientTimestamps.length));
+  res.setHeader('X-RateLimit-Reset', Math.ceil((windowStart + rateLimitConfig.windowMs) / 1000));
+  next();
+};
+
+app.use(rateLimitMiddleware);
+app.use(express.static(path.join(__dirname, '..'), {
+  maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0',
+  etag: true,
+  lastModified: true,
+}));
+
+logger.info('Setting up API routes...');
+app.get('/api/health', (req, res) => {
+  const healthCheck = {
+    uptime: process.uptime(),
+    message: 'OK',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  };
+  logger.debug('Health check requested');
+  res.status(200).json(healthCheck);
+});
+
+app.get('/api/v1/config/models', (req, res) => {
+  logger.debug('Model configuration requested');
+  res.status(200).json({
+    FREE_MODEL_NAME: MODEL_FREE,
+    PRO_MODEL_NAME: MODEL_PRO,
+    ULTRA_MODEL_NAME: MODEL_ULTRA,
+  });
+});
+
+app.get('/api/test', (req, res) => {
+  logger.debug('GET /api/test hit');
+  res.json({
+    message: 'Lorelic Backend API is responding!',
+    timestamp: new Date().toISOString(),
+    version: process.env.npm_package_version || '1.0.0',
+  });
+});
+
+/**
+ * Validates the request body for the Gemini API proxy endpoint.
+ * Ensures 'contents' field is present and is an array.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ */
+const validateGeminiRequest = (req, res, next) => {
+  const { contents, modelName, force_dice_roll, suppress_ai_dice_roll, is_initial_turn } = req.body;
+  if (!contents) {
+    logger.warn('Missing "contents" in request body for /api/v1/gemini/generate');
+    return res.status(400).json({
+      error: { message: 'Missing "contents" in request body', code: 'MISSING_CONTENTS' },
+    });
+  }
+  if (!Array.isArray(contents)) {
+    logger.warn('Invalid "contents" format - must be array');
+    return res.status(400).json({
+      error: { message: '"contents" must be an array', code: 'INVALID_CONTENTS_FORMAT' },
+    });
+  }
+  if (!modelName || typeof modelName !== 'string') {
+    logger.warn('Missing or invalid "modelName" in request body');
+    return res.status(400).json({
+      error: { message: '"modelName" is required and must be a string.', code: 'MISSING_MODEL_NAME' }
+    });
+  }
+  if (force_dice_roll !== undefined && typeof force_dice_roll !== 'boolean') {
+      logger.warn('Invalid "force_dice_roll" format - must be boolean');
+      return res.status(400).json({
+          error: { message: '"force_dice_roll" must be a boolean.', code: 'INVALID_FORCE_ROLL_FORMAT' },
+      });
+  }
+    if (suppress_ai_dice_roll !== undefined && typeof suppress_ai_dice_roll !== 'boolean') {
+      logger.warn('Invalid "suppress_ai_dice_roll" format - must be boolean');
+      return res.status(400).json({
+          error: { message: '"suppress_ai_dice_roll" must be a boolean.', code: 'INVALID_SUPPRESS_ROLL_FORMAT' },
+      });
+  }
+  if (is_initial_turn !== undefined && typeof is_initial_turn !== 'boolean') {
+      logger.warn('Invalid "is_initial_turn" format - must be boolean');
+      return res.status(400).json({
+          error: { message: '"is_initial_turn" must be a boolean.', code: 'INVALID_IS_INITIAL_TURN_FORMAT' },
+      });
+  }
+  next();
+};
+
+/**
+ * Maps Gemini API error status codes and messages to more user-friendly messages.
+ * @param {number} status - The HTTP status code from Gemini API.
+ * @param {string} message - The error message from Gemini API.
+ * @returns {string} A user-friendly error message.
+ */
+function mapGeminiError(status, message) {
+  const errorMappings = {
+    400: 'Invalid request format or parameters sent to AI service.',
+    401: 'Authentication failed with the AI service. Please check server API key.',
+    403: 'Access denied by AI service or API quota exceeded.',
+    429: 'Too many requests sent to the AI service. Please try again later.',
+    500: 'The AI service is temporarily unavailable. Please try again later.',
+    503: 'The AI service is currently under maintenance or overloaded.',
+  };
+  return errorMappings[status] || message || 'An unknown error occurred with the AI service.';
+}
+
+app.post('/api/v1/gemini/generate', authenticateOptionally, limitApiUsage, validateGeminiRequest, async (req, res) => {
+    logger.info(`POST /api/v1/gemini/generate - Request from User ID: ${req.user?.id || 'Anonymous'}, IP: ${req.ip}`);
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    if (!geminiApiKey) {
+        logger.error('GEMINI_API_KEY is not set in environment variables.');
+        return res.status(500).json({ error: { message: 'API key not configured on server.', code: 'MISSING_API_KEY' } });
+    }
+    const { contents, generationConfig: originalGenerationConfig, safetySettings, systemInstruction, modelName, dice_roll_request, force_dice_roll, suppress_ai_dice_roll, is_initial_turn } = req.body;
+    const charLimit = getTierCharacterLimit(req.user);
+    if (systemInstruction?.parts?.[0]?.text) {
+        const lengthInstruction = `\n\n**CRITICAL NARRATIVE LENGTH INSTRUCTION:** The 'narrative' field in your JSON response MUST be concise and strictly adhere to a maximum character limit of ${charLimit} characters. This is a hard limit. Be brief, evocative, and impactful within this constraint. Do not waste characters on filler. This rule is absolute.`;
+        systemInstruction.parts[0].text += lengthInstruction;
+        logger.info(`Applied narrative character limit of ${charLimit} for user ${req.user?.id || 'Anonymous'}.`);
+    }
+    const generationConfig = { ...(originalGenerationConfig || {}) };
+    generationConfig.thinkingConfig = { thinkingBudget: 0 };
+    if (generationConfig.responseMimeType) {
+      delete generationConfig.responseMimeType;
+    }
+    const effectiveModelName = modelName || MODEL_FREE;
+    const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${effectiveModelName}:generateContent?key=${geminiApiKey}`;
+    const fullTools = [{
+        functionDeclarations: [{
+            name: "rollDice",
+            description: "Rolls one or more dice based on standard D&D notation and checks for success against a target number. Returns the individual rolls, the final result, and a success boolean for each roll.",
+            parameters: {
+                type: "OBJECT",
+                properties: {
+                    rollConfigs: {
+                        type: "ARRAY",
+                        description: "An array of dice roll configuration objects.",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                notation: {
+                                    type: "STRING",
+                                    description: "Standard dice notation (e.g., '1d20+2', 'a2d20')."
+                                },
+                                target: {
+                                    type: "NUMBER",
+                                    description: "The target number for the roll to succeed."
+                                },
+                                comparison: {
+                                    type: "STRING",
+                                    description: "Optional. The comparison operator (e.g., '>=', '<='). Defaults to '>='."
+                                }
+                            },
+                            required: ["notation", "target"]
+                        }
+                    }
+                },
+                required: ["rollConfigs"]
+            }
+        }]
+    }];
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), process.env.GEMINI_TIMEOUT || 45000);
+    try {
+        let conversationHistory = [...contents];
+        let userInitiatedDiceResults = null;
+        if (dice_roll_request && Array.isArray(dice_roll_request) && dice_roll_request.length > 0) {
+            logger.info(`User-initiated dice roll request received:`, dice_roll_request);
+            const diceResults = executeRolls(dice_roll_request);
+            userInitiatedDiceResults = diceResults;
+            conversationHistory.push({
+                role: "model",
+                parts: [{
+                    functionCall: {
+                        name: "rollDice",
+                        args: {
+                            rollConfigs: dice_roll_request
+                        }
+                    }
+                }]
+            });
+            conversationHistory.push({
+                role: "tool",
+                parts: [{
+                    functionResponse: {
+                        name: "rollDice",
+                        response: {
+                            content: JSON.stringify(diceResults),
+                        }
+                    }
+                }]
+            });
+            logger.debug(`Added simulated function call and response for user-initiated dice roll to conversation history.`);
+        }
+        else if (force_dice_roll) {
+            if (systemInstruction?.parts?.[0]?.text) {
+                systemInstruction.parts[0].text += `\n\n**MANDATORY ACTION FOR THIS TURN:** The player has manually forced a dice roll. You MUST call the 'rollDice' function tool. Analyze the player's action and the current narrative context to determine an appropriate roll (e.g., '1d20', 'a2d20+2') and a challenging but fair Difficulty Class (DC) based on the provided gameplay mechanics. Your narrative must then be based on the outcome of this roll.`;
+                logger.info(`[DiceRoll] Instructing AI to perform a mandatory dice roll for user ${req.user?.id || 'Anonymous'}.`);
+            }
+        }
+        let finalResponseData = null;
+        let lastAiDiceRollResults = null;
+        const MAX_TURNS = 5;
+        // Correctly determine if tools should be included.
+        // Tools are disabled ONLY if it's the initial turn or if explicitly suppressed.
+        const useTools = (is_initial_turn !== true) && !suppress_ai_dice_roll;
+        const initialPayloadForDebug = {
+            contents: conversationHistory,
+            tools: useTools ? fullTools : [],
+            ...(generationConfig && { generationConfig }),
+            ...(safetySettings && { safetySettings }),
+            ...(systemInstruction && { systemInstruction }),
+        };
+        await saveDebugFile('latest_ai_prompt.json', initialPayloadForDebug);
+        for (let turn = 0; turn < MAX_TURNS; turn++) {
+            const payload = {
+                contents: conversationHistory,
+                tools: useTools ? fullTools : [],
+                ...(generationConfig && { generationConfig }),
+                ...(safetySettings && { safetySettings }),
+                ...(systemInstruction && { systemInstruction }),
+            };
+            logger.debug(`[Turn ${turn + 1}] Proxying request to Gemini. Model: ${effectiveModelName}, User: ${req.user?.id || 'Anonymous'}`);
+            const fetchOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'User-Agent': `Lorelic-Server/${process.env.npm_package_version || '1.0.0'}` },
+                body: JSON.stringify(payload),
+                signal: controller.signal,
+            };
+            const googleResponse = await fetch(GOOGLE_API_URL, fetchOptions);
+            const responseText = await googleResponse.text();
+            await saveDebugFile('latest_ai_response.json', responseText);
+            let currentTurnResponseData;
+            try {
+                currentTurnResponseData = JSON.parse(responseText);
+            } catch (parseError) {
+                logger.error('Failed to parse Gemini JSON response:', { rawTextSnippet: responseText.substring(0, 500) });
+                return res.status(502).json({ error: { message: 'Invalid JSON response from AI service.', code: 'INVALID_AI_RESPONSE_FORMAT' } });
+            }
+            if (!googleResponse.ok) {
+                logger.error(`Error from Gemini API (Status: ${googleResponse.status})`, currentTurnResponseData);
+                const mappedErrorMessage = mapGeminiError(googleResponse.status, currentTurnResponseData?.error?.message);
+                return res.status(googleResponse.status).json({ error: { message: mappedErrorMessage, code: currentTurnResponseData?.error?.code || `EXTERNAL_API_ERROR_${googleResponse.status}` } });
+            }
+            const candidate = currentTurnResponseData.candidates?.[0];
+            if (!candidate) {
+                logger.warn('Unexpected Gemini response structure (no candidates)', currentTurnResponseData);
+                return res.status(502).json({ error: { message: 'Unexpected response format from AI service (no candidates).', code: 'INVALID_AI_RESPONSE_STRUCTURE' } });
+            }
+            if (candidate.content?.parts?.[0]?.text) {
+                logger.info(`[Turn ${turn + 1}] Received final text response from AI.`);
+                finalResponseData = currentTurnResponseData;
+                break;
+            }
+            if (candidate.content?.parts?.[0]?.functionCall) {
+                logger.info(`[Turn ${turn + 1}] Received function call from AI.`);
+                const functionCall = candidate.content.parts[0].functionCall;
+                conversationHistory.push(candidate.content);
+                if (functionCall.name === 'rollDice') {
+                    const rollConfigs = functionCall.args?.rollConfigs || [];
+                    const diceResults = executeRolls(rollConfigs);
+                    lastAiDiceRollResults = diceResults;
+                    conversationHistory.push({
+                        role: "tool",
+                        parts: [{
+                            functionResponse: {
+                                name: "rollDice",
+                                response: {
+                                    content: JSON.stringify(diceResults),
+                                }
+                            }
+                        }]
+                    });
+                    logger.debug(`[Turn ${turn + 1}] Executed AI-initiated rollDice function. Results:`, diceResults);
+                } else {
+                    logger.warn(`[Turn ${turn + 1}] AI called an unknown function: ${functionCall.name}`);
+                    return res.status(501).json({ error: { message: `AI requested an unsupported function: ${functionCall.name}`, code: 'UNSUPPORTED_FUNCTION_CALL' } });
+                }
+                continue;
+            }
+            logger.warn(`[Turn ${turn + 1}] AI response was valid but contained no actionable content. Breaking loop.`);
+            finalResponseData = currentTurnResponseData;
+            break;
+        }
+        clearTimeout(timeoutId);
+        if (!finalResponseData) {
+            logger.error('AI conversation loop finished without a final response.');
+            return res.status(500).json({ error: { message: 'AI failed to produce a final response after function calls.', code: 'AI_CONVERSATION_TIMEOUT' } });
+        }
+        const resultsToSend = userInitiatedDiceResults || lastAiDiceRollResults;
+        if (resultsToSend) {
+            finalResponseData.dice_roll_results = resultsToSend;
+            logger.debug('Attaching dice roll results to the final response.');
+        }
+        if (req.incrementUsage) {
+            const updatedUsage = await req.incrementUsage();
+            finalResponseData.api_usage = updatedUsage;
+        }
+        logger.info(`Successfully processed Gemini request for model ${effectiveModelName}, User ID: ${req.user?.id || 'Anonymous'}`);
+        res.status(200).json(finalResponseData);
+    } catch (error) {
+        clearTimeout(timeoutId);
+        logger.error('Error in multi-turn Gemini API call:', { message: error.message, name: error.name });
+        if (error.name === 'AbortError') {
+            return res.status(504).json({ error: { message: 'Request to AI service timed out.', code: 'AI_REQUEST_TIMEOUT' } });
+        }
+        res.status(500).json({ error: { message: 'Failed to communicate with external AI service.', code: 'EXTERNAL_API_COMMUNICATION_ERROR' } });
+    }
+});
+
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/gamestates', gameStateRoutes);
+app.use('/api/v1/themes', themeInteractionRoutes);
+app.use('/api/v1', worldShardRoutes);
+
+app.get(/^\/(?!api\/)(?!.*\.\w{2,5}$).*$/, (req, res) => {
+  logger.debug(`SPA Fallback: Serving index.html for GET ${req.path}`);
+  res.sendFile(path.join(__dirname, '..', 'index.html'), (err) => {
+    if (err) {
+      logger.error('Error serving index.html via SPA fallback:', { path: req.path, message: err.message });
+      if (!res.headersSent) {
+        res.status(500).send('Error loading application content.');
+      }
+    }
+  });
+});
+
+app.use((req, res) => {
+  logger.warn(`404 - Route not found: ${req.method} ${req.path}`);
+  res.status(404).json({
+    error: {
+      message: 'The requested resource was not found on this server.',
+      code: 'ROUTE_NOT_FOUND',
+      path: req.path,
+      method: req.method,
+    },
+  });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  logger.error('Unhandled application error:', {
+    message: err.message,
+    stack: process.env.NODE_ENV !== 'production' ? err.stack : 'Stack trace hidden in production',
+    url: req.originalUrl,
+    method: req.method,
+    ip: req.ip,
+  });
+  const statusCode = err.status || err.statusCode || 500;
+  res.status(statusCode).json({
+    error: {
+      message: process.env.NODE_ENV === 'production' && statusCode === 500
+        ? 'An unexpected internal server error occurred.'
+        : err.message || 'Internal Server Error',
+      code: err.code || 'INTERNAL_SERVER_ERROR',
+    },
+  });
+});
+
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received. Shutting down gracefully...');
+  server.close(() => {
+    logger.info('HTTP server closed.');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  logger.info('SIGINT received. Shutting down gracefully...');
+  server.close(() => {
+    logger.info('HTTP server closed.');
+    process.exit(0);
+  });
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception. Shutting down application:', error);
+  process.exit(1);
+});
+
+const server = app.listen(PORT, () => {
+  logger.info(`🚀 Server listening on http://localhost:${PORT}`);
+  logger.info(`📱 Frontend accessible at http://localhost:${PORT}`);
+  logger.info(`📊 Log level: ${logger.getLogLevel()}`);
+  logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  if (process.env.NODE_ENV !== 'production') {
+    logger.warn('⚠️  Server is running in development mode. Rate limits are more permissive.');
+  }
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    logger.error(`❌ Port ${PORT} is already in use.`);
+  } else {
+    logger.error('❌ Server startup error:', error);
+  }
+  process.exit(1);
+});
+
+export default app;

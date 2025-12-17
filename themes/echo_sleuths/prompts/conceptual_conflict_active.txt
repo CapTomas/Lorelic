@@ -68,7 +68,15 @@ Your ENTIRE response MUST be a single, valid JSON object. No introductory text o
   ],
   "game_state_indicators": {
     // Key-value pairs for game state flags, especially `conceptual_conflict_engaged`.
-  }
+    },
+    "input_placeholder": "string (A short, context-aware, and subtle hint for the player's next input. Must be in ${currentNarrativeLanguage.toUpperCase()})"
 }
+
+**INPUT_PLACEHOLDER GUIDANCE:**
+Always provide a short, subtle input_placeholder string in the NARRATIVE LANGUAGE (${currentNarrativeLanguage.toUpperCase()}).
+This placeholder must not reference or suggest any specific action or path.
+It should evoke the inner state, sensory mood, or atmosphere of the scene without implying intent, decision, or direction.
+Keep it under 50 characters, emotionally or descriptively rich, and entirely non-directive.
+Do not echo the available actions. Do not hint at a goal. Do not resolve ambiguity—let it breathe.
 
 This prompt is central to making "Echo Sleuths" distinct. The 'combat' should feel more like a tense debate, a therapy session gone sideways, or a philosophical puzzle than a typical fight. The key is making the abstract tangible, interactive, and deeply resonant with the game's core themes. Ensure originality and avoid repetitive patterns in entity behavior and Sleuth responses.

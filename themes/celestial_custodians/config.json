@@ -10,293 +10,352 @@
   "concept_key": "theme_concept_celestial_custodians",
   "category_key": "theme_category_celestial_custodians",
   "style_key": "theme_style_celestial_custodians",
+  "default_identifier_key": "default_identifier_celestial_custodians",
   "naming_convention": "asset",
+  "base_attributes": {
+    "integrity": 100,
+    "willpower": 50,
+    "aptitude": 10,
+    "resilience": 10
+  },
+  "attribute_tooltips": {
+    "integrity": "tooltip_attr_integrity_celestial_custodians",
+    "willpower": "tooltip_attr_willpower_celestial_custodians",
+    "aptitude": "tooltip_attr_aptitude_celestial_custodians",
+    "resilience": "tooltip_attr_resilience_celestial_custodians"
+  },
+  "equipment_slots": {
+    "custodial_implement": {
+      "id": "equipped_implement_effect",
+      "type": "static",
+      "reward_trigger": "custodial_implement_reward_trigger"
+    },
+    "utility_suite": {
+      "id": "equipped_utility_suite_effect",
+      "type": "static",
+      "reward_trigger": "utility_suite_reward_trigger"
+    },
+    "auxiliary_gadget": {
+      "id": "equipped_auxiliary_gadget_effect",
+      "type": "consumable",
+      "reward_trigger": "auxiliary_gadget_reward_trigger"
+    },
+    "union_scrip": {
+      "id": "union_scrip_balance",
+      "type": "money",
+      "reward_trigger": "union_scrip_reward_trigger"
+    }
+  },
   "dashboard_config_ref": "celestial_custodians",
   "dashboard_config": {
-    "left_panel": [
+    "top_panel": [
       {
-        "id": "custodian-identity-module",
-        "title_key": "title_custodian_id_celestial_custodians",
-        "type": "static",
-        "initial_expanded": true,
-        "items": [
-          {
-            "id": "character_name",
-            "label_key": "label_custodian_name_celestial_custodians",
-            "type": "text",
-            "default_value_key": "custodian_name_default_celestial_custodians",
-            "must_translate": false,
-            "short_description": "The Custodian's official (or hilariously self-bestowed) designation. Should ideally sound vaguely professional yet hint at impending chaos."
-          },
-          {
-            "id": "gumption_level_pct",
-            "label_key": "label_gumption_level_celestial_custodians",
-            "type": "meter",
-            "meter_type": "stamina",
-            "default_value": "0",
-            "must_translate": false,
-            "short_description": "Custodian's current 'Gumption' (0-100). Essential for powering arcane cleaning implements, enduring baffling bureaucracy, and delivering perfectly timed sarcastic remarks. Replenished by strong tea, successfully not making things worse, or brief moments of surprising competence."
-          },
-          {
-            "id": "union_dues_status_text",
-            "label_key": "label_union_dues_celestial_custodians",
-            "type": "text",
-            "default_value_key": "union_dues_pending_celestial_custodians",
-            "must_translate": true,
-            "short_description": "Status of mandatory (and deeply questionable) Union of Celestial Custodians Local 47 dues. Often involves passive-aggressive postcards or threats of revoking biscuit privileges."
-          }
-        ]
+        "id": "integrity",
+        "label_key": "char_panel_label_integrity",
+        "tooltip_key": "tooltip_attr_integrity_celestial_custodians",
+        "type": "meter",
+        "meter_type": "health",
+        "maps_to_run_stat": "currentIntegrity",
+        "short_description": "Structural & Sanity Cohesion. The ability of the Custodial Unit to withstand damage, reality stress, and existential bewilderment. Zero means unscheduled, rapid disassembly and a sternly worded memo from HR."
       },
       {
-        "id": "vessel-condition-and-cargo-manifest",
-        "title_key": "title_ship_log_celestial_custodians",
+        "id": "willpower",
+        "label_key": "char_panel_label_willpower",
+        "tooltip_key": "tooltip_attr_willpower_celestial_custodians",
+        "type": "meter",
+        "meter_type": "stamina",
+        "maps_to_run_stat": "currentWillpower",
+        "short_description": "Gumption. A finite reserve of nerve and focus. Expended to operate unreliable tech or attempt acts of improbable reasoning. Recovers with tea."
+      },
+      {
+        "id": "aptitude",
+        "label_key": "char_panel_label_aptitude",
+        "tooltip_key": "tooltip_attr_aptitude_celestial_custodians",
+        "type": "number",
+        "maps_to_run_stat": "aptitude",
+        "short_description": "Custodial Know-How. Proficiency with bizarre tools and navigating byzantine regulations."
+      },
+      {
+        "id": "resilience",
+        "label_key": "char_panel_label_resilience",
+        "tooltip_key": "tooltip_attr_resilience_celestial_custodians",
+        "type": "number",
+        "maps_to_run_stat": "resilience",
+        "short_description": "Existential Insulation. Innate ability to passively endure cosmic absurdity and reality-warping events."
+      },
+      {
+        "id": "strain_level",
+        "label_key": "label_strain_level_celestial_custodians",
+        "tooltip_key": "tooltip_item_strain_level_celestial_custodians",
+        "type": "status_icon",
+        "default_ai_value": 2,
+        "maps_to_run_stat": "strainLevel",
+        "level_mappings": {
+          "1": {
+            "display_text_key": "strain_level_1_display_cc",
+            "css_class": "status-ok",
+            "icon_path": "images/sentiment/icon_sentiment_satisfied.svg"
+          },
+          "2": {
+            "display_text_key": "strain_level_2_display_cc",
+            "css_class": "status-warning",
+            "icon_path": "images/sentiment/icon_sentiment_neutral.svg"
+          },
+          "3": {
+            "display_text_key": "strain_level_3_display_cc",
+            "css_class": "status-danger",
+            "icon_path": "images/sentiment/icon_sentiment_dissatisfied.svg"
+          },
+          "4": {
+            "display_text_key": "strain_level_4_display_cc",
+            "css_class": "status-critical",
+            "icon_path": "images/sentiment/icon_sentiment_very_dissatisfied.svg"
+          }
+        },
+        "must_translate": false,
+        "short_description": "Exasperation. The Custodian's mental fatigue. MUST BE INTEGER (1-4). 1: Placid, 2: Mildly Perturbed, 3: Thoroughly Baffled, 4: On the Verge of a Stiff Drink."
+      }
+    ],
+    "left_panel": [
+      {
+        "id": "vessel_core_systems",
+        "title_key": "title_vessel_core_systems_cc",
         "type": "collapsible",
         "initial_expanded": true,
-        "boot_delay": 250,
         "items": [
           {
             "id": "ship_name",
             "label_key": "label_ship_name_celestial_custodians",
+            "tooltip_key": "tooltip_item_ship_name_celestial_custodians",
             "type": "text",
             "default_value_key": "ship_name_default_celestial_custodians",
             "must_translate": false,
-            "short_description": "Proud (or resigned) designation of the Custodian's trusty, and likely slightly dented, vessel. Should sound like it has character and questionable repair history."
+            "short_description": "Designation of the Custodian's vessel."
           },
           {
-            "id": "ship_integrity_pct",
-            "label_key": "label_ship_integrity_celestial_custodians",
-            "type": "meter",
-            "meter_type": "health",
-            "default_value": "0",
-            "must_translate": false,
-            "short_description": "Structural integrity of the vessel (0-100). Prone to unscheduled disassembly due to rogue asteroids, overly enthusiastic mopping, or experimental tea brewing."
-          },
-          {
-            "id": "ship_fuel_supply_text",
-            "label_key": "label_ship_fuel_celestial_custodians",
+            "id": "ai_assistant_name",
+            "label_key": "label_ai_assistant_name_cc",
+            "tooltip_key": "tooltip_item_ai_assistant_name_cc",
             "type": "text",
-            "default_value_key": "ship_fuel_nominal_celestial_custodians",
-            "suffix_key": "ship_fuel_unit_celestial_custodians",
-            "must_translate": true,
-            "short_description": "Remaining 'All-Purpose Go-Juice.' Describe qualitatively (e.g., 'Sufficient for several ill-advised detours,' 'Running on fumes and optimism,' 'Enough for a short hop and a long prayer')."
+            "default_value_key": "ai_name_default_cc",
+            "must_translate": false,
+            "short_description": "The designation of the ship's ever-present, often sarcastic, AI companion."
           },
           {
-            "id": "debris_containment_level_pct",
-            "label_key": "label_debris_containment_celestial_custodians",
-            "type": "meter",
-            "meter_type": "cargo_capacity",
-            "default_value": "0",
+            "id": "ai_rapport_level",
+            "label_key": "label_ai_rapport_level_cc",
+            "tooltip_key": "tooltip_item_ai_rapport_level_cc",
+            "type": "status_level",
+            "default_ai_value": 2,
+            "level_mappings": {
+              "1": {
+                "display_text_key": "rapport_level_1_display_cc",
+                "css_class": "status-critical"
+              },
+              "2": {
+                "display_text_key": "rapport_level_2_display_cc",
+                "css_class": "status-warning"
+              },
+              "3": {
+                "display_text_key": "rapport_level_3_display_cc",
+                "css_class": "status-ok"
+              },
+              "4": {
+                "display_text_key": "rapport_level_4_display_cc",
+                "css_class": "status-excellent"
+              }
+            },
             "must_translate": false,
-            "short_description": "Current fill level of the Debris Containment Unit (0-100). Rapidly accumulating cosmic gunk, questionable samples, and items that are probably best not identified."
+            "short_description": "The AI's current opinion of you. Integer (1-4). Influences its helpfulness. 1: Actively Disappointed, 2: Professionally Distant, 3: Begrudgingly Cooperative, 4: Unsettlingly Chummy."
+          },
+          {
+            "id": "ai_personality_quirk",
+            "label_key": "label_ai_personality_quirk_cc",
+            "tooltip_key": "tooltip_item_ai_personality_quirk_cc",
+            "type": "text",
+            "default_value_key": "quirk_default_cc",
+            "must_translate": true,
+            "short_description": "The AI's current dominant personality trait or fixation (e.g., 'Obsessed with Biscuits', 'Aspiring Stand-Up Comedian')."
           }
         ]
       },
       {
-        "id": "custodial-accoutrements-and-gizmos",
-        "title_key": "title_tools_trade_celestial_custodians",
+        "id": "personnel_file_and_loadout",
+        "title_key": "title_personnel_file_cc",
         "type": "collapsible",
-        "initial_expanded": false,
-        "boot_delay": 500,
+        "initial_expanded": true,
         "items": [
           {
-            "id": "plasmatic_mop_status_text",
-            "label_key": "label_plasmatic_mop_celestial_custodians",
-            "type": "text",
-            "default_value_key": "mop_status_ready_celestial_custodians",
+            "id": "union_scrip_balance",
+            "label_key": "label_union_scrip_celestial_custodians",
+            "tooltip_key": "tooltip_item_union_scrip_celestial_custodians",
+            "type": "number_text",
+            "default_value_key": "union_scrip_default_celestial_custodians",
             "must_translate": true,
-            "short_description": "Operational status of the legendary Plasmatic Mop Mk. IV (or possibly a less reliable earlier model). E.g., 'Charged & Gleaming,' 'Slightly Sticky After Unfortunate Sentient Jam Incident,' 'Currently Sulking.'"
+            "short_description": "Thematic currency. Balance of Union Scrip."
           },
           {
-            "id": "toolkit_condition_text",
-            "label_key": "label_toolkit_condition_celestial_custodians",
+            "id": "equipped_implement_effect",
+            "label_key": "label_equipped_implement_celestial_custodians",
+            "tooltip_key": "tooltip_slot_custodial_implement_celestial_custodians",
             "type": "text_long",
-            "default_value_key": "toolkit_condition_stocked_celestial_custodians",
+            "default_value_key": "default_equipped_implement_celestial_custodians",
             "must_translate": true,
-            "short_description": "Condition and notable contents of the Custodian's Sarcastic Multi-Tool & General Purpose Fix-It (Or Make-It-Worse) Kit. Should mention at least one utterly useless but thematically appropriate item."
+            "short_description": "Name and effect of the equipped primary Custodial Implement."
           },
           {
-            "id": "special_gadget_slot_text",
-            "label_key": "label_special_gadget_celestial_custodians",
-            "type": "text",
-            "default_value_key": "gadget_slot_empty_celestial_custodians",
+            "id": "equipped_utility_suite_effect",
+            "label_key": "label_equipped_utility_suite_celestial_custodians",
+            "tooltip_key": "tooltip_slot_utility_suite_celestial_custodians",
+            "type": "text_long",
+            "default_value_key": "default_equipped_utility_suite_celestial_custodians",
             "must_translate": true,
-            "short_description": "Current one-off or mission-specific gadget equipped, if any. E.g., 'Sentient Dust Bunny Lure (Extra Strength),' 'Anti-Gravity Spatula (Slightly Bent),' 'Emergency Tea Cosy (For Rogue Black Holes).'"
+            "short_description": "Name and effect of the active Utility Suite or Multi-Tool."
+          },
+          {
+            "id": "equipped_auxiliary_gadget_effect",
+            "label_key": "label_equipped_auxiliary_gadget_celestial_custodians",
+            "tooltip_key": "tooltip_slot_auxiliary_gadget_celestial_custodians",
+            "type": "text_long",
+            "default_value_key": "default_equipped_auxiliary_gadget_celestial_custodians",
+            "must_translate": true,
+            "short_description": "Name and effect of the deployed Auxiliary Gadget or Prototype."
           }
         ]
       }
     ],
     "right_panel": [
       {
-        "id": "active-assignment-briefing",
-        "title_key": "title_assignment_docket_celestial_custodians",
-        "type": "static",
+        "id": "union_work_order_panel",
+        "title_key": "title_union_work_order_cc",
+        "type": "collapsible",
         "initial_expanded": true,
         "items": [
           {
             "id": "assignment_brief_text",
             "label_key": "label_assignment_brief_celestial_custodians",
+            "tooltip_key": "tooltip_item_assignment_brief_celestial_custodians",
             "type": "text_long",
             "default_value_key": "assignment_brief_standby_celestial_custodians",
             "must_translate": true,
-            "short_description": "The primary objective of the current cosmic cleanup, bewildering errand, or request to 'just make the noise stop'. Should be specific, absurd, and probably downplay any actual danger."
+            "short_description": "The primary objective of the current cosmic cleanup, bewildering errand, or request to 'just make the noise stop'."
           },
           {
-            "id": "assignment_client_location_text",
-            "label_key": "label_assignment_client_location_celestial_custodians",
+            "id": "work_order_id",
+            "label_key": "label_work_order_id_cc",
+            "tooltip_key": "tooltip_item_work_order_id_cc",
             "type": "text",
-            "default_value_key": "client_location_unknown_celestial_custodians",
-            "must_translate": true,
-            "short_description": "The (often eccentric) client and/or baffling location of the current assignment. E.g., 'The Disgruntled Sentient Nebula, Quadrant of Mild Annoyance,' 'Planet Floopy-Doo Prime (Currently Experiencing Spontaneous Jazz Outbreaks).'"
+            "default_value_key": "work_order_id_none_cc",
+            "must_translate": false,
+            "short_description": "The official, likely nonsensical, Union identification code for the current assignment."
           },
           {
-            "id": "hazard_pay_prospects_text",
-            "label_key": "label_hazard_pay_celestial_custodians",
+            "id": "stated_compensation",
+            "label_key": "label_stated_compensation_cc",
+            "tooltip_key": "tooltip_item_stated_compensation_cc",
             "type": "text",
-            "default_value_key": "hazard_pay_standard_celestial_custodians",
+            "default_value_key": "compensation_none_cc",
             "must_translate": true,
-            "short_description": "Likelihood and nature of any hazard pay or unusual compensation. E.g., 'Standard Rate (Barely Covers Tea Expenses),' 'Bonus: Slightly Used Asteroid Belt (Some Assembly Required),' 'Payment in 'Valuable Life Lessons' (Non-negotiable).'"
+            "short_description": "The stated payment upon successful (or at least, not catastrophically unsuccessful) completion of the work order."
           }
         ]
       },
       {
-        "id": "local-peculiarity-monitor",
-        "title_key": "title_local_phenomena_celestial_custodians",
-        "type": "hidden_until_active",
-        "indicator_key": "active_anomaly_scan_data_available",
+        "id": "hazard_anomaly_assessment_panel",
+        "title_key": "title_hazard_assessment_cc",
+        "type": "collapsible",
         "initial_expanded": true,
-        "boot_delay": 300,
         "items": [
-          {
-            "id": "current_anomaly_report_text",
-            "label_key": "label_anomaly_report_celestial_custodians",
-            "type": "text_long",
-            "default_value_key": "anomaly_report_clear_celestial_custodians",
-            "must_translate": true,
-            "short_description": "Live report of any unusual local phenomena, strange lifeforms, spatial distortions, or bizarre contaminants at the current job site. Should be factual but dripping with understatement or confusion."
-          },
           {
             "id": "cosmic_weirdness_index_text",
             "label_key": "label_cosmic_weirdness_index_celestial_custodians",
+            "tooltip_key": "tooltip_item_weirdness_index_celestial_custodians",
             "type": "status_level",
-            "default_ai_value": 1,
-             "level_mappings": {
+            "default_ai_value": 2,
+            "level_mappings": {
               "1": { "display_text_key": "weirdness_index_mundane_celestial_custodians", "css_class": "status-ok" },
-              "2": { "display_text_key": "weirdness_index_peculiar_celestial_custodians", "css_class": "status-caution-mild" },
+              "2": { "display_text_key": "weirdness_index_peculiar_celestial_custodians", "css_class": "status-warning" },
               "3": { "display_text_key": "weirdness_index_bizarre_celestial_custodians", "css_class": "status-warning" },
               "4": { "display_text_key": "weirdness_index_reality_bending_celestial_custodians", "css_class": "status-danger" }
             },
             "must_translate": false,
-            "short_description": "Overall measure of situational strangeness. CRUCIAL: MUST be ONLY a numerical string: \"1\" (Surprisingly Normal), \"2\" (Mildly Peculiar), \"3\" (Actively Bizarre), or \"4\" (Reality is Optional). Client displays text. DO NOT include text, only the number."
+            "short_description": "Overall measure of situational strangeness. CRUCIAL: MUST be ONLY a numerical string: \"1\" (Surprisingly Normal), \"2\" (Mildly Peculiar), \"3\" (Actively Bizarre), or \"4\" (Reality is Optional)."
+          },
+          {
+            "id": "local_anomaly_report",
+            "label_key": "label_anomaly_report_celestial_custodians",
+            "tooltip_key": "tooltip_item_anomaly_report_celestial_custodians",
+            "type": "text_long",
+            "default_value_key": "anomaly_report_clear_celestial_custodians",
+            "must_translate": true,
+            "short_description": "Live report of unusual local phenomena or bizarre contaminants. This panel is always visible but content changes."
           }
         ]
       },
       {
-        "id": "emergency-contingency-directives",
-        "title_key": "title_emergency_protocol_celestial_custodians",
-        "type": "hidden_until_active",
-        "indicator_key": "critical_system_failure_or_breach",
-        "initial_expanded": true,
-        "boot_delay": 600,
+        "id": "navigational_data_panel",
+        "title_key": "title_navigational_data_cc",
+        "type": "collapsible",
+        "initial_expanded": false,
         "items": [
           {
-            "id": "protocol_advice_text",
-            "label_key": "label_protocol_advice_celestial_custodians",
+            "id": "current_location",
+            "label_key": "label_current_location_cc",
+            "tooltip_key": "tooltip_item_current_location_cc",
             "type": "text_long",
-            "default_value_key": "protocol_advice_standard_celestial_custodians",
+            "default_value_key": "location_unknown_cc",
             "must_translate": true,
-            "short_description": "Excerpts from the 'Celestial Custodian Emergency Protocol & Terribly Dubious Advice Archive' relevant to the current (likely self-inflicted) crisis. Should be hilariously unhelpful or pedantically correct but practically impossible."
+            "short_description": "The ship's current registered position in the cosmos, according to its (possibly whimsical) navigation system."
           },
           {
-            "id": "last_known_similar_incident_text",
-            "label_key": "label_similar_incident_celestial_custodians",
-            "type": "text_long",
-            "default_value_key": "similar_incident_none_celestial_custodians",
-            "must_translate": true,
-            "short_description": "Records (if any, and if the filing system hasn't achieved sentience and hidden them) of similar past incidents and their (almost certainly unhelpful or deeply confusing) resolutions."
-          }
-        ]
-      },
-      {
-        "id": "union-representation-channel",
-        "title_key": "title_union_hotline_celestial_custodians",
-        "type": "hidden_until_active",
-        "indicator_key": "union_rep_contact_critical",
-        "initial_expanded": true,
-        "boot_delay": 750,
-        "items": [
-          {
-            "id": "union_rep_advice_text",
-            "label_key": "label_union_rep_advice_celestial_custodians",
-            "type": "text_long",
-            "default_value_key": "union_advice_unavailable_celestial_custodians",
-            "must_translate": true,
-            "short_description": "The (guaranteed to be unhelpful, off-topic, or fixated on obscure bylaws) advice or status update from the Union of Celestial Custodians Local 47 representative. May involve biscuits."
-          },
-          {
-            "id": "union_grievance_status_text",
-            "label_key": "label_union_grievance_status_celestial_custodians",
+            "id": "local_time_perception",
+            "label_key": "label_local_time_perception_cc",
+            "tooltip_key": "tooltip_item_local_time_perception_cc",
             "type": "text",
-            "default_value_key": "grievance_status_none_celestial_custodians",
+            "default_value_key": "time_nominal_cc",
             "must_translate": true,
-            "short_description": "Status of any currently filed (and likely to be ignored, misfiled, or eaten by space goats) grievances with the Union."
+            "short_description": "The perceived flow of time in the immediate vicinity, which is not always consistent."
+          },
+          {
+            "id": "existential_bearing",
+            "label_key": "label_existential_bearing_cc",
+            "tooltip_key": "tooltip_item_existential_bearing_cc",
+            "type": "text",
+            "default_value_key": "bearing_unclear_cc",
+            "must_translate": true,
+            "short_description": "A deeply philosophical, often unhelpful, assessment of the Custodian's current purpose or place in the grand, baffling scheme of things."
           }
         ]
       }
     ],
     "game_state_indicators": [
       {
-        "id": "critical_system_failure_or_breach",
-        "label_key": "label_indicator_critical_failure_celestial_custodians",
+        "id": "generate_item_reward",
         "type": "boolean",
         "default_value": false,
-        "must_translate": false,
-        "priority": 6,
-        "short_description": "CRITICAL: Set to 'true' if a key piece of Custodial equipment malfunctions spectacularly OR if a containment breach is actively occurring/imminent. Triggers the Emergency Contingency Directives panel."
+        "priority": 10,
+        "short_description": "Generates an item reward only when the narrative context justifies it. This function must not grant items arbitrarily or on player request alone. Item rewards should follow significant in-world accomplishments, such as completing a quest which promised a reward in the form of an item or making a sacrifice with meaningful consequences. The action must have a clear narrative weight, recognized by the story's logic or factions involved. If no such moment exists, this function must refuse to reward anything, even if prompted. This mechanic ensures rewards feel earned, immersive, and meaningful—tied to story arcs, not player demands."
       },
       {
-        "id": "unexpected_lifeform_encountered",
-        "label_key": "label_indicator_lifeform_encounter_celestial_custodians",
+        "id": "utility_suite_reward_trigger",
         "type": "boolean",
         "default_value": false,
-        "must_translate": false,
-        "priority": 4,
-        "short_description": "CRITICAL: Set to 'true' if a new, strange, or potentially problematic alien lifeform (or sentient object of baffling origin) has just been encountered at the job site."
-      },
-      {
-        "id": "job_scope_creep_detected",
-        "label_key": "label_indicator_scope_creep_celestial_custodians",
-        "type": "boolean",
-        "default_value": false,
-        "must_translate": false,
-        "priority": 5,
-        "short_description": "CRITICAL: Set to 'true' if the current assignment has unexpectedly become far more complicated, dangerous, or just plain weirder than initially described (e.g., client adds 'just one more thing... involving a miniature black hole')."
-      },
-      {
-        "id": "active_anomaly_scan_data_available",
-        "label_key": "label_indicator_scan_data_celestial_custodians",
-        "type": "boolean",
-        "default_value": false,
-        "must_translate": false,
-        "priority": 3,
-        "short_description": "CRITICAL: Set to 'true' when new, specific data about local anomalies, peculiar energy readings, or other cosmic weirdness is available for review in its dedicated panel. Typically set when arriving at a site or when the Cosmic Weirdness Index warrants an update."
-      },
-      {
-        "id": "union_rep_contact_critical",
-        "label_key": "label_indicator_union_contact_celestial_custodians",
-        "type": "boolean",
-        "default_value": false,
-        "must_translate": false,
-        "priority": 1,
-        "short_description": "CRITICAL: Set to 'true' if the situation (or player's exasperation) warrants contacting the Union Representative. Enables the Union Representation Channel panel."
-      },
-      {
-        "id": "bizarre_solution_achieved",
-        "label_key": "label_indicator_bizarre_solution_celestial_custodians",
-        "type": "boolean",
-        "default_value": false,
-        "must_translate": false,
         "priority": 2,
-        "short_description": "CRITICAL: Set to 'true' for one turn after the player successfully resolves a major problem or part of their assignment using a particularly absurd, unexpected, or thematically appropriate 'Custodial' method (e.g., reasoning with a rogue AI using only interpretive dance)."
+        "short_description": "Backend trigger. Set to true to signal a Utility Suite reward is available."
+      },
+      {
+        "id": "auxiliary_gadget_reward_trigger",
+        "type": "boolean",
+        "default_value": false,
+        "priority": 2,
+        "short_description": "Backend trigger. Set to true to signal an Auxiliary Gadget reward is available."
+      },
+      {
+        "id": "union_scrip_reward_trigger",
+        "type": "boolean",
+        "default_value": false,
+        "priority": 2,
+        "short_description": "Backend trigger. Set to true to signal a Union Scrip currency reward is available."
       }
     ]
   }

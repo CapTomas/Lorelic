@@ -1,0 +1,12 @@
+{
+  "PROMPT_URLS": {
+    "master_initial": "themes/master/prompts/master_initial.txt",
+    "master_default": "themes/master/prompts/master_default.txt",
+    "master_lore_deep_dive": "themes/master/prompts/master_lore_deep_dive.txt",
+    "master_items": "themes/master/prompts/master_items.txt",
+    "core_mechanics": "themes/master/prompts/helpers/core_mechanics.json",
+    "core_texts": "themes/master/prompts/helpers/core_texts.json"
+  },
+  "NARRATIVE_LANG_PROMPT_PARTS": {
+  }
+}

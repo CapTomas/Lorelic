@@ -1,0 +1,354 @@
+[
+  {
+    "id": "cc_us_stained_coveralls_l01",
+    "name": {
+      "en": "Standard-Issue Coveralls (Slightly Stained)",
+      "cs": "Standardní Montérky (Lehce Ušpiněné)"
+    },
+    "description": {
+      "en": "The classic beige. Comes pre-equipped with mystery stains and a faint air of resignation. Union-approved for minimal protection and maximum conformity.",
+      "cs": "Klasická béžová. Dodává se s předinstalovanými záhadnými skvrnami a lehkým odérem rezignace. Schváleno Unií pro minimální ochranu a maximální konformitu."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+5"
+      },
+      "cs": {
+        "Bonus k Integritě": "+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants a +1 bonus to Resilience saves against minor environmental mishaps (like tea spills)."
+      ],
+      "cs": [
+        "Poskytuje bonus +1 k Záchranným hodům na Odolnost proti menším environmentálním nehodám (jako je rozlitý čaj)."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+5 Integrity, +1 vs Mishaps",
+      "cs": "+5 Integrita, +1 vs Nehody"
+    },
+    "level": 1,
+    "buyPrice": 25,
+    "sellPrice": 7
+  },
+  {
+    "id": "cc_us_reinforced_galoshes_l02",
+    "name": {
+      "en": "Reinforced Galoshes (Worn as a Suit)",
+      "cs": "Zesílené Galoše (Nošené jako Oblek)"
+    },
+    "description": {
+      "en": "Through a bureaucratic loophole, these oversized, surprisingly durable galoshes are classified as a full utility suite. Protects against puddles of a questionable nature.",
+      "cs": "Díky byrokratické skulince jsou tyto nadměrné, překvapivě odolné galoše klasifikovány jako plnohodnotná užitková sada. Chrání před kalužemi pochybné povahy."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+8"
+      },
+      "cs": {
+        "Bonus k Integritě": "+8"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on Willpower saves against effects that cause despair or confusion."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům, které způsobují zoufalství nebo zmatek."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+8 Integrity, Resist Despair",
+      "cs": "+8 Integrita, Odolnost vůči Zoufalství"
+    },
+    "level": 2,
+    "buyPrice": 36,
+    "sellPrice": 9
+  },
+  {
+    "id": "cc_us_padded_boiler_suit_l03",
+    "name": {
+      "en": "Padded Boiler Suit",
+      "cs": "Polstrovaný Pracovní Overal"
+    },
+    "description": {
+      "en": "A slight upgrade featuring what the manual calls 'strategic fluff.' Offers moderate comfort during minor temporal paradoxes.",
+      "cs": "Mírné vylepšení obsahující to, co manuál nazývá 'strategické chmýří'. Nabízí mírné pohodlí během menších časových paradoxů."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+9"
+      },
+      "cs": {
+        "Bonus k Integritě": "+9"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on Willpower saves against fear or madness-inducing effects."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům vyvolávajícím strach nebo šílenství."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+9 Integrity, Resist Fear/Madness",
+      "cs": "+9 Integrita, Odolnost Strachu/Šílenství"
+    },
+    "level": 3,
+    "buyPrice": 46,
+    "sellPrice": 12
+  },
+  {
+    "id": "cc_us_asbestos_lined_apron_l04",
+    "name": {
+      "en": "Asbestos-Lined Apron",
+      "cs": "Azbestem Podšitá Zástěra"
+    },
+    "description": {
+      "en": "An older model from a less... litigious era of custodial service. Surprisingly effective against low-level thermal and existential hazards.",
+      "cs": "Starší model z méně... soudně sporné éry údržbářských služeb. Překvapivě účinná proti nízkoúrovňovým tepelným a existenčním rizikům."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+11"
+      },
+      "cs": {
+        "Bonus k Integritě": "+11"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reduce incoming fire or energy damage by 1d4.",
+        "Imposes Disadvantage on saves vs. poison."
+      ],
+      "cs": [
+        "Snižuje příchozí ohnivé nebo energetické zranění o 1d4.",
+        "Uvaluje Nevýhodu na záchranné hody proti jedu."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+11 Integrity, -1d4 Fire Dmg, Poison Weakness",
+      "cs": "+11 Integrita, -1d4 Ohnivé Zran., Slabost na Jed"
+    },
+    "level": 4,
+    "buyPrice": 56,
+    "sellPrice": 17
+  },
+  {
+    "id": "cc_us_anti_static_jumpsuit_l05",
+    "name": {
+      "en": "Anti-Static Jumpsuit",
+      "cs": "Antistatická Kombinéza"
+    },
+    "description": {
+      "en": "Guaranteed to reduce unwanted static cling by up to 80%, even when wrestling with sentient carpets or negotiating with beings of pure energy.",
+      "cs": "Zaručeně snižuje nežádoucí statickou přilnavost až o 80 %, i při zápasení s vnímajícími koberci nebo vyjednávání s bytostmi z čisté energie."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+13"
+      },
+      "cs": {
+        "Bonus k Integritě": "+13"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Once per session, reduce damage from a single energy-based attack by 1d8."
+      ],
+      "cs": [
+        "Jednou za sezení sniž poškození z jednoho energetického útoku o 1d8."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+13 Integrity, 1/session Energy Shield",
+      "cs": "+13 Integrita, 1/sezení Energ. Štít"
+    },
+    "level": 5,
+    "buyPrice": 68,
+    "sellPrice": 20
+  },
+  {
+    "id": "cc_us_gravity_wellies_l06",
+    "name": {
+      "en": "Gravity Wellies",
+      "cs": "Gravitační Gumáky"
+    },
+    "description": {
+      "en": "These boots ensure you remain vaguely 'down' relative to the most convenient large object. Results may vary in areas with indecisive gravity.",
+      "cs": "Tyto boty zajišťují, že zůstanete vágně 'dole' vzhledem k nejvhodnějšímu velkému objektu. Výsledky se mohou lišit v oblastech s nerozhodnou gravitací."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+15"
+      },
+      "cs": {
+        "Bonus k Integritě": "+15"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on checks to resist being moved or knocked prone by physical forces."
+      ],
+      "cs": [
+        "Získáš Výhodu při hodech na odolání pohybu nebo sražení k zemi fyzickými silami."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+15 Integrity, Resist Knockdown",
+      "cs": "+15 Integrita, Odolnost Sražení"
+    },
+    "level": 6,
+    "buyPrice": 78,
+    "sellPrice": 23
+  },
+  {
+    "id": "cc_us_self_ironing_tunic_l07",
+    "name": {
+      "en": "Self-Ironing Tunic",
+      "cs": "Samožehlicí Tunika"
+    },
+    "description": {
+      "en": "Maintains a crisp, professional crease even when reality itself is fraying at the edges. Professionalism is key, even during a containment breach.",
+      "cs": "Udržuje si ostrý, profesionální puky, i když se samotná realita třepí na okrajích. Profesionalita je klíčová, i během narušení kontejnmentu."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+18"
+      },
+      "cs": {
+        "Bonus k Integritě": "+18"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Once per session, restore 1d8 Willpower by taking a moment to appreciate your own professional appearance."
+      ],
+      "cs": [
+        "Jednou za sezení obnov 1d8 Vůle tím, že si na chvíli vychutnáš svůj profesionální vzhled."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+18 Integrity, 1/session Willpower Restore",
+      "cs": "+18 Integrita, 1/sezení Obnova Vůle"
+    },
+    "level": 7,
+    "buyPrice": 88,
+    "sellPrice": 26
+  },
+  {
+    "id": "cc_us_bureaucratic_bulwark_l08",
+    "name": {
+      "en": "Bureaucratic Bulwark Vest",
+      "cs": "Vesta Byrokratické Bašty"
+    },
+    "description": {
+      "en": "Lined with layers of rejected forms and triplicate copies, this vest can absorb a surprising amount of kinetic energy and administrative oversight.",
+      "cs": "Tato vesta, podšitá vrstvami zamítnutých formulářů a trojmo vyhotovených kopií, dokáže pohltit překvapivé množství kinetické energie a administrativního dohledu."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+20"
+      },
+      "cs": {
+        "Bonus k Integritě": "+20"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on checks made to deceive or bypass bureaucratic systems or entities."
+      ],
+      "cs": [
+        "Získáš Výhodu při hodech na oklamání nebo obejití byrokratických systémů či entit."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+20 Integrity, Advantage vs Bureaucracy",
+      "cs": "+20 Integrita, Výhoda vs Byrokracie"
+    },
+    "level": 8,
+    "buyPrice": 98,
+    "sellPrice": 29
+  },
+  {
+    "id": "cc_us_pocket_protector_plus_l09",
+    "name": {
+      "en": "Pocket Protector Plus™",
+      "cs": "Chránič Kapes Plus™"
+    },
+    "description": {
+      "en": "Not just a pocket protector, but a full-body hazmat suit woven from the same indestructible plastic. Protects against leaky pens and minor cosmic rays.",
+      "cs": "Nejen chránič kapes, ale celotělový ochranný oblek utkaný ze stejného nezničitelného plastu. Chrání před tekoucími pery a menšími kosmickými paprsky."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+22"
+      },
+      "cs": {
+        "Bonus k Integritě": "+22"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain resistance to acid damage (halve damage taken)."
+      ],
+      "cs": [
+        "Získáš odolnost vůči poškození kyselinou (poloviční poškození)."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+22 Integrity, Acid Resistance",
+      "cs": "+22 Integrita, Odolnost vůči Kyselině"
+    },
+    "level": 9,
+    "buyPrice": 115,
+    "sellPrice": 35
+  },
+  {
+    "id": "cc_us_hazard_pay_vest_l10",
+    "name": {
+      "en": "Hazard-Pay Vest with Extra Pockets",
+      "cs": "Vesta pro Rizikové Práce s Extra Kapsami"
+    },
+    "description": {
+      "en": "Reinforced with what the manual calls 'Semi-Pliable Carbon,' this vest has enough pockets to lose several small pets and a surprising number of forms (Form 37B not included).",
+      "cs": "Zesílená materiálem, který manuál nazývá 'polo-ohebný karbon', tato vesta má dost kapes na ztracení několika malých domácích mazlíčků a překvapivého množství formulářů (formulář 37B není součástí)."
+    },
+    "itemType": "utility_suite",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+25"
+      },
+      "cs": {
+        "Bonus k Integritě": "+25"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Provides a +2 bonus to all Resilience saving throws."
+      ],
+      "cs": [
+        "Poskytuje bonus +2 ke všem Záchranným hodům na Odolnost."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+25 Integrity, +2 Resilience Saves",
+      "cs": "+25 Integrita, +2 k Záchr. hodům na Odol."
+    },
+    "level": 10,
+    "buyPrice": 125,
+    "sellPrice": 38
+  }
+]

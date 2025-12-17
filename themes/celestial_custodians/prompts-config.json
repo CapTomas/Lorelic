@@ -8,7 +8,8 @@
     "union_rep_contact_critical": "themes/celestial_custodians/prompts/union_rep_contact_critical.txt",
     "job_scope_creep_detected": "themes/celestial_custodians/prompts/job_scope_creep_detected.txt",
     "bizarre_solution_achieved": "themes/celestial_custodians/prompts/bizarre_solution_achieved.txt",
-    "starts": "themes/celestial_custodians/prompts/helpers/starts.txt"
+    "starts": "themes/celestial_custodians/prompts/helpers/starts.txt",
+    "traits": "themes/celestial_custodians/prompts/helpers/traits.json"
   },
   "NARRATIVE_LANG_PROMPT_PARTS": {
     "en": "The narrative MUST emulate the style of Douglas Adams. Deliver an unending stream of dry wit, unexpected juxtapositions, and gloriously absurd logical leaps. Describe cosmic-scale ineptitude and bizarre phenomena with a deadpan, almost matter-of-fact tone. Embrace tangents that are funnier than the main point. Understate colossal problems. The universe is not so much hostile as it is bafflingly mismanaged and prone to fits of utter improbability. Dialogue should be sharp, often missing the point entirely, or achieving profundity by accident. Think Hitchhiker's Guide first, with a dash of Futurama's workplace chaos and Red Dwarf's slightly grubby charm.",

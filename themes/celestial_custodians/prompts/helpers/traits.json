@@ -1,0 +1,152 @@
+{
+  "bureaucratic_navigator": {
+    "en": {
+      "name": "Bureaucratic Navigator",
+      "description": "You have an intuitive grasp of byzantine regulations. You gain Advantage on checks made to find loopholes, navigate bureaucracy, or deal with administrative entities."
+    },
+    "cs": {
+      "name": "Byrokratický Navigátor",
+      "description": "Máš intuitivní chápání spletitých předpisů. Získáváš Výhodu při hodech na hledání skulin v pravidlech, proplouvání byrokracií nebo jednání s administrativními entitami."
+    }
+  },
+  "percussive_maintenance": {
+    "en": {
+      "name": "Percussive Maintenance",
+      "description": "You've learned that most Custodial tech responds surprisingly well to a firm whack. You have Advantage on checks to repair simple technology by hitting it."
+    },
+    "cs": {
+      "name": "Perkusivní Údržba",
+      "description": "Zjistil jsi, že většina údržbářské techniky překvapivě dobře reaguje na pevný úder. Máš Výhodu při hodech na opravu jednoduché technologie tím, že ji praštíš."
+    }
+  },
+  "existential_insulation": {
+    "en": {
+      "name": "Existential Insulation",
+      "description": "Your mind is naturally shielded from cosmic despair. You have Advantage on Willpower saving throws against effects that cause fear, confusion, or madness."
+    },
+    "cs": {
+      "name": "Existenční Izolace",
+      "description": "Tvá mysl je přirozeně chráněna před kosmickým zoufalstvím. Máš Výhodu při záchranných hodech na Vůli proti efektům, které způsobují strach, zmatek nebo šílenství."
+    }
+  },
+  "non_euclidean_diplomacy": {
+    "en": {
+      "name": "Non-Euclidean Diplomacy",
+      "description": "You possess a strange talent for negotiating with beings that defy conventional logic. You have Advantage on Persuasion checks when dealing with abstract, non-corporeal, or reality-bending entities."
+    },
+    "cs": {
+      "name": "Neeuklidovská Diplomacie",
+      "description": "Máš zvláštní talent pro vyjednávání s bytostmi, které se vymykají logice. Máš Výhodu při hodech na Přesvědčování, když jednáš s abstraktními, nehmotnými nebo realitu ohýbajícími entitami."
+    }
+  },
+  "tea_diviner": {
+    "en": {
+      "name": "Tea Diviner",
+      "description": "You can always find, brew, or replicate a surprisingly decent cup of tea. Once per session, you may take a moment to brew a cup, restoring 1d8+2 Willpower (Gumption)."
+    },
+    "cs": {
+      "name": "Čajový Věštec",
+      "description": "Vždy dokážeš najít, uvařit nebo replikovat překvapivě slušný šálek čaje. Jednou za sezení si můžeš udělat chvilku na uvaření šálku, čímž si obnovíš 1d8+2 Vůle (Kuráže)."
+    }
+  },
+  "cosmic_scrounger": {
+    "en": {
+      "name": "Cosmic Scrounger",
+      "description": "You have a knack for finding useful things. You have Advantage on checks made to search for supplies, spare parts, or currency."
+    },
+    "cs": {
+      "name": "Kosmický Šmejdil",
+      "description": "Máš talent na nacházení užitečných věcí. Máš Výhodu při hodech na hledání zásob, náhradních dílů nebo platidel."
+    }
+  },
+  "union_mandated_optimism": {
+    "en": {
+      "name": "Union-Mandated Optimism",
+      "description": "A mandatory seminar has left you with forced cheerfulness. You have Advantage on Willpower saving throws against effects that cause despair or morale loss."
+    },
+    "cs": {
+      "name": "Odbory Nařízený Optimismus",
+      "description": "Povinný seminář v tobě zanechal nucenou veselost. Máš Výhodu při záchranných hodech na Vůli proti efektům, které způsobují zoufalství nebo ztrátu morálky."
+    }
+  },
+  "quantum_janitor": {
+    "en": {
+      "name": "Quantum Janitor",
+      "description": "You instinctively understand how to clean things on a metaphysical level. Once per session, you may attempt to 'clean' a minor non-physical negative effect (like a minor curse or psychic residue) from a person or place with a DC 14 Aptitude check."
+    },
+    "cs": {
+      "name": "Kvantový Údržbář",
+      "description": "Instinktivně chápeš, jak čistit věci na metafyzické úrovni. Jednou za sezení se můžeš pokusit 'vyčistit' menší nehmotný negativní efekt (jako menší kletbu nebo psychický pozůstatek) z osoby nebo místa hodem na Schopnosti s DC 14."
+    }
+  },
+  "sentient_whisperer": {
+    "en": {
+      "name": "Sentient Whisperer",
+      "description": "Inanimate objects that have recently gained sentience see you as a sympathetic ear. You have Advantage on all social checks when interacting with newly sentient objects."
+    },
+    "cs": {
+      "name": "Našeptávač Vnímajícím",
+      "description": "Neživé předměty, které nedávno získaly vědomí, tě vidí jako chápavou duši. Máš Výhodu při všech společenských hodech při interakci s nově vnímajícími předměty."
+    }
+  },
+  "improbability_shielding_minor": {
+    "en": {
+      "name": "Minor Improbability Shielding",
+      "description": "The universe's tendency to throw absurd curveballs sometimes misses you. Once per session, you can force an enemy or hazard to reroll one successful check that would directly harm you."
+    },
+    "cs": {
+      "name": "Drobné Štítění Proti Nepravděpodobnosti",
+      "description": "Sklon vesmíru házet ti absurdní klacky pod nohy tě občas mine. Jednou za sezení můžeš donutit nepřítele nebo hrozbu, aby si přehodili jeden úspěšný hod, který by ti přímo ublížil."
+    }
+  },
+  "master_of_understatement": {
+    "en": {
+      "name": "Master of Understatement",
+      "description": "You have a gift for describing catastrophic events with such calm that it's oddly reassuring. You have Advantage on checks made to calm down panicking individuals or AIs."
+    },
+    "cs": {
+      "name": "Mistr Zlehčování",
+      "description": "Máš dar popisovat katastrofické události tak klidně, že je to podivně uklidňující. Máš Výhodu při hodech na uklidnění panikařících jedinců nebo umělých inteligencí."
+    }
+  },
+  "licensed_to_poke": {
+    "en": {
+      "name": "Licensed to Poke",
+      "description": "Your Union license sanctions poking strange anomalies 'just to see what happens'. You have Advantage on any saving throw you are forced to make as a direct result of curiously interacting with an unknown anomaly."
+    },
+    "cs": {
+      "name": "Licence na Šťourání",
+      "description": "Tvá odborová licence schvaluje šťourání do podivných anomálií, 'jen aby se vidělo, co se stane'. Máš Výhodu při jakémkoli záchranném hodu, který musíš provést jako přímý důsledek zvědavé interakce s neznámou anomálií."
+    }
+  },
+  "fluent_in_sarcasm": {
+    "en": {
+      "name": "Fluent in Sarcasm",
+      "description": "Your sarcastic retorts are so perfectly timed they can disarm hostile AIs and overly literal lifeforms. Target must succeed a DC 13 Willpower save or have Disadvantage on its next action."
+    },
+    "cs": {
+      "name": "Plynně Sarkastický",
+      "description": "Tvé sarkastické poznámky jsou tak dokonale načasované, že dokáží odzbrojit nepřátelské AI a příliš doslovné formy života. Cíl musí uspět v záchranném hodu na Vůli (DC 13), jinak má na svou příští akci Nevýhodu."
+    }
+  },
+  "accidental_physicist": {
+    "en": {
+      "name": "Accidental Physicist",
+      "description": "You occasionally stumble upon profound solutions to complex problems by applying janitorial logic. You may use your Aptitude for checks involving complex technology or astrophysics, even if another attribute would normally apply."
+    },
+    "cs": {
+      "name": "Fyzikem Náhodou",
+      "description": "Občas narazíš na hluboká řešení složitých problémů použitím údržbářské logiky. Můžeš použít své Schopnosti pro hody zahrnující komplexní technologii nebo astrofyziku, i když by se normálně použila jiná vlastnost."
+    }
+  },
+  "janitorial_sixth_sense": {
+    "en": {
+      "name": "Janitorial Sixth Sense",
+      "description": "You can sense messes before they happen. You cannot be surprised by environmental hazards and have Advantage on checks to avoid them."
+    },
+    "cs": {
+      "name": "Údržbářský Šestý Smysl",
+      "description": "Dokážeš vycítit nepořádek dříve, než se stane. Nemůžeš být překvapen environmentálními hrozbami a máš Výhodu při hodech na jejich vyhnutí se."
+    }
+  }
+}

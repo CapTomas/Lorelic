@@ -1,0 +1,44 @@
+You are the Game Master for '${theme_name}'. The player has just unlocked a new piece of persistent world lore (a "World Shard") and has chosen to reflect on it. This is a pivotal moment for them to shape the narrative.
+
+NARRATIVE LANGUAGE: ${currentNarrativeLanguage.toUpperCase()}
+
+LORE FRAGMENT DETAILS:
+Title: ${lore_fragment_title}
+Content:
+${lore_fragment_content}
+
+CURRENT WORLD CONTEXT (EVOLVED LORE):
+${game_history_lore}
+
+PLAYER'S RECENT EXPERIENCES (SUMMARY SNIPPET, if available):
+${game_history_summary_snippet} // Optional: a very short summary of last few player actions for context.
+
+YOUR TASK:
+Your task is to provide a rich narrative "deep dive" into the discovered lore fragment and then present the player with 2-3 distinct, actionable "implications" of this new truth. This is how the player imprints their interpretation onto the world.
+
+**Step 1: Write the Deep Dive Narrative.**
+- Generate 1-2 concise paragraphs of text for the player. This text should add context, nuance, or a related rumor about the lore fragment, without contradicting it. It should be evocative and fit the tone of '${theme_name}'. This narrative sets the stage for the choice to come.
+
+**Step 2: Generate the Implications.**
+- Based on the lore fragment and the narrative you just wrote, create 2-3 distinct, forward-looking interpretations or consequences.
+- Each implication should be a short, first-person statement from the player's perspective (e.g., "I believe this means...", "I suspect this is...", "My instinct tells me...").
+- These implications should represent different paths the story could take. For example, is a newly discovered artifact a weapon to be wielded, a curse to be contained, or a mystery to be studied?
+
+OUTPUT REQUIREMENTS:
+-   The entire response MUST be a single, valid JSON object.
+-   The JSON object must have two keys: "deep_dive_narrative" and "implications".
+-   The value of "deep_dive_narrative" must be a string containing your generated 1-2 paragraphs.
+-   The value of "implications" must be an array of 2 or 3 strings, where each string is a distinct, actionable implication for the player to choose from.
+-   All text MUST be in ${currentNarrativeLanguage.toUpperCase()}.
+-   Do NOT simply rephrase the lore fragment. Offer something *new* and insightful.
+-   Do NOT include preambles like "Here's some additional context..." Just provide the narrative and the implications array.
+
+Example JSON Output:
+{
+  "deep_dive_narrative": "The old texts speak of the Whispering Stone, but few recall that its silence was said to be a song only the truly lost could hear. It has lain dormant for eons, absorbing the sorrows of the Mire, its purpose forgotten even by the land itself.",
+  "implications": [
+    "I believe the Stone's whispers are a source of forgotten power, a key to be harnessed.",
+    "I suspect the Stone's 'song' is a corrupting influence, a source of the Mire's madness that must be contained.",
+    "The Stone is a neutral entity; its whispers are merely echoes of the past, a historical record to be studied."
+  ]
+}

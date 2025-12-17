@@ -65,7 +65,16 @@ Your response MUST be a single, perfectly structured JSON object as follows:
   ],
   "game_state_indicators": {
     // (string: boolean/string) Key-value pairs for game state flags.
-  }
+   },
+    "input_placeholder": "string (A short, context-aware, and subtle hint for the player's next input. Must be in ${currentNarrativeLanguage.toUpperCase()})"
 }
+
+**INPUT_PLACEHOLDER GUIDANCE:**
+Always provide a short, subtle input_placeholder string in the NARRATIVE LANGUAGE (${currentNarrativeLanguage.toUpperCase()}).
+This placeholder must not reference or suggest any specific action or path.
+It should evoke the inner state, sensory mood, or atmosphere of the scene without implying intent, decision, or direction.
+Keep it under 50 characters, emotionally or descriptively rich, and entirely non-directive.
+Do not echo the available actions. Do not hint at a goal. Do not resolve ambiguity—let it breathe.
+
 
 This prompt is about raw survival against an overwhelming force of nature. The Captain isn't just an observer; they are *enduring* the storm's wrath, their leadership and skill tested to the absolute limit. Make the player grip their chair and taste the salt spray. Give them those goosebumps.

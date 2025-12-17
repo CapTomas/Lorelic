@@ -1,0 +1,392 @@
+[
+  {
+    "id": "sr_cg_extragrogrations_l01",
+    "name": {
+      "en": "Extra Grog Rations",
+      "cs": "Mimořádná Dávka Grogu"
+    },
+    "description": {
+      "en": "A barrel of particularly potent, foul-smelling grog, distributed to bolster the crew's spirits for a single, desperate clash.",
+      "cs": "Sud obzvláště silného, odporně páchnoucího grogu, rozdávaný k posílení morálky posádky pro jeden zoufalý střet."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Crew Cohesion Boost": "Minor",
+        "Duration": "One Engagement"
+      },
+      "cs": {
+        "Posílení Soudržnosti Posádky": "Menší",
+        "Trvání": "Jeden Střet"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Temporarily boosts crew morale",
+        "Reduces fear from minor threats"
+      ],
+      "cs": [
+        "Dočasně posiluje morálku posádky",
+        "Snižuje strach z menších hrozeb"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Minor Crew Cohesion Boost (1 engagement)",
+      "cs": "Menší Bonus k Soudržnosti (1 střet)"
+    },
+    "level": 1,
+    "buyPrice": 5,
+    "sellPrice": 2
+  },
+  {
+    "id": "sr_cg_rustygrapeshot_l02",
+    "name": {
+      "en": "Rusty Grapeshot",
+      "cs": "Rezavý Kartáč"
+    },
+    "description": {
+      "en": "A canvas bag filled with rusty nails, bolts, and scrap metal. A crude but effective way to clear an enemy deck at close range.",
+      "cs": "Plátěný pytel plný rezavých hřebíků, šroubů a kovového šrotu. Primitivní, ale účinný způsob, jak vyčistit nepřátelskou palubu zblízka."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Anti-Crew Damage": "Low",
+        "Range": "Close"
+      },
+      "cs": {
+        "Poškození Posádky": "Nízké",
+        "Dosah": "Blízký"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Damages enemy crew",
+        "Ineffective against hull"
+      ],
+      "cs": [
+        "Zraňuje nepřátelskou posádku",
+        "Neúčinné proti trupu"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Low Crew Dmg (Close Range)",
+      "cs": "Nízké Zran. Posádky (Blízký Dosah)"
+    },
+    "level": 2,
+    "buyPrice": 8,
+    "sellPrice": 2
+  },
+  {
+    "id": "sr_cg_smokepowder_l03",
+    "name": {
+      "en": "Smudge Pot",
+      "cs": "Dýmovnice"
+    },
+    "description": {
+      "en": "A simple clay pot filled with damp powder and tar that creates a thick, acrid smoke screen when lit, briefly obscuring your ship.",
+      "cs": "Jednoduchý hliněný hrnec naplněný vlhkým prachem a dehtem, který po zapálení vytvoří hustou, štiplavou kouřovou clonu, jež krátce zakryje vaši loď."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Evasion Boost": "Minor",
+        "Duration": "Brief"
+      },
+      "cs": {
+        "Bonus k Úhybu": "Menší",
+        "Trvání": "Krátké"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Creates a smoke screen",
+        "Hinders enemy aiming"
+      ],
+      "cs": [
+        "Vytváří kouřovou clonu",
+        "Ztěžuje míření nepřátel"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Minor Evasion Boost (Brief)",
+      "cs": "Menší Bonus k Úhybu (Krátce)"
+    },
+    "level": 3,
+    "buyPrice": 11,
+    "sellPrice": 3
+  },
+  {
+    "id": "sr_cg_barbedchainshot_l04",
+    "name": {
+      "en": "Barbed Chain Shot",
+      "cs": "Ostnatá Řetězová Koule"
+    },
+    "description": {
+      "en": "Two small cannonballs linked by a barbed chain, designed to rip through sails and rigging with vicious efficiency.",
+      "cs": "Dvě malé dělové koule spojené ostnatým řetězem, navržené tak, aby s krutou účinností trhaly plachty a lanoví."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Sail Damage": "Moderate",
+        "Hull Damage": "Negligible"
+      },
+      "cs": {
+        "Poškození Plachet": "Střední",
+        "Poškození Trupu": "Zanedbatelné"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Shreds enemy sails",
+        "Reduces enemy maneuverability"
+      ],
+      "cs": [
+        "Trhá nepřátelské plachty",
+        "Snižuje manévrovatelnost nepřítele"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Moderate Sail Damage",
+      "cs": "Střední Poškození Plachet"
+    },
+    "level": 4,
+    "buyPrice": 14,
+    "sellPrice": 4
+  },
+  {
+    "id": "sr_cg_luckycompass_l05",
+    "name": {
+      "en": "Lookout's 'Lucky' Eyeglass",
+      "cs": "Hlídkařův 'Šťastný' Dalekohled"
+    },
+    "description": {
+      "en": "A surprisingly clear spyglass, claimed by the lookout to spot Imperial patrols or rich merchantmen before anyone else. A one-time advantage.",
+      "cs": "Překvapivě čistý dalekohled, o kterém hlídkař tvrdí, že spatří imperiální hlídky nebo bohaté obchodní lodě dříve než kdokoli jiný. Jednorázová výhoda."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Scouting Advantage": "Moderate",
+        "Duration": "Single Use"
+      },
+      "cs": {
+        "Průzkumná Výhoda": "Střední",
+        "Trvání": "Jedno Použití"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Spots distant ships more clearly",
+        "Reveals basic ship type and intent"
+      ],
+      "cs": [
+        "Jasněji spatří vzdálené lodě",
+        "Odhalí základní typ a úmysl lodi"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Improved Scouting (1 Use)",
+      "cs": "Zlepšený Průzkum (1 Použití)"
+    },
+    "level": 5,
+    "buyPrice": 17,
+    "sellPrice": 5
+  },
+  {
+    "id": "sr_cg_sirenswax_l06",
+    "name": {
+      "en": "Siren's Wax Earplugs",
+      "cs": "Voskové Špunty proti Sirénám"
+    },
+    "description": {
+      "en": "Beeswax mixed with a foul-smelling herbal concoction. Stuffed in the crew's ears, it helps resist the alluring, deadly song of sirens.",
+      "cs": "Včelí vosk smíchaný s odporně páchnoucím bylinným odvarem. Nacpaný do uší posádky pomáhá odolat svůdné, smrtící písni sirén."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Supernatural Resistance": "Minor",
+        "Target": "Siren Song"
+      },
+      "cs": {
+        "Odolnost vůči Nadpřirozenu": "Menší",
+        "Cíl": "Píseň Sirén"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants crew resistance to siren calls",
+        "Effect lasts for one encounter"
+      ],
+      "cs": [
+        "Poskytuje posádce odolnost vůči volání sirén",
+        "Účinek trvá po jedno střetnutí"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Minor Resist vs Siren Song (1 Encounter)",
+      "cs": "Menší Odolnost vůči Sirénám (1 Střet)"
+    },
+    "level": 6,
+    "buyPrice": 20,
+    "sellPrice": 6
+  },
+  {
+    "id": "sr_cg_overchargedpowder_l07",
+    "name": {
+      "en": "Over-Charged Powder Keg",
+      "cs": "Přeplněný Soudek Prachu"
+    },
+    "description": {
+      "en": "A single keg of black powder mixed with something... extra. It provides a more powerful broadside, but at the risk of stressing the cannons.",
+      "cs": "Jeden soudek černého prachu smíchaný s něčím... navíc. Poskytuje silnější boční salvu, ale s rizikem poškození děl."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Damage Boost": "Moderate",
+        "Risk": "Minor Cannon Stress"
+      },
+      "cs": {
+        "Bonus k Poškození": "Střední",
+        "Riziko": "Menší Opotřebení Děl"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Boosts damage of next broadside",
+        "May cause minor damage to own cannons"
+      ],
+      "cs": [
+        "Zvyšuje poškození příští boční salvy",
+        "Může způsobit menší poškození vlastních děl"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Mod. Dmg Boost (1 Salvo), Cannon Stress Risk",
+      "cs": "Stř. Bonus Zran. (1 Salva), Riziko Pošk. Děl"
+    },
+    "level": 7,
+    "buyPrice": 24,
+    "sellPrice": 7
+  },
+  {
+    "id": "sr_cg_bloodinthewater_l08",
+    "name": {
+      "en": "Chum Bucket",
+      "cs": "Vědro s Návnadou"
+    },
+    "description": {
+      "en": "A bucket of fish guts and blood, dumped overboard. Guaranteed to attract any hungry predators in the area... which can be a useful distraction.",
+      "cs": "Vědro rybích vnitřností a krve, vysypané přes palubu. Zaručeně přiláká všechny hladové predátory v oblasti... což může být užitečné rozptýlení."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Attracts Sea Predators": "High",
+        "Effect": "Distraction/Chaos"
+      },
+      "cs": {
+        "Láká Mořské Predátory": "Vysoká",
+        "Účinek": "Rozptýlení/Chaos"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Draws nearby sea creatures",
+        "Can create chaos in naval battles"
+      ],
+      "cs": [
+        "Přitahuje blízké mořské tvory",
+        "Může způsobit chaos v námořních bitvách"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Attracts Sea Predators, Creates Chaos",
+      "cs": "Láká Mořské Predátory, Působí Chaos"
+    },
+    "level": 8,
+    "buyPrice": 28,
+    "sellPrice": 8
+  },
+  {
+    "id": "sr_cg_shantyofshores_l09",
+    "name": {
+      "en": "Shanty of Shores Unseen",
+      "cs": "Popěvek o Nevídaných Březích"
+    },
+    "description": {
+      "en": "A rousing, legendary sea shanty scrawled on a piece of sailcloth. When sung with gusto, it fills the crew with dreams of plunder, steeling their resolve.",
+      "cs": "Strhující, legendární námořnický popěvek načmáraný na kusu plachtoviny. Když je zpíván s vervou, naplní posádku sny o kořisti a zocelí jejich odhodlání."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Crew Cohesion Boost": "Moderate",
+        "Duration": "One Engagement"
+      },
+      "cs": {
+        "Posílení Soudržnosti Posádky": "Střední",
+        "Trvání": "Jeden Střet"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Significantly boosts crew morale",
+        "Inspires courage and ignores fear"
+      ],
+      "cs": [
+        "Výrazně posiluje morálku posádky",
+        "Vzbuzuje odvahu a ignoruje strach"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Mod. Crew Cohesion Boost (1 engagement)",
+      "cs": "Stř. Bonus k Soudržnosti (1 střet)"
+    },
+    "level": 9,
+    "buyPrice": 32,
+    "sellPrice": 10
+  },
+  {
+    "id": "sr_cg_ghostlyfog_l10",
+    "name": {
+      "en": "Jar of Ghostly Fog",
+      "cs": "Džbán Přízračné Mlhy"
+    },
+    "description": {
+      "en": "A sealed clay jar containing fog from a cursed isle. When shattered, it releases a thick, unnatural fog that clings to the sea, chilling enemy crews to the bone.",
+      "cs": "Zapečetěný hliněný džbán obsahující mlhu z prokletého ostrova. Po rozbití vypustí hustou, nepřirozenou mlhu, která se drží u mořské hladiny a mrazí nepřátelské posádky až do morku kostí."
+    },
+    "itemType": "captains_gambit",
+    "attributes": {
+      "en": {
+        "Evasion Boost": "Moderate",
+        "Morale Damage": "Minor"
+      },
+      "cs": {
+        "Bonus k Úhybu": "Střední",
+        "Poškození Morálky": "Menší"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Creates supernatural fog",
+        "Reduces enemy morale"
+      ],
+      "cs": [
+        "Vytváří nadpřirozenou mlhu",
+        "Snižuje morálku nepřátel"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Mod. Evasion, Minor Morale Dmg",
+      "cs": "Stř. Úhyb, Menší Pošk. Morálky"
+    },
+    "level": 10,
+    "buyPrice": 36,
+    "sellPrice": 11
+  }
+]

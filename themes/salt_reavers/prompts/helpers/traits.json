@@ -1,0 +1,102 @@
+{
+  "sea_legs": {
+    "en": {
+      "name": "Sea Legs",
+      "description": "You are exceptionally steady on your feet, whether on a storm-tossed deck or a swinging rope, making you more resistant to being knocked down or losing your balance."
+    },
+    "cs": {
+      "name": "Mořské Nohy",
+      "description": "Jste výjimečně stabilní na nohou, ať už na palubě zmítané bouří nebo na houpajícím se laně, což vás činí odolnějšími vůči sražení nebo ztrátě rovnováhy."
+    }
+  },
+  "devils_luck": {
+    "en": {
+      "name": "Devil's Luck",
+      "description": "You have a knack for surviving situations that should be fatal. Once per voyage, you may narrowly escape a seemingly certain doom."
+    },
+    "cs": {
+      "name": "Ďábelské Štěstí",
+      "description": "Máte talent na přežití situací, které by měly být smrtelné. Jednou za plavbu můžete těsně uniknout zdánlivě jisté zkáze."
+    }
+  },
+  "master_cannoneer": {
+    "en": {
+      "name": "Master Cannoneer",
+      "description": "Your expertise with cannons allows you to reload faster and aim for specific weaknesses on enemy ships, such as masts or rudder chains, with greater accuracy."
+    },
+    "cs": {
+      "name": "Mistr Dělostřelec",
+      "description": "Vaše odbornost s děly vám umožňuje rychleji nabíjet a s větší přesností mířit na specifické slabiny nepřátelských lodí, jako jsou stěžně nebo řetězy kormidla."
+    }
+  },
+  "fearsome_reputation": {
+    "en": {
+      "name": "Fearsome Reputation",
+      "description": "Your name inspires fear in the hearts of lesser crews. Weaker opponents may be intimidated into surrendering or fleeing without a fight."
+    },
+    "cs": {
+      "name": "Děsivá Pověst",
+      "description": "Vaše jméno vzbuzuje strach v srdcích slabších posádek. Slabší protivníci mohou být zastrašeni a vzdát se nebo uprchnout bez boje."
+    }
+  },
+  "old_salt": {
+    "en": {
+      "name": "Old Salt",
+      "description": "You can read the winds and the waves like a book, giving you an edge in navigating storms, avoiding reefs, and predicting weather changes."
+    },
+    "cs": {
+      "name": "Starý Mořský Vlk",
+      "description": "Dokážete číst vítr a vlny jako knihu, což vám dává výhodu při navigaci bouřemi, vyhýbání se útesům a předpovídání změn počasí."
+    }
+  },
+  "cutthroat_duelist": {
+    "en": {
+      "name": "Cutthroat Duelist",
+      "description": "You excel in one-on-one combat, able to parry with uncanny skill and deliver swift, decisive counter-attacks with your blade."
+    },
+    "cs": {
+      "name": "Hrdlořez Duelista",
+      "description": "Vynikáte v souboji jeden na jednoho, dokážete odrážet rány s neuvěřitelnou zručností a provádět rychlé, rozhodné protiútoky svou čepelí."
+    }
+  },
+  "treasure_sense": {
+    "en": {
+      "name": "Treasure Sense",
+      "description": "You have an almost supernatural ability to sniff out hidden valuables, notice secret compartments, and interpret the most cryptic clues on treasure maps."
+    },
+    "cs": {
+      "name": "Cit pro Poklad",
+      "description": "Máte téměř nadpřirozenou schopnost vycítit skryté cennosti, všimnout si tajných přihrádek a interpretovat i ty nejzáhadnější stopy na mapách pokladů."
+    }
+  },
+  "curse_warded": {
+    "en": {
+      "name": "Curse-Warded",
+      "description": "Whether through superstition or strange fortune, you are more resistant to the effects of ancient curses placed on treasure or haunted islands."
+    },
+    "cs": {
+      "name": "Ochráněn před Kletbami",
+      "description": "Ať už díky pověrčivosti nebo podivnému štěstí, jste odolnější vůči účinkům prastarých kleteb umístěných na pokladech nebo strašidelných ostrovech."
+    }
+  },
+  "silver_tongue": {
+    "en": {
+      "name": "Silver Tongue",
+      "description": "You can talk your way out of (or into) almost any situation. You are more effective at parleying with rivals, haggling in port, and inspiring your crew with rousing speeches."
+    },
+    "cs": {
+      "name": "Stříbrný Jazyk",
+      "description": "Dokážete se vymluvit z (nebo do) téměř jakékoli situace. Jste efektivnější při vyjednávání s rivaly, smlouvání v přístavu a inspirování posádky strhujícími projevy."
+    }
+  },
+  "krakens_blood": {
+    "en": {
+      "name": "Kraken's Blood",
+      "description": "A strange encounter in your past has left its mark. You are unnervingly calm in the presence of sea monsters and can sometimes anticipate their actions."
+    },
+    "cs": {
+      "name": "Krev Krakena",
+      "description": "Podivné setkání v minulosti zanechalo svou stopu. Jste znepokojivě klidní v přítomnosti mořských příšer a někdy dokážete předvídat jejich akce."
+    }
+  }
+}

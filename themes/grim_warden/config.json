@@ -10,35 +10,116 @@
   "concept_key": "theme_concept_grim_warden",
   "category_key": "theme_category_grim_warden",
   "style_key": "theme_style_grim_warden",
+  "default_identifier_key": "default_identifier_grim_warden",
   "naming_convention": "entity",
+  "base_attributes": {
+    "integrity": 100,
+    "willpower": 50,
+    "aptitude": 10,
+    "resilience": 10
+  },
+  "attribute_tooltips": {
+    "integrity": "tooltip_attr_integrity_grim_warden",
+    "willpower": "tooltip_attr_willpower_grim_warden",
+    "aptitude": "tooltip_attr_aptitude_grim_warden",
+    "resilience": "tooltip_attr_resilience_grim_warden"
+  },
+  "equipment_slots": {
+    "wardens_blade": {
+      "id": "equipped_wardens_blade_effect",
+      "type": "static",
+      "reward_trigger": "wardens_blade_reward_trigger"
+    },
+    "protective_gear": {
+      "id": "equipped_protective_gear_effect",
+      "type": "static",
+      "reward_trigger": "protective_gear_reward_trigger"
+    },
+    "alchemical_concoction": {
+      "id": "equipped_alchemical_concoction_effect",
+      "type": "consumable",
+      "reward_trigger": "alchemical_concoction_reward_trigger"
+    },
+    "silver_shards": {
+      "id": "silver_shards",
+      "type": "money",
+      "reward_trigger": "silver_shards_reward_trigger"
+    }
+  },
   "dashboard_config_ref": "grim_warden",
   "dashboard_config": {
+    "top_panel": [
+      {
+        "id": "integrity",
+        "label_key": "char_panel_label_integrity",
+        "tooltip_key": "tooltip_attr_integrity_grim_warden",
+        "type": "meter",
+        "meter_type": "health",
+        "maps_to_run_stat": "currentIntegrity",
+        "short_description": "The Warden's physical and spiritual wholeness. Lost to wounds and horrors. At zero, the body or will is broken. Crucial to update every time health is changed."
+      },
+      {
+        "id": "willpower",
+        "label_key": "char_panel_label_willpower",
+        "tooltip_key": "tooltip_attr_willpower_grim_warden",
+        "type": "meter",
+        "meter_type": "stamina",
+        "maps_to_run_stat": "currentWillpower",
+        "short_description": "A finite reservoir of resolve. Expended to fuel alchemical signs and desperate feats of strength. A scarred mind's greatest weapon."
+      },
+      {
+        "id": "aptitude",
+        "label_key": "char_panel_label_aptitude",
+        "tooltip_key": "tooltip_attr_aptitude_grim_warden",
+        "type": "number",
+        "maps_to_run_stat": "aptitude",
+        "short_description": "A measure of honed skill and cold precision. Governs accuracy in combat, insight in investigation, and efficacy with alchemical signs."
+      },
+      {
+        "id": "resilience",
+        "label_key": "char_panel_label_resilience",
+        "tooltip_key": "tooltip_attr_resilience_grim_warden",
+        "type": "number",
+        "maps_to_run_stat": "resilience",
+        "short_description": "Inner grit and hardened flesh. Passively reduces the impact of physical blows and the insidious whispers of the Blight."
+      },
+      {
+        "id": "strain_level",
+        "label_key": "label_strain_level_grim_warden",
+        "tooltip_key": "tooltip_item_strain_level_grim_warden",
+        "type": "status_icon",
+        "default_ai_value": 1,
+        "maps_to_run_stat": "strainLevel",
+        "level_mappings": {
+          "1": { "display_text_key": "strain_level_1_display", "css_class": "status-ok", "icon_path": "images/sentiment/icon_sentiment_satisfied.svg" },
+          "2": { "display_text_key": "strain_level_2_display", "css_class": "status-warning", "icon_path": "images/sentiment/icon_sentiment_neutral.svg" },
+          "3": { "display_text_key": "strain_level_3_display", "css_class": "status-danger", "icon_path": "images/sentiment/icon_sentiment_dissatisfied.svg" },
+          "4": { "display_text_key": "strain_level_4_display", "css_class": "status-critical", "icon_path": "images/sentiment/icon_sentiment_very_dissatisfied.svg" }
+        },
+        "must_translate": false,
+        "short_description": "The Warden's cumulative mental and physical stress. MUST BE INTEGER (1-4). Higher levels negatively impact actions and may trigger afflictions. 1: Calm, 2: Taxed, 3: Stressed, 4: Breaking Point."
+      }
+    ],
     "left_panel": [
       {
-        "id": "character-status-panel-box",
+        "id": "wardens-scrip-panel-box",
         "title_key": "title_character_status_grim_warden",
         "type": "collapsible",
         "initial_expanded": true,
         "items": [
           {
-            "id": "character_name",
-            "label_key": "label_character_name_grim_warden",
-            "type": "text",
-            "default_value_key": "unknown_warden",
-            "must_translate": false,
-            "short_description": "Player character's chosen name or grim epithet."
-          },
-          {
             "id": "silver_shards",
             "label_key": "label_character_coin_grim_warden",
+            "tooltip_key": "tooltip_item_silver_shards_grim_warden",
             "type": "number_text",
             "default_value_key": "coin_scant_shards",
             "must_translate": true,
-            "short_description": "Amount of hard-won silver shards the Warden possesses. Use descriptive terms or numbers. Unit 'Shards'. Acquired through contracts, scavenging, or dire necessity."
+            "short_description": "Hard-won coin. Used for repairs, reagents, and rare moments of solace. Thematic currency. Warden should start with a small amount. (2-10 is typical)."
           },
           {
             "id": "renown",
             "label_key": "label_character_renown_grim_warden",
+            "tooltip_key": "tooltip_item_renown_grim_warden",
             "type": "text",
             "default_value_key": "renown_obscure_figure",
             "must_translate": true,
@@ -47,100 +128,65 @@
           {
             "id": "oath_allegiance",
             "label_key": "label_character_oath_grim_warden",
+            "tooltip_key": "tooltip_item_oath_allegiance_grim_warden",
             "type": "text",
             "default_value_key": "oath_order_initiate",
             "must_translate": true,
-            "short_description": "Warden's defining oath or current allegiance."
+            "short_description": "The Warden's defining philosophy or sworn duty."
           }
         ]
       },
       {
-        "id": "vitality-gear-panel-box",
+        "id": "flesh-and-iron-panel-box",
         "title_key": "title_vitality_gear_grim_warden",
         "type": "collapsible",
         "initial_expanded": false,
         "boot_delay": 750,
         "items": [
           {
-            "id": "healthPct",
-            "label_key": "label_character_health_grim_warden",
-            "type": "meter",
-            "meter_type": "health",
-            "default_value": "100",
-            "must_translate": false,
-            "short_description": "Character's current physical integrity (0-100). E.g., '100', '65 (Bruised)', '10 (Near Death)'."
-          },
-          {
-            "id": "staminaPct",
-            "label_key": "label_character_stamina_grim_warden",
-            "type": "meter",
-            "meter_type": "stamina",
-            "default_value": "100",
-            "must_translate": false,
-            "short_description": "Character's current vigor/resolve (0-100). Expended by strenuous actions. Should not decrease passively."
-          },
-          {
-            "id": "blight_exposure_level",
-            "label_key": "label_blight_exposure_grim_warden",
-            "type": "status_level",
-            "default_ai_value": 1,
-            "level_mappings": {
-              "1": { "display_text_key": "blight_exposure_level_1_display", "css_class": "status-ok" },
-              "2": { "display_text_key": "blight_exposure_level_2_display", "css_class": "status-warning" },
-              "3": { "display_text_key": "blight_exposure_level_3_display", "css_class": "status-danger" },
-              "4": { "display_text_key": "blight_exposure_level_4_display", "css_class": "status-critical" }
-            },
-            "must_translate": false,
-            "short_description": "Warden's current stage of Blight contamination. MUST BE INTEGER (1-4). 1: Dormant, 2: Nascent, 3: Festering, 4: Critical. Affects perception, resilience, or invokes Blight-induced afflictions. AI provides numerical level."
-          },
-          {
-            "id": "elixir_charges",
-            "label_key": "label_elixir_charges_grim_warden",
-            "type": "text",
-            "default_value_key": "elixirs_none_prepared",
-            "must_translate": true,
-            "short_description": "Count of potent restorative draughts or alchemical concoctions."
-          },
-          {
-            "id": "armor_condition",
-            "label_key": "label_armor_condition_grim_warden",
-            "type": "text",
-            "default_value_key": "armor_scuffed_hide",
-            "must_translate": true,
-            "short_description": "Warden's primary armor description and state. "
-          },
-          {
-            "id": "weapon_condition",
-            "label_key": "label_weapon_condition_grim_warden",
-            "type": "text",
-            "default_value_key": "weapon_trusted_steel",
-            "must_translate": true,
-            "short_description": "Warden's primary weapon description and state. "
-          },
-          {
-            "id": "current_burden",
-            "label_key": "label_current_burden_grim_warden",
+            "id": "equipped_wardens_blade_effect",
+            "label_key": "label_equipped_wardens_blade_grim_warden",
+            "tooltip_key": "tooltip_slot_wardens_blade_grim_warden",
             "type": "text_long",
-            "default_value_key": "burden_lightly_laden",
+            "default_value_key": "default_equipped_wardens_blade_grim_warden",
             "must_translate": true,
-            "short_description": "Current encumbrance level and its effects. "
+            "short_description": "Name and effect description string of the Warden's primary weapon. Provided via rewards or store. You must not change this field under any circumstances, as it is just used to determine the Warden's primary weapon."
+          },
+          {
+            "id": "equipped_protective_gear_effect",
+            "label_key": "label_equipped_protective_gear_grim_warden",
+            "tooltip_key": "tooltip_slot_protective_gear_grim_warden",
+            "type": "text_long",
+            "default_value_key": "default_equipped_protective_gear_grim_warden",
+            "must_translate": true,
+            "short_description": "Name and effect description string of the Warden's worn armor/protection. Provided via rewards or store. You must not change this field under any circumstances, as it is just used to determine the Warden's protective gear."
+          },
+          {
+            "id": "equipped_alchemical_concoction_effect",
+            "label_key": "label_equipped_alchemical_concoction_grim_warden",
+            "tooltip_key": "tooltip_slot_alchemical_concoction_grim_warden",
+            "type": "text_long",
+            "default_value_key": "default_equipped_alchemical_concoction_grim_warden",
+            "must_translate": true,
+            "short_description": "Name and effect description string of the readied alchemical draught or salve. Provided via rewards or store. You must not change this field under any circumstances, as it is just used to determine the Warden's alchemical concoction."
           }
         ]
       },
       {
-        "id": "omens-whispers-panel-box",
-        "title_key": "title_omens_whispers_grim_warden",
+        "id": "active-conditions-panel-box",
+        "title_key": "title_active_conditions_grim_warden",
         "type": "hidden_until_active",
+        "indicator_key": "conditions_active",
         "initial_expanded": true,
-        "indicator_key": "omen_detected",
         "items": [
           {
-            "id": "omen_details",
-            "label_key": "label_omen_details_grim_warden",
+            "id": "conditions_list",
+            "label_key": "label_conditions_list_grim_warden",
+            "tooltip_key": "tooltip_item_active_conditions_grim_warden",
             "type": "text_long",
-            "default_value_key": "omens_shadows_quiet",
+            "default_value_key": "conditions_none_active",
             "must_translate": true,
-            "short_description": "Details of active preternatural omens, unsettling visions, or unnatural whispers only the Warden can sense."
+            "short_description": "Comma-separated list of active temporary conditions"
           }
         ]
       }
@@ -155,30 +201,34 @@
           {
             "id": "current_quest",
             "label_key": "label_current_quest_grim_warden",
+            "tooltip_key": "tooltip_item_current_quest_grim_warden",
             "type": "text_long",
             "default_value_key": "quest_awaiting_contract",
             "must_translate": true,
-            "short_description": "The current primary CONTRACT or HUNT. Can only change by completing, failing, or abandoning the objective."
+            "short_description": "The current primary contract or hunt. Changes only upon completion, failure, or abandonment."
           },
           {
             "id": "quest_reward_rumor",
             "label_key": "label_quest_reward_grim_warden",
+            "tooltip_key": "tooltip_item_quest_reward_rumor_grim_warden",
             "type": "text",
             "default_value_key": "reward_to_be_seen",
             "must_translate": true,
-            "short_description": "Rumored or stated reward for completing the current contract. Fulfilled upon success."
+            "short_description": "The rumored or stated reward for the current contract."
           },
           {
             "id": "activity_status",
             "label_key": "label_activity_status_grim_warden",
+            "tooltip_key": "tooltip_item_activity_status_grim_warden",
             "type": "text",
             "default_value_key": "status_on_watch",
             "must_translate": true,
-            "short_description": "Warden's current primary activity or stance."
+            "short_description": "Warden's current primary activity"
           },
           {
             "id": "threat_level",
             "label_key": "label_threat_level_grim_warden",
+            "tooltip_key": "tooltip_item_threat_level_grim_warden",
             "type": "status_level",
             "default_ai_value": 1,
             "level_mappings": {
@@ -188,7 +238,7 @@
               "4": { "display_text_key": "threat_level_4_display", "css_class": "status-critical" }
             },
             "must_translate": false,
-            "short_description": "MUST be an integer: 1 (Unease), 2 (Wary), 3 (Danger), 4 (Extreme Peril). Represents immediate environmental or situational threat level."
+            "short_description": "MUST be an integer: 1 (Unease), 2 (Danger Sensed), 3 (Threat Imminent), 4 (Mortal Peril). Represents immediate environmental or situational threat."
           }
         ]
       },
@@ -202,50 +252,38 @@
           {
             "id": "current_locale",
             "label_key": "label_current_location_grim_warden",
+            "tooltip_key": "tooltip_item_current_locale_grim_warden",
             "type": "text_long",
             "default_value_key": "location_murkwood_fringe",
             "must_translate": true,
-            "short_description": "Evocative name of the current specific location or micro-region. Be precise and thematic."
-          },
-          {
-            "id": "regional_control",
-            "label_key": "label_regional_control_grim_warden",
-            "type": "text",
-            "default_value_key": "control_lawless_marches",
-            "must_translate": true,
-            "short_description": "Dominant influence or faction controlling the current area."
-          },
-          {
-            "id": "immediate_surroundings",
-            "label_key": "label_ambient_conditions_grim_warden",
-            "type": "text_long",
-            "default_value_key": "conditions_chill_wind_grey_skies",
-            "must_translate": true,
-            "short_description": "Sensory details of immediate environment/weather."
+            "short_description": "Evocative name of the current specific location or micro-region."
           },
           {
             "id": "blight_saturation",
             "label_key": "label_blight_intensity_grim_warden",
+            "tooltip_key": "tooltip_item_blight_saturation_grim_warden",
             "type": "text_long",
             "default_value_key": "blight_whispers_of_decay",
             "must_translate": true,
-            "short_description": "Perceived intensity and nature of the Blight's presence."
+            "short_description": "Perceived intensity and nature of the Blight's presence in the environment."
           },
           {
             "id": "local_blight_phenomenon",
             "label_key": "label_local_blight_phenomenon_grim_warden",
+            "tooltip_key": "tooltip_item_local_blight_phenomenon_grim_warden",
             "type": "text_long",
             "default_value_key": "phenomenon_none_apparent",
             "must_translate": true,
-            "short_description": "Description of any specific, active Blight manifestations or environmental corruptions in the immediate area. Use 'None Apparent' if nothing specific."
+            "short_description": "Description of any specific, active Blight manifestations or environmental corruptions. Use 'None Apparent' if nothing specific."
           },
           {
             "id": "sky_and_cycle",
             "label_key": "label_moon_cycle_grim_warden",
+            "tooltip_key": "tooltip_item_sky_and_cycle_grim_warden",
             "type": "text",
             "default_value_key": "moon_cycle_sky_obscured",
             "must_translate": false,
-            "short_description": "Current moon phase (e.g., 'Full Moon', 'Waning Crescent', 'Blood Moon') or time of day if sky is irrelevant (e.g., 'Deep Night', 'Midday Gloom', 'Torchlight')."
+            "short_description": "Current moon phase or time of day."
           }
         ]
       },
@@ -262,7 +300,7 @@
             "type": "text",
             "default_value_key": "target_no_adversary",
             "must_translate": true,
-            "short_description": "Specific type of adversary engaged (monster, human, etc.). MUST be original and thematic. Use 'None Sighted' or similar if no target."
+            "short_description": "Specific type of adversary engaged (monster or human). Use original, thematic names."
           },
           {
             "id": "adversary_toughness_pct",
@@ -271,17 +309,9 @@
             "meter_type": "monster_defense",
             "default_value": "0",
             "status_text_id": "adversary_defense_status_text",
-            "default_status_key": "defense_shattered",
+            "default_status_key": "defense_status_unknown",
             "must_translate": false,
-            "short_description": "Adversary's remaining physical/magical defenses (armor/hide/wards/skill) as a percentage 0-100. AI MUST also update 'adversary_defense_status_text'."
-          },
-          {
-            "id": "adversary_defense_status_text",
-            "label_key": "label_adversary_defense_status_grim_warden",
-            "type": "text",
-            "default_value_key": "defense_status_unknown",
-            "must_translate": true,
-            "short_description": "Descriptive status of the adversary's defenses, linked to 'adversary_toughness_pct'. Provided by AI."
+            "short_description": "Adversary's remaining physical defenses (armor/hide/skill) as a percentage 0-100. AI MUST also update 'adversary_defense_status_text'."
           },
           {
             "id": "adversary_vitality_pct",
@@ -290,20 +320,43 @@
             "meter_type": "monster_health",
             "default_value": "0",
             "must_translate": false,
-            "short_description": "Adversary's remaining vitality/health/morale as a percentage 0-100. E.g., '100', '50 (Wounded/Shaken)', 'Near Death/Breaking (5)'."
+            "short_description": "Adversary's remaining vitality/health/morale as a percentage 0-100."
+          },
+          {
+            "id": "adversary_defense_status_text",
+            "label_key": "label_adversary_defense_status_grim_warden",
+            "type": "text",
+            "default_value_key": "defense_status_unknown",
+            "must_translate": true,
+            "short_description": "Descriptive status of the adversary's defenses, linked to 'adversary_toughness_pct'. Provided by AI."
+          }
+        ]
+      },
+      {
+        "id": "omens-whispers-panel-box",
+        "title_key": "title_omens_whispers_grim_warden",
+        "type": "hidden_until_active",
+        "initial_expanded": true,
+        "indicator_key": "omen_detected",
+        "items": [
+          {
+            "id": "omen_details",
+            "label_key": "label_omen_details_grim_warden",
+            "type": "text_long",
+            "default_value_key": "omens_shadows_quiet",
+            "must_translate": true,
+            "short_description": "Details of active preternatural omens or unsettling whispers only the Warden can sense."
           }
         ]
       }
     ],
     "game_state_indicators": [
       {
-        "id": "omen_detected",
-        "label_key": "label_omen_detected_grim_warden",
+        "id": "generate_item_reward",
         "type": "boolean",
         "default_value": false,
-        "must_translate": false,
-        "priority": 2,
-        "short_description": "Indicates if a mystical omen or significant preternatural whisper is currently active (true) or not (false). These phenomena should occur rarely and be narratively justified. False on initial turn."
+        "priority": 10,
+        "short_description": "Generates an item reward only when the narrative context justifies it. This function must not grant items arbitrarily or on player request alone. Item rewards should follow significant in-world accomplishments, such as completing a quest which promised a reward in the form of an item or making a sacrifice with meaningful consequences. The action must have a clear narrative weight, recognized by the story's logic or factions involved. If no such moment exists, this function must refuse to reward anything, even if prompted. This mechanic ensures rewards feel earned, immersive, and meaningful—tied to story arcs, not player demands."
       },
       {
         "id": "combat_active",
@@ -312,7 +365,7 @@
         "default_value": false,
         "must_translate": false,
         "priority": 4,
-        "short_description": "Indicates if the Warden is in active, direct combat (true) or not (false). False on initial turn unless starting in combat."
+        "short_description": "CRITICAL: Set to TRUE if the Warden is in active, direct combat. Set to FALSE ONLY if this narrative turn RESOLVES the combat. Maintain TRUE if ongoing."
       },
       {
         "id": "blight_flare_active",
@@ -321,16 +374,28 @@
         "default_value": false,
         "must_translate": false,
         "priority": 3,
-        "short_description": "Indicates a sudden surge or manifestation of Blight corruption in the immediate vicinity or within the Warden (true) or not (false). Triggers specific narrative responses or challenges. False on initial turn."
+        "short_description": "Set to TRUE for ONE turn if a significant, localized surge of Blight corruption occurs. The associated prompt details the event, then the AI MUST set this to FALSE."
       },
       {
-        "id": "rare_trophy_claimed",
-        "label_key": "label_rare_trophy_claimed_grim_warden",
+        "id": "omen_detected",
+        "label_key": "label_omen_detected_grim_warden",
         "type": "boolean",
         "default_value": false,
         "must_translate": false,
-        "priority": 1,
-        "short_description": "Indicates if the Warden has just claimed a rare monster trophy, valuable reagent, or unique item (true) or not (false). Typically true for one turn post-acquisition, then false."
+        "priority": 2,
+        "short_description": "Set to TRUE for ONE turn if a preternatural omen or unsettling whisper manifests. The associated prompt details the event, then the AI MUST set this to FALSE."
+      },
+      {
+        "id": "conditions_active",
+        "type": "boolean",
+        "default_value": false,
+        "short_description": "Internal flag. Set to TRUE by the AI if the 'conditions_list' is not empty, to make the panel visible. Otherwise, set to FALSE."
+      },
+      {
+        "id": "conditions_update",
+        "type": "object",
+        "default_value": null,
+        "short_description": "SPECIAL: Use to modify the active conditions list. Format: { \"add\": [\"Condition Name\"], \"remove\": [\"Condition Name\"] }. This key will be processed by the game engine and will not appear on the dashboard itself."
       }
     ]
   }

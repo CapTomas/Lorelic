@@ -1,0 +1,344 @@
+[
+  {
+    "id": "gw_blade_pitted_dirk_l1",
+    "name": {
+      "en": "Pitted Dirk",
+      "cs": "Důlkovaná Dýka"
+    },
+    "description": {
+      "en": "A rusty, ill-balanced dirk. More of a sharpened shard of despair than a proper weapon. Better than nothing... barely.",
+      "cs": "Rezavá, nevyvážená dýka. Spíše naostřený střep zoufalství než pořádná zbraň. Lepší než nic... sotva."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d4+1"
+      },
+      "cs": {
+        "Zranění": "1d4+1"
+      }
+    },
+    "abilities": {
+      "en": [],
+      "cs": []
+    },
+    "itemEffectDescription": {
+      "en": "1d4+1 Damage",
+      "cs": "1d4+1 Zranění"
+    },
+    "level": 1,
+    "buyPrice": 23,
+    "sellPrice": 7
+  },
+  {
+    "id": "gw_blade_scavenged_hatchet_l2",
+    "name": {
+      "en": "Scavenged Hatchet",
+      "cs": "Nalezená Sekyrka"
+    },
+    "description": {
+      "en": "Pulled from a corpse or a forgotten crate, this hatchet's edge is chipped but its weight offers some grim comfort.",
+      "cs": "Vytažena z mrtvoly či zapomenuté bedny, ostří této sekyrky je vyštípané, ale její váha nabízí ponurou útěchu."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d6+2"
+      },
+      "cs": {
+        "Zranění": "1d6+2"
+      }
+    },
+    "abilities": {
+      "en": [],
+      "cs": []
+    },
+    "itemEffectDescription": {
+      "en": "1d6+2 Damage",
+      "cs": "1d6+2 Zranění"
+    },
+    "level": 2,
+    "buyPrice": 38,
+    "sellPrice": 11
+  },
+  {
+    "id": "gw_blade_notched_shortsword_l3",
+    "name": {
+      "en": "Notched Shortsword",
+      "cs": "Zubatá Krátká Čepel"
+    },
+    "description": {
+      "en": "Covered in nicks and grim history. Each notch tells a tale of desperate survival or a bitter end.",
+      "cs": "Pokrytá záseky a ponurou historií. Každý zub vypráví příběh zoufalého přežití nebo hořkého konce."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d8+2"
+      },
+      "cs": {
+        "Zranění": "1d8+2"
+      }
+    },
+    "abilities": {
+      "en": [
+        "On a critical hit, the jagged edge tears a deep wound, dealing an additional 1d6 damage immediately."
+      ],
+      "cs": [
+        "Při kritickém zásahu zubaté ostří způsobí hlubokou ránu a udělí okamžitě 1d6 zranění navíc."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d8+2 Damage, Crit: +1d6 Dmg",
+      "cs": "1d8+2 Zranění, Krit: +1d6 Zraň."
+    },
+    "level": 3,
+    "buyPrice": 48,
+    "sellPrice": 14
+  },
+  {
+    "id": "gw_blade_militia_spearhead_l4",
+    "name": {
+      "en": "Militia Spearhead",
+      "cs": "Hrot Domobraneckého Kopí"
+    },
+    "description": {
+      "en": "A crude spearhead, likely broken from its shaft in some forgotten skirmish. Awkward, but sharp enough to puncture hide.",
+      "cs": "Hrubý hrot kopí, pravděpodobně odlomený z násady v nějaké zapomenuté šarvátce. Nepohodlný, ale dost ostrý na probodnutí kůže."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d8+2"
+      },
+      "cs": {
+        "Zranění": "1d8+2"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on attack rolls against foes with heavy armor."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na útok proti nepřátelům v těžké zbroji."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d8+2 Damage, Armor Piercing",
+      "cs": "1d8+2 Zranění, Průrazná zbroj"
+    },
+    "level": 4,
+    "buyPrice": 58,
+    "sellPrice": 17
+  },
+  {
+    "id": "gw_blade_barbed_cleaver_l5",
+    "name": {
+      "en": "Barbed Cleaver",
+      "cs": "Ostnatý Sekáč"
+    },
+    "description": {
+      "en": "A brutal tool, its edge lined with cruel barbs meant to tear flesh and instill a deep, visceral fear.",
+      "cs": "Brutální nástroj, jehož ostří je lemováno krutými ostny, navrženými k trhání masa a vštěpování hlubokého, viscerálního strachu."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d10+3"
+      },
+      "cs": {
+        "Zranění": "1d10+3"
+      }
+    },
+    "abilities": {
+      "en": [
+        "On hit, the barbs catch and tear, dealing an immediate extra 1d4 damage."
+      ],
+      "cs": [
+        "Při zásahu se ostny zachytí a trhají, což způsobí okamžité 1d4 zranění navíc."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d10+3 Dmg, +1d4 on hit",
+      "cs": "1d10+3 Zraň, +1d4 při zásahu"
+    },
+    "level": 5,
+    "buyPrice": 70,
+    "sellPrice": 21
+  },
+  {
+    "id": "gw_blade_grim_falchion_l6",
+    "name": {
+      "en": "Grim Falchion",
+      "cs": "Ponurý Falchion"
+    },
+    "description": {
+      "en": "A heavy, curved blade favored by desperate sellswords. It sings a mournful song as it cuts through the air.",
+      "cs": "Těžká, zakřivená čepel oblíbená zoufalými žoldáky. Zpívá truchlivou píseň, když se prosekává vzduchem."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d12+3"
+      },
+      "cs": {
+        "Zranění": "1d12+3"
+      }
+    },
+    "abilities": {
+      "en": [
+        "On hit, target must make a DC 12 Resilience save or be knocked prone."
+      ],
+      "cs": [
+        "Při zásahu musí cíl uspět v Záchranném hodu na Odolnost (DC 12), jinak je sražen k zemi."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d12+3 Damage, Knockdown Chance",
+      "cs": "1d12+3 Zranění, Šance na Sražení"
+    },
+    "level": 6,
+    "buyPrice": 80,
+    "sellPrice": 24
+  },
+  {
+    "id": "gw_blade_witchfinder_stiletto_l7",
+    "name": {
+      "en": "Witchfinder's Stiletto",
+      "cs": "Stilet Kacířského Soudce"
+    },
+    "description": {
+      "en": "A slender, needle-pointed dagger, designed to slip between ribs or into the eyes of the unholy. Cold to the touch.",
+      "cs": "Štíhlá dýka s jehlovitým hrotem, navržená k proklouznutí mezi žebry nebo do očí bezbožných. Chladná na dotek."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "1d6+5"
+      },
+      "cs": {
+        "Zranění": "1d6+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Scores a critical hit on a roll of 19-20."
+      ],
+      "cs": [
+        "Způsobí kritický zásah při hodu 19-20."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d6+5 Damage, Improved Critical",
+      "cs": "1d6+5 Zranění, Zlepšený Krit."
+    },
+    "level": 7,
+    "buyPrice": 90,
+    "sellPrice": 27
+  },
+  {
+    "id": "gw_blade_bone_saw_l8",
+    "name": {
+      "en": "Bone Saw",
+      "cs": "Kostní Pila"
+    },
+    "description": {
+      "en": "More a tool of butchery than combat, this saw's serrated edge chews through flesh and grinds against bone with horrifying efficiency.",
+      "cs": "Více nástroj řezníka než bojovníka, tato pila s pilovitým ostřím žvýká maso a drtí kosti s děsivou účinností."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "2d6+5"
+      },
+      "cs": {
+        "Zranění": "2d6+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "On hit, target's maximum Integrity is reduced by the damage dealt until healed. (AI to narrate effect)."
+      ],
+      "cs": [
+        "Při zásahu se maximální Integrita cíle sníží o udělené zranění, dokud není vyléčen. (AI popíše efekt)."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d6+5 Damage, Grievous Wounds",
+      "cs": "2d6+5 Zranění, Těžké Rány"
+    },
+    "level": 8,
+    "buyPrice": 100,
+    "sellPrice": 30
+  },
+  {
+    "id": "gw_blade_silvered_arming_sword_l9",
+    "name": {
+      "en": "Silvered Arming Sword",
+      "cs": "Postříbřený Bojový Meč"
+    },
+    "description": {
+      "en": "A knight's sword, its edge thinly coated in silver. Wardens often carry such blades against creatures vulnerable to the pure metal.",
+      "cs": "Rytířský meč, jehož ostří je tence potaženo stříbrem. Strážci často nosí takové čepele proti tvorům zranitelným čistým kovem."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "2d8+3"
+      },
+      "cs": {
+        "Zranění": "2d8+3"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Damage is considered magical. Deals +1d6 damage to Blighted creatures."
+      ],
+      "cs": [
+        "Zranění je považováno za magické. Způsobuje +1d6 zranění Zkaženým tvorům."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d8+3 Damage, +1d6 vs Blighted",
+      "cs": "2d8+3 Zranění, +1d6 vs Zkažení"
+    },
+    "level": 9,
+    "buyPrice": 120,
+    "sellPrice": 36
+  },
+  {
+    "id": "gw_blade_wardens_resolve_l10",
+    "name": {
+      "en": "Warden's Resolve",
+      "cs": "Strážcovo Odhodlání"
+    },
+    "description": {
+      "en": "A standard-issue Warden blade, plain but flawlessly crafted. It hums faintly in the presence of intense Blight.",
+      "cs": "Standardní čepel Strážce, prostá, ale bezchybně zpracovaná. Slabě bzučí v přítomnosti intenzivní Zkázy."
+    },
+    "itemType": "wardens_blade",
+    "attributes": {
+      "en": {
+        "Damage": "2d8+4"
+      },
+      "cs": {
+        "Zranění": "2d8+4"
+      }
+    },
+    "abilities": {
+      "en": [
+        "+1 to attack rolls. Damage is considered magical for overcoming resistances."
+      ],
+      "cs": [
+        "+1 k hodům na útok. Zranění je považováno za magické pro překonání odolností."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d8+4 Damage, +1 to Hit",
+      "cs": "2d8+4 Zranění, +1 k Zásahu"
+    },
+    "level": 10,
+    "buyPrice": 130,
+    "sellPrice": 39
+  }
+]

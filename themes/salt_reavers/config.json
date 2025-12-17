@@ -10,64 +10,102 @@
   "concept_key": "theme_concept_salt_reavers",
   "category_key": "theme_category_salt_reavers",
   "style_key": "theme_style_salt_reavers",
+  "default_identifier_key": "default_identifier_salt_reavers",
   "naming_convention": "entity",
+  "base_attributes": {
+    "integrity": 100,
+    "willpower": 50,
+    "aptitude": 10,
+    "resilience": 10
+  },
+  "attribute_tooltips": {
+    "integrity": "tooltip_attr_ship_integrity_salt_reavers",
+    "willpower": "tooltip_attr_crew_cohesion_salt_reavers",
+    "aptitude": "tooltip_attr_ship_proficiency_salt_reavers",
+    "resilience": "tooltip_attr_ship_durability_salt_reavers"
+  },
+  "equipment_slots": {
+    "ship_guns": {
+      "id": "equipped_ship_guns_effect",
+      "type": "static",
+      "reward_trigger": "ship_guns_reward_trigger"
+    },
+    "ship_hull_and_rigging": {
+      "id": "equipped_ship_hull_rigging_effect",
+      "type": "static",
+      "reward_trigger": "ship_hull_rigging_reward_trigger"
+    },
+    "captains_gambit": {
+      "id": "equipped_captains_gambit_effect",
+      "type": "consumable",
+      "reward_trigger": "captains_gambit_reward_trigger"
+    },
+    "doubloons": {
+      "id": "ship_doubloons_balance",
+      "type": "money",
+      "reward_trigger": "doubloons_reward_trigger"
+    }
+  },
   "dashboard_config_ref": "salt_reavers",
   "dashboard_config": {
-    "left_panel": [
+    "top_panel": [
       {
-        "id": "captain-orders-panel-box",
-        "title_key": "title_captain_orders_salt_reavers",
-        "type": "collapsible",
-        "initial_expanded": true,
-        "items": [
-          {
-            "id": "character_name",
-            "label_key": "label_captains_name_salt_reavers",
-            "type": "text",
-            "default_value_key": "captain_unknown",
-            "must_translate": false,
-            "short_description": "Player character's chosen name or pirate moniker."
-          },
-          {
-            "id": "first_mate",
-            "label_key": "label_first_mate_salt_reavers",
-            "type": "text",
-            "default_value_key": "first_mate_default",
-            "must_translate": true,
-            "short_description": "Name of the ship's current First Mate."
-          },
-          {
-            "id": "captain_mood",
-            "label_key": "label_captain_mood_salt_reavers",
-            "type": "text",
-            "default_value_key": "mood_unpredictable",
-            "must_translate": true,
-            "short_description": "The Captain's current temperament or disposition."
-          },
-          {
-            "id": "ship_doubloons",
-            "label_key": "label_ship_doubloons_salt_reavers",
-            "type": "number_text",
-            "default_value_key": "doubloons_empty_chest",
-            "must_translate": true,
-            "short_description": "The ship's treasury; amount of gold doubloons."
-          },
-          {
-            "id": "ship_infamy",
-            "label_key": "label_ship_infamy_salt_reavers",
-            "type": "text",
-            "default_value_key": "infamy_unknown_scurvy_dogs",
-            "must_translate": true,
-            "short_description": "The ship's (and by extension, your) reputation across the Archipelago."
-          }
-        ]
+        "id": "integrity",
+        "label_key": "char_panel_label_ship_integrity",
+        "tooltip_key": "tooltip_attr_ship_integrity_salt_reavers",
+        "type": "meter",
+        "meter_type": "health",
+        "maps_to_run_stat": "currentIntegrity",
+        "short_description": "Ship's Hull Integrity & Seaworthiness. Reflects the vessel's ability to withstand damage. If it reaches zero, the ship sinks."
       },
       {
-        "id": "ship-status-panel-box",
-        "title_key": "title_ship_status_salt_reavers",
-        "type": "collapsible",
+        "id": "willpower",
+        "label_key": "char_panel_label_crew_cohesion",
+        "tooltip_key": "tooltip_attr_crew_cohesion_salt_reavers",
+        "type": "meter",
+        "meter_type": "stamina",
+        "maps_to_run_stat": "currentWillpower",
+        "short_description": "Crew Cohesion & Daring. Represents the crew's fighting spirit and the Captain's ability to inspire bold actions. Expended for potent ship maneuvers or crew efforts."
+      },
+      {
+        "id": "aptitude",
+        "label_key": "char_panel_label_ship_proficiency",
+        "tooltip_key": "tooltip_attr_ship_proficiency_salt_reavers",
+        "type": "number",
+        "maps_to_run_stat": "aptitude",
+        "short_description": "Ship's Combat & Sailing Proficiency. Influenced by Captain's skill, crew training, and ship's condition. Affects gunnery, maneuvering, and boarding."
+      },
+      {
+        "id": "resilience",
+        "label_key": "char_panel_label_ship_durability",
+        "tooltip_key": "tooltip_attr_ship_durability_salt_reavers",
+        "type": "number",
+        "maps_to_run_stat": "resilience",
+        "short_description": "Ship's Durability & Warding. The vessel's inherent toughness against storms, curses, and environmental hazards."
+      },
+      {
+        "id": "strain_level",
+        "label_key": "label_strain_level_captain_salt_reavers",
+        "tooltip_key": "tooltip_item_strain_level_captain_salt_reavers",
+        "type": "status_icon",
+        "default_ai_value": 1,
+        "maps_to_run_stat": "strainLevel",
+        "level_mappings": {
+          "1": { "display_text_key": "strain_level_1_display_sr_captain", "css_class": "status-ok", "icon_path": "images/sentiment/icon_sentiment_satisfied.svg" },
+          "2": { "display_text_key": "strain_level_2_display_sr_captain", "css_class": "status-warning", "icon_path": "images/sentiment/icon_sentiment_neutral.svg" },
+          "3": { "display_text_key": "strain_level_3_display_sr_captain", "css_class": "status-danger", "icon_path": "images/sentiment/icon_sentiment_dissatisfied.svg" },
+          "4": { "display_text_key": "strain_level_4_display_sr_captain", "css_class": "status-critical", "icon_path": "images/sentiment/icon_sentiment_very_dissatisfied.svg" }
+        },
+        "must_translate": false,
+        "short_description": "Captain's Personal Strain. Cumulative stress and weariness. MUST BE INTEGER (1-4). Higher levels can lead to poor decisions or affect crew morale. 1: Steady, 2: Frayed, 3: Pressured, 4: At Wit's End."
+      }
+    ],
+    "left_panel": [
+      {
+        "id": "captain-and-ship-log-panel",
+        "title_key": "title_captain_ship_log_salt_reavers",
+        "type": "static",
         "initial_expanded": true,
-        "boot_delay": 300,
         "items": [
           {
             "id": "ship_name",
@@ -75,32 +113,68 @@
             "type": "text",
             "default_value_key": "ship_name_default",
             "must_translate": true,
-            "short_description": "The name of your current vessel."
+            "short_description": "The name of the Captain's current pirate vessel (e.g., 'The Sea Serpent')."
           },
           {
-            "id": "hull_integrity_pct",
-            "label_key": "label_hull_integrity_salt_reavers",
-            "type": "meter",
-            "meter_type": "health",
-            "default_value": "100",
-            "must_translate": false,
-            "short_description": "Ship's current hull strength (0-100)."
-          },
-          {
-            "id": "sail_condition",
-            "label_key": "label_sail_condition_salt_reavers",
+            "id": "ship_infamy_level",
+            "label_key": "label_ship_infamy_salt_reavers",
             "type": "text",
-            "default_value_key": "sails_full_canvas",
+            "default_value_key": "infamy_unknown_scurvy_dogs",
             "must_translate": true,
-            "short_description": "Condition of the ship's sails."
+            "short_description": "The ship's (and by extension, the Captain's) fearsome reputation across the Azure Archipelago."
+          }
+        ]
+      },
+      {
+        "id": "ship-outfitting-panel",
+        "title_key": "title_ship_outfitting_salt_reavers",
+        "type": "collapsible",
+        "initial_expanded": true,
+        "boot_delay": 400,
+        "items": [
+          {
+            "id": "equipped_ship_guns_effect",
+            "label_key": "label_equipped_ship_guns_salt_reavers",
+            "tooltip_key": "tooltip_slot_ship_guns_salt_reavers",
+            "type": "text_long",
+            "default_value_key": "default_ship_guns_salt_reavers",
+            "must_translate": true,
+            "short_description": "Currently mounted cannons (e.g., 'Rusty 6-Pounders', 'Long Nine Culverins'). Details their damage, range, or special properties."
           },
           {
-            "id": "cannonball_count",
-            "label_key": "label_cannonball_count_salt_reavers",
-            "type": "number_text",
-            "default_value_key": "cannonballs_few_rounds",
+            "id": "equipped_ship_hull_rigging_effect",
+            "label_key": "label_equipped_ship_hull_rigging_salt_reavers",
+            "tooltip_key": "tooltip_slot_ship_hull_rigging_salt_reavers",
+            "type": "text_long",
+            "default_value_key": "default_ship_hull_rigging_salt_reavers",
             "must_translate": true,
-            "short_description": "Number of cannonballs in the ship's magazine."
+            "short_description": "Fitted hull upgrades and sail quality (e.g., 'Patched Canvas & Salted Timbers', 'Ironwood Plating & Storm-Fast Sails'). Affects Hull Integrity, Resilience, or Aptitude."
+          },
+          {
+            "id": "equipped_captains_gambit_effect",
+            "label_key": "label_equipped_captains_gambit_salt_reavers",
+            "tooltip_key": "tooltip_slot_captains_gambit_salt_reavers",
+            "type": "text_long",
+            "default_value_key": "default_captains_gambit_salt_reavers",
+            "must_translate": true,
+            "short_description": "Readied consumable for a tactical edge (e.g., 'Grapeshot Load', 'Extra Grog Rations', 'Fair Wind Charm')."
+          }
+        ]
+      },
+      {
+        "id": "ship-stores-treasury-panel",
+        "title_key": "title_ship_stores_salt_reavers",
+        "type": "collapsible",
+        "initial_expanded": false,
+        "boot_delay": 600,
+        "items": [
+          {
+            "id": "ship_doubloons_balance",
+            "label_key": "label_ship_doubloons_salt_reavers",
+            "type": "number_text",
+            "default_value_key": "doubloons_empty_chest",
+            "must_translate": true,
+            "short_description": "Current hoard of plundered Doubloons in the ship's strongbox."
           },
           {
             "id": "provisions_status",
@@ -108,15 +182,15 @@
             "type": "text",
             "default_value_key": "provisions_well_stocked",
             "must_translate": true,
-            "short_description": "Current stock of food and water (e.g., days remaining, status)."
+            "short_description": "Current stock of food, water, and grog. Affects crew morale and survival on long voyages."
           },
           {
-            "id": "grog_rations",
-            "label_key": "label_grog_rations_salt_reavers",
-            "type": "text",
-            "default_value_key": "grog_barrel_full",
+            "id": "cannonball_count",
+            "label_key": "label_cannonball_count_salt_reavers",
+            "type": "number_text",
+            "default_value_key": "cannonballs_few_rounds",
             "must_translate": true,
-            "short_description": "Availability of grog for the crew."
+            "short_description": "Rounds of shot available in the ship's magazine. Types may vary (round shot, chain, grape)."
           }
         ]
       },
@@ -158,7 +232,7 @@
             "type": "text",
             "default_value_key": "relic_unknown_source",
             "must_translate": true,
-            "short_description": "The name or description of the cursed item aboard."
+            "short_description": "The name or description of the cursed item aboard or affecting the ship."
           },
           {
             "id": "curse_manifestations",
@@ -166,15 +240,7 @@
             "type": "text_long",
             "default_value_key": "manifestations_none_yet",
             "must_translate": true,
-            "short_description": "Supernatural or ill effects of the curse."
-          },
-          {
-            "id": "quartermaster_affliction",
-            "label_key": "label_quartermaster_affliction_salt_reavers",
-            "type": "text_long",
-            "default_value_key": "affliction_unaffected",
-            "must_translate": true,
-            "short_description": "How the curse is specifically affecting the Quartermaster."
+            "short_description": "Supernatural or ill effects of the curse on the ship or crew."
           }
         ]
       }
@@ -192,7 +258,7 @@
             "type": "text_long",
             "default_value_key": "objective_awaiting_captains_whim",
             "must_translate": true,
-            "short_description": "The current primary quest, contract, or objective."
+            "short_description": "The current primary quest, contract, or objective for the ship and crew."
           },
           {
             "id": "voyage_rumored_reward",
@@ -203,12 +269,12 @@
             "short_description": "Rumored or stated reward for the current voyage."
           },
           {
-            "id": "quartermaster_stance",
-            "label_key": "label_quartermaster_stance_salt_reavers",
+            "id": "captain_activity",
+            "label_key": "label_captain_activity_salt_reavers",
             "type": "text",
             "default_value_key": "stance_on_deck_observing",
             "must_translate": true,
-            "short_description": "The Quartermaster's current primary activity or state."
+            "short_description": "The Captain's current command focus or ship's primary activity."
           },
           {
             "id": "sea_threat_level",
@@ -233,27 +299,21 @@
         "initial_expanded": false,
         "boot_delay": 900,
         "items": [
+           {
+            "id": "first_mate_name_secondary",
+            "label_key": "label_first_mate_salt_reavers",
+            "type": "text",
+            "default_value_key": "first_mate_default",
+            "must_translate": true,
+            "short_description": "The Captain's First Mate. A key figure in crew management and ship operations."
+          },
           {
             "id": "crew_complement",
             "label_key": "label_crew_complement_salt_reavers",
             "type": "text",
             "default_value_key": "crew_skeleton_crew",
             "must_translate": true,
-            "short_description": "Number and general state of the crew."
-          },
-          {
-            "id": "crew_morale",
-            "label_key": "label_crew_morale_salt_reavers",
-            "type": "status_level",
-            "default_ai_value": 3,
-            "level_mappings": {
-              "1": { "display_text_key": "morale_mutinous", "css_class": "status-critical" },
-              "2": { "display_text_key": "morale_restless", "css_class": "status-danger" },
-              "3": { "display_text_key": "morale_content", "css_class": "status-warning" },
-              "4": { "display_text_key": "morale_loyal", "css_class": "status-ok" }
-            },
-            "must_translate": false,
-            "short_description": "Overall morale of the ship's crew (1-4). AI provides numerical level."
+            "short_description": "Number and general state of the ship's crew. Directly impacts Crew Cohesion (Willpower)."
           },
           {
             "id": "deck_rumors",
@@ -261,7 +321,7 @@
             "type": "text_long",
             "default_value_key": "rumors_quiet_decks",
             "must_translate": true,
-            "short_description": "Whispers and gossip heard among the crew."
+            "short_description": "Whispers and gossip heard among the crew. Influences and is influenced by Crew Cohesion (Willpower)."
           }
         ]
       },
@@ -294,7 +354,7 @@
             "type": "text_long",
             "default_value_key": "weather_calm_seas_fair_breeze",
             "must_translate": true,
-            "short_description": "Current wind, weather, and sea state."
+            "short_description": "Current wind, weather, and sea state. Impacts sailing (Aptitude) and storm survival (Resilience)."
           },
           {
             "id": "time_sky_conditions",
@@ -420,6 +480,13 @@
     ],
     "game_state_indicators": [
       {
+        "id": "generate_item_reward",
+        "type": "boolean",
+        "default_value": false,
+        "priority": 10,
+        "short_description": "Generates an item reward only when the narrative context justifies it. This function must not grant items arbitrarily or on player request alone. Item rewards should follow significant in-world accomplishments, such as completing a quest which promised a reward in the form of an item or making a sacrifice with meaningful consequences. The action must have a clear narrative weight, recognized by the story's logic or factions involved. If no such moment exists, this function must refuse to reward anything, even if prompted. This mechanic ensures rewards feel earned, immersive, and meaningful—tied to story arcs, not player demands."
+      },
+      {
         "id": "naval_encounter_imminent",
         "label_key": "label_naval_encounter_imminent_salt_reavers",
         "type": "boolean",
@@ -452,8 +519,8 @@
         "type": "boolean",
         "default_value": false,
         "must_translate": false,
-        "priority": 2,
-        "short_description": "True if crew discontent reaches a critical point, risking mutiny."
+        "priority": 3,
+        "short_description": "True if crew discontent reaches a critical point, risking mutiny. Directly impacts Crew Cohesion (Willpower)."
       },
       {
         "id": "treasure_curse_active",
@@ -461,8 +528,8 @@
         "type": "boolean",
         "default_value": false,
         "must_translate": false,
-        "priority": 1,
-        "short_description": "True if a cursed item is actively affecting the ship or crew."
+        "priority": 2,
+        "short_description": "True if a cursed item is actively affecting the ship or crew, potentially impacting Ship Durability (Resilience) or Crew Cohesion (Willpower)."
       },
       {
         "id": "significant_plunder_secured",
@@ -470,8 +537,8 @@
         "type": "boolean",
         "default_value": false,
         "must_translate": false,
-        "priority": 0,
-        "short_description": "True for one turn after acquiring a major haul of treasure or valuable goods."
+        "priority": 1,
+        "short_description": "True for one turn after acquiring a major haul of treasure or valuable goods. Often boosts Crew Cohesion (Willpower)."
       }
     ]
   }

@@ -1,0 +1,372 @@
+[
+  {
+    "id": "sr_gun_rusty_swivel_gun_l01",
+    "name": {
+      "en": "Rusty Swivel Gun",
+      "cs": "Rezavé Otočné Dělo"
+    },
+    "description": {
+      "en": "A small, poorly-maintained swivel gun, likely liberated from a rotting merchantman. It's prone to misfires and its report is more of a sad cough than a proud roar.",
+      "cs": "Malé, špatně udržované otočné dělo, pravděpodobně uloupené z hnijící kupecké lodi. Je náchylné k selhání a jeho výstřel je spíše smutným zakašláním než hrdým řevem."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 25,
+        "Accuracy": "Poor"
+      },
+      "cs": {
+        "Poškození": 25,
+        "Přesnost": "Špatná"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Slow to Reload",
+        "Prone to Misfire"
+      ],
+      "cs": [
+        "Pomalé nabíjení",
+        "Náchylné k selhání"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "25 Dmg, Poor Accuracy, Slow Reload",
+      "cs": "25 Pošk, Špatná Přesnost, Pomalé Nabíjení"
+    },
+    "level": 1,
+    "buyPrice": 25,
+    "sellPrice": 7
+  },
+  {
+    "id": "sr_gun_cracked_4_pounder_l02",
+    "name": {
+      "en": "Cracked 4-Pounder",
+      "cs": "Prasklá 4liberka"
+    },
+    "description": {
+      "en": "An old cast-iron cannon with a visible hairline crack near the breech. Firing it is an act of faith as much as aggression.",
+      "cs": "Staré litinové dělo s viditelnou vlasovou prasklinou u závěru. Střelba z něj je aktem víry stejně jako agrese."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 28,
+        "Range": "Short"
+      },
+      "cs": {
+        "Poškození": 28,
+        "Dostřel": "Krátký"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Unreliable"
+      ],
+      "cs": [
+        "Nespolehlivé"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "28 Dmg, Short Range, Unreliable",
+      "cs": "28 Pošk, Krátký Dostřel, Nespolehlivé"
+    },
+    "level": 2,
+    "buyPrice": 44,
+    "sellPrice": 12
+  },
+  {
+    "id": "sr_gun_scavenged_carronade_l03",
+    "name": {
+      "en": "Scavenged Carronade",
+      "cs": "Nalezená Karronáda"
+    },
+    "description": {
+      "en": "A short-barreled, large-bore cannon ripped from the deck of a wreck. Devastating at close range, but hopelessly inaccurate beyond a pistol shot.",
+      "cs": "Dělo s krátkou hlavní a velkým kalibrem, vytržené z paluby vraku. Ničivé na blízko, ale beznadějně nepřesné dál než na dostřel pistole."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 33,
+        "Range": "Very Short"
+      },
+      "cs": {
+        "Poškození": 33,
+        "Dostřel": "Velmi Krátký"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Shreds Hulls"
+      ],
+      "cs": [
+        "Trhá Trupy"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "33 Dmg, V. Short Range, Hull Shredder",
+      "cs": "33 Pošk, V. Krát. Dostřel, Trhač Trupů"
+    },
+    "level": 3,
+    "buyPrice": 52,
+    "sellPrice": 15
+  },
+  {
+    "id": "sr_gun_weathered_long_gun_l04",
+    "name": {
+      "en": "Weathered Long Gun",
+      "cs": "Ošlehané Dlouhé Dělo"
+    },
+    "description": {
+      "en": "A long-barreled cannon that shows its age, but was clearly well-made once. It can still reach out and touch a distant foe, if the gunner squints.",
+      "cs": "Dělo s dlouhou hlavní, které ukazuje svůj věk, ale kdysi bylo zjevně dobře vyrobeno. Stále dokáže zasáhnout vzdáleného nepřítele, pokud dělostřelec přimhouří oči."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 31,
+        "Range": "Long"
+      },
+      "cs": {
+        "Poškození": 31,
+        "Dostřel": "Dlouhý"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Inaccurate at Range"
+      ],
+      "cs": [
+        "Nepřesné na dálku"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "31 Dmg, Long Range, Inaccurate",
+      "cs": "31 Pošk, Dlouhý Dostřel, Nepřesné"
+    },
+    "level": 4,
+    "buyPrice": 75,
+    "sellPrice": 22
+  },
+  {
+    "id": "sr_gun_decent_6_pounder_l05",
+    "name": {
+      "en": "Decent 6-Pounder",
+      "cs": "Slušná 6liberka"
+    },
+    "description": {
+      "en": "The workhorse of many a pirate vessel. Not exceptional, but it loads reliably and sends a cannonball where it's pointed. Most of the time.",
+      "cs": "Tahoun mnoha pirátských lodí. Není výjimečné, ale spolehlivě se nabíjí a posílá dělovou kouli tam, kam je namířeno. Většinou."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 35,
+        "Accuracy": "Standard"
+      },
+      "cs": {
+        "Poškození": 35,
+        "Přesnost": "Standardní"
+      }
+    },
+    "abilities": {
+      "en": [],
+      "cs": []
+    },
+    "itemEffectDescription": {
+      "en": "35 Dmg, Standard Accuracy",
+      "cs": "35 Pošk, Standardní Přesnost"
+    },
+    "level": 5,
+    "buyPrice": 88,
+    "sellPrice": 25
+  },
+  {
+    "id": "sr_gun_navy_culverin_l06",
+    "name": {
+      "en": "Veridian Navy Culverin",
+      "cs": "Veridiánská Námořní Kolubrina"
+    },
+    "description": {
+      "en": "'Liberated' from an Imperial patrol, this long cannon is built for range and accuracy. The Emperor's seal has been crudely scratched off.",
+      "cs": "'Osvobozena' z imperiální hlídky, toto dlouhé dělo je stavěno na dostřel a přesnost. Císařská pečeť byla hrubě seškrábána."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 36,
+        "Range": "Good"
+      },
+      "cs": {
+        "Poškození": 36,
+        "Dostřel": "Dobrý"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Accurate Shots"
+      ],
+      "cs": [
+        "Přesné Výstřely"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "36 Dmg, Good Range, Accurate",
+      "cs": "36 Pošk, Dobrý Dostřel, Přesné"
+    },
+    "level": 6,
+    "buyPrice": 105,
+    "sellPrice": 30
+  },
+  {
+    "id": "sr_gun_double_barreled_swivel_l07",
+    "name": {
+      "en": "Double-Barreled Swivel",
+      "cs": "Dvouhlavňové Otočné Dělo"
+    },
+    "description": {
+      "en": "A clever and deadly invention for sweeping enemy decks. Can fire twice before needing a full reload, sowing chaos among boarders.",
+      "cs": "Chytrý a smrtící vynález pro čištění nepřátelských palub. Může vystřelit dvakrát, než potřebuje plné nabití, a zasévá chaos mezi abordážníky."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 42,
+        "Special": "Anti-Personnel"
+      },
+      "cs": {
+        "Poškození": 42,
+        "Speciální": "Proti Pěchotě"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Two Quick Shots",
+        "Effective Against Crew"
+      ],
+      "cs": [
+        "Dva rychlé výstřely",
+        "Účinné proti posádce"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "42 Dmg, 2 Shots, Anti-Crew",
+      "cs": "42 Pošk, 2 Rány, Proti Posádce"
+    },
+    "level": 7,
+    "buyPrice": 125,
+    "sellPrice": 38
+  },
+  {
+    "id": "sr_gun_heavy_9_pounder_l08",
+    "name": {
+      "en": "Heavy 9-Pounder",
+      "cs": "Těžká 9liberka"
+    },
+    "description": {
+      "en": "A solid, reliable cannon that packs a serious punch. The backbone of any self-respecting pirate captain's broadside.",
+      "cs": "Solidní, spolehlivé dělo, které má pořádnou sílu. Páteř boční salvy každého pirátského kapitána, který si váží sám sebe."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 45,
+        "Impact": "High"
+      },
+      "cs": {
+        "Poškození": 45,
+        "Síla Nárazu": "Vysoká"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Good Hull Damage"
+      ],
+      "cs": [
+        "Dobré poškození trupu"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "45 Dmg, High Impact",
+      "cs": "45 Pošk, Vysoký Dopad"
+    },
+    "level": 8,
+    "buyPrice": 140,
+    "sellPrice": 42
+  },
+  {
+    "id": "sr_gun_chain_shot_culverin_l09",
+    "name": {
+      "en": "Chain-Shot Culverin",
+      "cs": "Řetězová Kolubrina"
+    },
+    "description": {
+      "en": "Specially designed to fire two cannonballs linked by a chain, this weapon is a terror to enemy sails and rigging.",
+      "cs": "Speciálně navržená ke střelbě dvou dělových koulí spojených řetězem, tato zbraň je postrachem nepřátelských plachet a lanoví."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage vs Rigging": 50
+      },
+      "cs": {
+        "Poškození Lanoví": 50
+      }
+    },
+    "abilities": {
+      "en": [
+        "Shreds Sails",
+        "Cripples Maneuverability"
+      ],
+      "cs": [
+        "Trhá Plachty",
+        "Ochromuje Manévrovatelnost"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "50 Rigging Dmg, Shreds Sails",
+      "cs": "50 Pošk Lanoví, Trhá Plachty"
+    },
+    "level": 9,
+    "buyPrice": 165,
+    "sellPrice": 50
+  },
+  {
+    "id": "sr_gun_masterforged_12_pounder_l10",
+    "name": {
+      "en": "Master-Forged 12-Pounder",
+      "cs": "Mistrovsky Kovaná 12liberka"
+    },
+    "description": {
+      "en": "A perfectly balanced and reinforced cannon from a master gunsmith. Its roar is as terrifying as its impact.",
+      "cs": "Dokonale vyvážené a zesílené dělo od mistra zbrojíře. Jeho řev je stejně děsivý jako jeho dopad."
+    },
+    "itemType": "ship_guns",
+    "attributes": {
+      "en": {
+        "Damage": 53,
+        "Accuracy": "Good"
+      },
+      "cs": {
+        "Poškození": 53,
+        "Přesnost": "Dobrá"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reliable and Powerful"
+      ],
+      "cs": [
+        "Spolehlivé a Silné"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "53 Dmg, Good Accuracy",
+      "cs": "53 Pošk, Dobrá Přesnost"
+    },
+    "level": 10,
+    "buyPrice": 180,
+    "sellPrice": 54
+  }
+]

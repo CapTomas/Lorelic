@@ -5,7 +5,9 @@
     "combat_active": "themes/grim_warden/prompts/combat_active.txt",
     "omen_detected": "themes/grim_warden/prompts/omen_detected.txt",
     "blight_flare_active": "themes/grim_warden/prompts/blight_flare_active.txt",
-    "starts": "themes/grim_warden/prompts/helpers/starts.txt"
+    "starts": "themes/grim_warden/prompts/helpers/starts.txt",
+    "traits": "themes/grim_warden/prompts/helpers/traits.json",
+    "core_texts": "themes/grim_warden/prompts/helpers/core_texts.json"
   },
   "NARRATIVE_LANG_PROMPT_PARTS": {
     "en": "The narrative must be a tapestry woven from the darkest threads of fantasy, rendered in English that is both hauntingly evocative and starkly immediate. Strive for the cinematic: paint scenes not just with sight, but with the chilling touch of dread, the coppery tang of fear, the oppressive silence of a world succumbing to ruin. Dialogue must be sharp, laconic, and weary, like words chipped from stone by characters who have seen too much; let every utterance carry the weight of unspoken sorrows or grim resolve, with archaic echoes where the lore demands. Combat should be a visceral ballet of desperation; environments, cathedrals of decay or twisted beauty; and the psychological toll of the Blight, a palpable corrosion of the soul. This is not mere storytelling; it is an invocation of a dying world. Aim for goosebumps.",

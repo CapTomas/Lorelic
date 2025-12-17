@@ -1,0 +1,352 @@
+[
+  {
+    "id": "gw_ac_bitterrootdraught_l01",
+    "name": {
+      "en": "Bitter Root Draught",
+      "cs": "Odvar z Hořkého Kořene"
+    },
+    "description": {
+      "en": "A murky, astringent liquid that settles the stomach and dulls minor aches. Smells strongly of damp earth and regret.",
+      "cs": "Kalná, svíravá tekutina, která uklidňuje žaludek a tlumí drobné bolesti. Silně páchne vlhkou zemí a lítostí."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Healing": "1d4+2 Integrity"
+      },
+      "cs": {
+        "Léčení": "1d4+2 Integrita"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Instantly restores a small amount of Integrity."
+      ],
+      "cs": [
+        "Okamžitě obnoví malé množství Integrita."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Heals 1d4+2 Integrity",
+      "cs": "Vyléčí 1d4+2 Integrita"
+    },
+    "level": 1,
+    "buyPrice": 5,
+    "sellPrice": 1
+  },
+  {
+    "id": "gw_ac_gravemossinfusion_l02",
+    "name": {
+      "en": "Gravemoss Infusion",
+      "cs": "Nálev z Hrobového Mechu"
+    },
+    "description": {
+      "en": "Brewed from moss scraped from ancient tombstones, this infusion grants a fleeting clarity to tired eyes.",
+      "cs": "Uvařený z mechu seškrábaného ze starých náhrobků, tento nálev propůjčuje unaveným očím prchavou jasnost."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next Perception check"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod na Vnímání"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Briefly sharpens the senses to notice hidden details."
+      ],
+      "cs": [
+        "Krátce zostřuje smysly k všimnutí si skrytých detailů."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next Perception check",
+      "cs": "Výhoda na příští hod na Vnímání"
+    },
+    "level": 2,
+    "buyPrice": 7,
+    "sellPrice": 2
+  },
+  {
+    "id": "gw_ac_nettleburnsalve_l03",
+    "name": {
+      "en": "Nettleburn Salve",
+      "cs": "Mast z Kopřivového Spálení"
+    },
+    "description": {
+      "en": "A stinging, pungent salve that, when applied, briefly invigorates tired muscles. The initial burn is quickly forgotten.",
+      "cs": "Štípavá, pronikavá mast, která po nanesení krátce povzbudí unavené svaly. Počáteční pálení je rychle zapomenuto."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Recovery": "1d4+1 Willpower"
+      },
+      "cs": {
+        "Obnova": "1d4+1 Vůle"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Instantly restores a small amount of Willpower."
+      ],
+      "cs": [
+        "Okamžitě obnoví malé množství Vůle."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Restores 1d4+1 Willpower",
+      "cs": "Obnoví 1d4+1 Vůli"
+    },
+    "level": 3,
+    "buyPrice": 9,
+    "sellPrice": 3
+  },
+  {
+    "id": "gw_ac_shadowslipelixir_l04",
+    "name": {
+      "en": "Shadowslip Draught",
+      "cs": "Lektvar Stínového Skluzu"
+    },
+    "description": {
+      "en": "This oily, dark liquid seems to absorb light. For a short while, it makes one's footsteps fall a little softer.",
+      "cs": "Tato olejovitá, tmavá tekutina jako by pohlcovala světlo. Na krátkou chvíli činí kroky o něco tiššími."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next Stealth check"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod na Plížení"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Briefly muffles footsteps and blends you into shadows."
+      ],
+      "cs": [
+        "Krátce tlumí kroky a nechá tě splynout se stíny."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next Stealth check",
+      "cs": "Výhoda na příští hod na Plížení"
+    },
+    "level": 4,
+    "buyPrice": 12,
+    "sellPrice": 4
+  },
+  {
+    "id": "gw_ac_bloodwortpotion_l05",
+    "name": {
+      "en": "Bloodwort Potion",
+      "cs": "Lektvar z Krvavníku"
+    },
+    "description": {
+      "en": "A crimson potion that helps staunch minor bleeding and knits small wounds with surprising speed. Tastes faintly metallic.",
+      "cs": "Rudý lektvar, který pomáhá zastavit menší krvácení a s překvapivou rychlostí sceluje malé rány. Chutná slabě kovově."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Healing": "2d4+2 Integrity"
+      },
+      "cs": {
+        "Léčení": "2d4+2 Integrita"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Instantly restores a moderate amount of Integrity."
+      ],
+      "cs": [
+        "Okamžitě obnoví střední množství Integrita."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Heals 2d4+2 Integrity",
+      "cs": "Vyléčí 2d4+2 Integrita"
+    },
+    "level": 5,
+    "buyPrice": 13,
+    "sellPrice": 4
+  },
+  {
+    "id": "gw_ac_stoneskintonic_l06",
+    "name": {
+      "en": "Stoneskin Brew",
+      "cs": "Odvar Kamenné Kůže"
+    },
+    "description": {
+      "en": "A thick, gritty concoction that temporarily hardens the skin, making it more resilient to light impacts. Feels like drinking sand.",
+      "cs": "Hustý, písčitý lektvar, který dočasně ztvrdne kůži, čímž ji činí odolnější vůči lehkým nárazům. Pije se jako písek."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Defense": "Reduce damage by 1d6 from the next hit"
+      },
+      "cs": {
+        "Obrana": "Sniž poškození z příštího zásahu o 1d6"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Temporarily hardens skin against one incoming attack."
+      ],
+      "cs": [
+        "Dočasně zpevňuje kůži proti jednomu příchozímu útoku."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Reduce next damage taken by 1d6",
+      "cs": "Sniž příští zranění o 1d6"
+    },
+    "level": 6,
+    "buyPrice": 16,
+    "sellPrice": 5
+  },
+  {
+    "id": "gw_ac_foxgloveextract_l07",
+    "name": {
+      "en": "Foxglove Heartstim",
+      "cs": "Stimulant z Náprstníku"
+    },
+    "description": {
+      "en": "A carefully dosed extract that quickens the pulse and sharpens reflexes for a short period. An overdose would be fatal.",
+      "cs": "Pečlivě dávkovaný extrakt, který na krátkou dobu zrychlí puls a zostří reflexy. Předávkování by bylo smrtelné."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next Dexterity-based roll"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod založený na Obratnosti"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Briefly quickens reflexes for dodging or acting fast."
+      ],
+      "cs": [
+        "Krátce zrychluje reflexy pro úskoky nebo rychlé jednání."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next Dexterity roll",
+      "cs": "Výhoda na příští hod na Obratnost"
+    },
+    "level": 7,
+    "buyPrice": 18,
+    "sellPrice": 6
+  },
+  {
+    "id": "gw_ac_nightseyeelixir_l08",
+    "name": {
+      "en": "Nightseye Elixir",
+      "cs": "Elixír Nočního Oka"
+    },
+    "description": {
+      "en": "Swirling with dark particles, this elixir grants the ability to see clearly in dim light for a respectable duration.",
+      "cs": "Tento elixír, vířící tmavými částicemi, propůjčuje schopnost jasně vidět v šeru po úctyhodnou dobu."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next check in darkness"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští hod ve tmě"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants superior vision for a single action in darkness."
+      ],
+      "cs": [
+        "Propůjčuje vynikající vidění pro jednu akci ve tmě."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next check in darkness",
+      "cs": "Výhoda na příští hod ve tmě"
+    },
+    "level": 8,
+    "buyPrice": 20,
+    "sellPrice": 6
+  },
+  {
+    "id": "gw_ac_wardingincense_l09",
+    "name": {
+      "en": "Warding Incense Ash (Ingested)",
+      "cs": "Popel z Ochranného Kadidla (Požitý)"
+    },
+    "description": {
+      "en": "The bitter ashes of a protective incense, when swallowed, offer a fleeting ward against minor hexes and ill will.",
+      "cs": "Hořký popel z ochranného kadidla po spolknutí nabízí prchavou ochranu proti menším kletbám a zlé vůli."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next save vs. magic"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští záchr. hod proti magii"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Briefly wards against minor hexes and ill will."
+      ],
+      "cs": [
+        "Krátce chrání před menšími kletbami a zlou vůlí."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next magic save",
+      "cs": "Výhoda na příští magický záchr. hod"
+    },
+    "level": 9,
+    "buyPrice": 22,
+    "sellPrice": 7
+  },
+  {
+    "id": "gw_ac_ironbiletonic_l10",
+    "name": {
+      "en": "Ironbile Tonic",
+      "cs": "Tonikum Železné Žluči"
+    },
+    "description": {
+      "en": "A vile, metallic-tasting tonic that temporarily fortifies the body against common poisons. The aftertaste lingers.",
+      "cs": "Odporné tonikum s kovovou chutí, které dočasně posiluje tělo proti běžným jedům. Pachuť přetrvává."
+    },
+    "itemType": "alchemical_concoction",
+    "attributes": {
+      "en": {
+        "Effect": "Advantage on next save vs. poison"
+      },
+      "cs": {
+        "Účinek": "Výhoda na příští záchr. hod proti jedu"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants resistance against one dose of poison."
+      ],
+      "cs": [
+        "Poskytuje odolnost proti jedné dávce jedu."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "Advantage on next poison save",
+      "cs": "Výhoda na příští záchr. hod proti jedu"
+    },
+    "level": 10,
+    "buyPrice": 25,
+    "sellPrice": 8
+  }
+]

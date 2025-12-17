@@ -4,16 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Anomady</title>
+    <title>Lorelic</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="images/app/platform_favicon.png">
 </head>
 
-<body>
+<body class="app-loading">
     <div id="app-root">
         <header id="application-header">
             <div class="top-bar-left">
-                <img id="application-logo" src="images/app/platform_logo.svg" alt="Application Logo">
+                <img id="application-logo" src="images/app/platform_logo.svg
+                " alt="Application Logo">
                 <div id="theme-selector">
                     <div id="playing-themes-container">
                     </div>
@@ -30,15 +31,50 @@
                     data-lang-key="system_processing_short">Processing...</span>
             </div>
             <div class="top-bar-right">
-                <button id="new-game-button" class="ui-button icon-button" data-lang-key="button_new_game"
-                    data-lang-key-aria="aria_label_new_game">New Game</button>
-                <button id="model-toggle-button" class="ui-button icon-button" data-lang-key="label_toggle_model"
-                    data-lang-key-aria="aria_label_toggle_model_generic">Toggle Model</button>
-                <button id="language-toggle-button" class="ui-button icon-button" data-lang-key="toggle_language"
-                    data-lang-key-aria="aria_label_toggle_language" aria-label="Toggle Language"></button>
+                <button id="user-profile-button" class="ui-button icon-button" style="display: none;" data-lang-key="button_user_profile" data-lang-key-aria="aria_label_user_profile">Profile</button>
+                <button id="login-button" class="ui-button icon-button" data-lang-key="button_login" data-lang-key-aria="aria_label_login">Login</button>
+                <button id="new-game-button" class="ui-button icon-button" data-lang-key="button_new_game" data-lang-key-aria="aria_label_new_game">New Game</button>
+                <button id="model-toggle-button" class="ui-button icon-button" data-lang-key="label_toggle_model">Toggle Model</button>
+                <button id="language-toggle-button" class="ui-button icon-button" data-lang-key="toggle_language" data-lang-key-aria="toggle_language_aria" aria-label="Toggle Language"></button>
             </div>
         </header>
-
+        <div id="character-progression-panel" style="display: none;">
+            <div class="character-info-left">
+                <span id="char-panel-identifier" data-lang-key="char_panel_placeholder_name">Character Name</span>
+                <span id="char-panel-level" data-lang-key="char_panel_placeholder_level">Level 1</span>
+            </div>
+            <div class="character-attributes-grid">
+                <!-- Integrity: Column 1 -->
+                <div class="attribute-item" id="cp-item-integrity">
+                    <span class="attribute-label" data-lang-key="char_panel_label_integrity">Integrity</span>
+                    <div class="attribute-meter-container">
+                        <div id="char-panel-integrity-meter" class="attribute-meter-bar"></div>
+                    </div>
+                    <span id="char-panel-integrity-value" class="attribute-value">100/100</span>
+                </div>
+                <!-- Willpower: Column 2 -->
+                <div class="attribute-item" id="cp-item-willpower">
+                    <span class="attribute-label" data-lang-key="char_panel_label_willpower">Willpower</span>
+                    <div class="attribute-meter-container">
+                        <div id="char-panel-willpower-meter" class="attribute-meter-bar"></div>
+                    </div>
+                    <span id="char-panel-willpower-value" class="attribute-value">50/50</span>
+                </div>
+                <!-- Aptitude: Column 3, Row 1 -->
+                <div class="attribute-item" id="cp-item-aptitude">
+                    <span class="attribute-label" data-lang-key="char_panel_label_aptitude">Aptitude</span>
+                    <span id="char-panel-aptitude-value" class="attribute-value">50</span>
+                </div>
+                <!-- Resilience: Column 3, Row 2 -->
+                <div class="attribute-item" id="cp-item-resilience">
+                    <span class="attribute-label" data-lang-key="char_panel_label_resilience">Resilience</span>
+                    <span id="char-panel-resilience-value" class="attribute-value">50</span>
+                </div>
+            </div>
+             <div class="character-info-right">
+                <!-- This column is intentionally empty for future use as per requirements -->
+            </div>
+        </div>
         <div id="main-layout">
             <aside id="left-panel" class="panel-sidebar">
                 <div class="scroll-indicator scroll-indicator-up" id="left-panel-scroll-indicator-up"></div>
@@ -73,8 +109,12 @@
                             data-lang-key="button_access_systems">Begin</button>
                     </div>
                     <div id="action-input-section" class="input-group" style="display:none;">
-                        <textarea id="player-action-input" data-lang-key-placeholder="placeholder_command"
-                            placeholder="Enter command or response..." rows="1"></textarea>
+                        <div class="textarea-with-counter-wrapper">
+                            <textarea id="player-action-input" data-lang-key-placeholder="placeholder_command"
+                                placeholder="Enter command or response..." rows="1"></textarea>
+                            <div id="player-action-char-counter" class="char-counter">0/600</div>
+                        </div>
+                        <button id="force-roll-toggle-button" class="ui-button"></button>
                         <button id="send-action-button" class="ui-button primary"
                             data-lang-key="button_execute_command">Send</button>
                     </div>
@@ -101,8 +141,12 @@
             </aside>
         </div>
         <footer id="application-footer">
-            <p>© 2025 Anomady v0.3. Worlds written as you walk them. </p>
+            <p>© 2025 Lorelic v0.7.0. Worlds written as you walk them. </p>
         </footer>
+        <div id="xp-bar-container" style="display: none;">
+            <div id="xp-bar-fill"></div>
+            <span id="xp-bar-text" data-lang-key="xp_bar_default_text">XP: 0/100</span>
+        </div>
         <div id="custom-modal-overlay" class="modal-overlay">
             <div id="custom-modal" class="modal-box">
                 <h3 id="custom-modal-title" class="modal-title">Modal Title</h3>
@@ -115,9 +159,7 @@
             </div>
         </div>
     </div>
-    <script src="js/global-texts.js"></script>
-    <script src="js/themes-manifest.js"></script>
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

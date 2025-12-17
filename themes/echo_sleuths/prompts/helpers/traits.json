@@ -1,0 +1,102 @@
+{
+  "cognitive_anchor": {
+    "en": {
+      "name": "Cognitive Anchor",
+      "description": "Your mind has a stronger tether to baseline reality. You are more resistant to psychic disturbances and effects that cause Cognitive Dissonance."
+    },
+    "cs": {
+      "name": "Kognitivní Kotva",
+      "description": "Vaše mysl má silnější pouto k základní realitě. Jste odolnější vůči psychickým poruchám a účinkům, které způsobují kognitivní disonanci."
+    }
+  },
+  "narrative_intuition": {
+    "en": {
+      "name": "Narrative Intuition",
+      "description": "You can sense the 'story' of a place or object, occasionally gleaning insights or clues from the ambient psychic residue of past events."
+    },
+    "cs": {
+      "name": "Narativní Intuice",
+      "description": "Dokážete vycítit 'příběh' místa nebo předmětu a občas získat vhledy nebo stopy z okolního psychického zbytku minulých událostí."
+    }
+  },
+  "logicist_mind": {
+    "en": {
+      "name": "Logicist Mind",
+      "description": "Trained in the methods of the Logicists, you can deconstruct paradoxes and conceptual arguments more effectively, finding flaws in an entity's reasoning."
+    },
+    "cs": {
+      "name": "Logicistická Mysl",
+      "description": "Vycvičeni v metodách Logicistů dokážete efektivněji dekonstruovat paradoxy a konceptuální argumenty a nacházet chyby v uvažování entit."
+    }
+  },
+  "dreamweaver_empathy": {
+    "en": {
+      "name": "Dreamweaver Empathy",
+      "description": "You can connect with the emotional core of conceptual entities, allowing for peaceful resolutions or the discovery of their root motivations and weaknesses."
+    },
+    "cs": {
+      "name": "Empatie Snovače",
+      "description": "Dokážete se napojit na emocionální jádro konceptuálních entit, což umožňuje mírová řešení nebo objevení jejich kořenových motivací a slabin."
+    }
+  },
+  "reality_surfer": {
+    "en": {
+      "name": "Reality Surfer",
+      "description": "You are more adept at navigating reality flux events, able to maintain your bearings and spot fleeting opportunities or stable paths amidst the chaos."
+    },
+    "cs": {
+      "name": "Surfař Reality",
+      "description": "Jste zdatnější v navigaci během událostí toku reality, schopni udržet si orientaci a zahlédnout prchavé příležitosti nebo stabilní cesty uprostřed chaosu."
+    }
+  },
+  "memoria_collector": {
+    "en": {
+      "name": "Memoria Collector",
+      "description": "Your Memoria Flask is more efficient, allowing you to capture clearer, more detailed echoes of memories from the environment."
+    },
+    "cs": {
+      "name": "Sběratel Memorií",
+      "description": "Váš Memoria Flakón je efektivnější, což vám umožňuje zachytit jasnější a detailnější ozvěny vzpomínek z prostředí."
+    }
+  },
+  "psychic_sump": {
+    "en": {
+      "name": "Psychic Sump",
+      "description": "You have a high tolerance for existential dread. Events that would increase others' Existential Weight affect you less."
+    },
+    "cs": {
+      "name": "Psychická Jímka",
+      "description": "Máte vysokou toleranci k existenciální hrůze. Události, které by zvýšily existenciální tíhu ostatních, vás ovlivňují méně."
+    }
+  },
+  "conceptual_parry": {
+    "en": {
+      "name": "Conceptual Parry",
+      "description": "You can instinctively deflect or redirect a minor conceptual or psychic assault, sometimes turning an entity's own logic or emotion back on itself."
+    },
+    "cs": {
+      "name": "Konceptuální Odražení",
+      "description": "Dokážete instinktivně odrazit nebo přesměrovat menší konceptuální či psychický útok, někdy obrátíte logiku nebo emoce entity proti ní samé."
+    }
+  },
+  "authority_insider": {
+    "en": {
+      "name": "Authority Insider",
+      "description": "You have contacts within the Municipal Authority, giving you better access to case files, resources, or warnings when the Authority's Gaze intensifies."
+    },
+    "cs": {
+      "name": "Zasvěcenec Úřadu",
+      "description": "Máte kontakty v Městském Úřadu, což vám poskytuje lepší přístup ke spisům případů, zdrojům nebo varováním, když se Pohled Úřadu zostří."
+    }
+  },
+  "face_in_the_fog": {
+    "en": {
+      "name": "Face in the Fog",
+      "description": "You are adept at blending into the background of Reverie's psychic noise, making you less likely to be noticed by hostile entities or the Authority."
+    },
+    "cs": {
+      "name": "Tvář v Mlze",
+      "description": "Jste zdatní v zapadnutí do pozadí psychického šumu Reverie, takže je méně pravděpodobné, že si vás všimnou nepřátelské entity nebo Úřad."
+    }
+  }
+}

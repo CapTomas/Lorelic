@@ -1,0 +1,352 @@
+[
+  {
+    "id": "gw_pg_wornshroud_l01",
+    "name": {
+      "en": "Worn Grave Shroud",
+      "cs": "Opotřebovaný Pohřební Rubáš"
+    },
+    "description": {
+      "en": "Little more than tattered cloth, smelling faintly of crypt dust and old sorrows. Offers scant protection against the encroaching dark.",
+      "cs": "O něco víc než potrhaná látka, slabě páchnoucí kryptovým prachem a starými žaly. Poskytuje chatrnou ochranu proti dotírajícím stínům."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+5"
+      },
+      "cs": {
+        "Bonus k Integritě": "+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on checks to move silently."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na tichý pohyb."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+5 Integrity, Advantage on Stealth",
+      "cs": "+5 Integrita, Výhoda na Plížení"
+    },
+    "level": 1,
+    "buyPrice": 25,
+    "sellPrice": 7
+  },
+  {
+    "id": "gw_pg_hidepatches_l02",
+    "name": {
+      "en": "Patched Hide Scraps",
+      "cs": "Záplatované Kožené Odřezky"
+    },
+    "description": {
+      "en": "Stiff, mismatched pieces of cured animal hide, crudely stitched together. Better than nothing, but not by much.",
+      "cs": "Ztvrdlé, nesourodé kusy vydělané zvířecí kůže, nahrubo sešité. Lepší než nic, ale ne o mnoho."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+7"
+      },
+      "cs": {
+        "Bonus k Integritě": "+7"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on Resilience saves against cold weather effects."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Odolnost proti efektům chladného počasí."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+7 Integrity, Cold Resistance",
+      "cs": "+7 Integrita, Odolnost vůči Chladu"
+    },
+    "level": 2,
+    "buyPrice": 36,
+    "sellPrice": 10
+  },
+  {
+    "id": "gw_pg_rustedlinks_l03",
+    "name": {
+      "en": "Rusted Chain Links",
+      "cs": "Zrezivělé Kroužky Brnění"
+    },
+    "description": {
+      "en": "A few lengths of corroded chainmail, perhaps salvaged from a forgotten battlefield. They clink with every movement.",
+      "cs": "Několik délek zkorodované kroužkové zbroje, možná zachráněných z zapomenutého bojiště. Při každém pohybu cinkají."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+10"
+      },
+      "cs": {
+        "Bonus k Integritě": "+10"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Imposes Disadvantage on checks to move silently."
+      ],
+      "cs": [
+        "Uvaluje Nevýhodu na hody pro tichý pohyb."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+10 Integrity, Noisy",
+      "cs": "+10 Integrita, Hlučné"
+    },
+    "level": 3,
+    "buyPrice": 47,
+    "sellPrice": 14
+  },
+  {
+    "id": "gw_pg_thicktunic_l04",
+    "name": {
+      "en": "Thick Woolen Tunic",
+      "cs": "Hrubá Vlněná Tunika"
+    },
+    "description": {
+      "en": "A heavy, coarse garment that offers surprising warmth and some padding against blows. It carries the scent of damp earth.",
+      "cs": "Těžký, hrubý oděv, který poskytuje překvapivé teplo a určité polstrování proti úderům. Nese vůni vlhké země."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+12"
+      },
+      "cs": {
+        "Bonus k Integritě": "+12"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reduce incoming Bludgeoning damage by 1."
+      ],
+      "cs": [
+        "Snižuje příchozí Drtivé zranění o 1."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+12 Integrity, -1 Bludgeoning Dmg",
+      "cs": "+12 Integrita, -1 Drtivé Zraň."
+    },
+    "level": 4,
+    "buyPrice": 52,
+    "sellPrice": 15
+  },
+  {
+    "id": "gw_pg_bonewraps_l05",
+    "name": {
+      "en": "Bone-Studded Wraps",
+      "cs": "Kostmi Pobité Bandáže"
+    },
+    "description": {
+      "en": "Lengths of tough linen interwoven with sharpened animal bones. An unsettling, primitive form of armor.",
+      "cs": "Pásy pevného plátna protkané nabroušenými zvířecími kostmi. Znepokojivá, primitivní forma zbroje."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+14"
+      },
+      "cs": {
+        "Bonus k Integritě": "+14"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants +1d4 bonus on Intimidation checks."
+      ],
+      "cs": [
+        "Poskytuje bonus +1d4 k hodům na Zastrašování."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+14 Integrity, +1d4 Intimidation",
+      "cs": "+14 Integrita, +1d4 Zastrašování"
+    },
+    "level": 5,
+    "buyPrice": 68,
+    "sellPrice": 20
+  },
+  {
+    "id": "gw_pg_leatherjerkin_l06",
+    "name": {
+      "en": "Hardened Leather Jerkin",
+      "cs": "Prošívaná Kožená Vesta"
+    },
+    "description": {
+      "en": "A sleeveless vest of boiled leather, stiff and offering decent protection to the torso. Bears the marks of long use.",
+      "cs": "Vesta bez rukávů z vařené kůže, tuhá a poskytující slušnou ochranu trupu. Nese stopy dlouhého používání."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+16"
+      },
+      "cs": {
+        "Bonus k Integritě": "+16"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reduce incoming Slashing damage by 2."
+      ],
+      "cs": [
+        "Snižuje příchozí Sekající zranění o 2."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+16 Integrity, -2 Slashing Dmg",
+      "cs": "+16 Integrita, -2 Sekající Zraň."
+    },
+    "level": 6,
+    "buyPrice": 78,
+    "sellPrice": 23
+  },
+  {
+    "id": "gw_pg_paddedgambeson_l07",
+    "name": {
+      "en": "Padded Warden's Gambeson",
+      "cs": "Polstrovaný Strážcův Gambeson"
+    },
+    "description": {
+      "en": "A thick, quilted jacket worn under armor or on its own. Its many layers absorb the force of impacts.",
+      "cs": "Tlustá, prošívaná bunda nošená pod zbrojí nebo samostatně. Její mnohé vrstvy pohlcují sílu nárazů."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+18"
+      },
+      "cs": {
+        "Bonus k Integritě": "+18"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reduces damage from critical hits by 1d6."
+      ],
+      "cs": [
+        "Snižuje zranění z kritických zásahů o 1d6."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+18 Integrity, Crit Dmg Reduction",
+      "cs": "+18 Integrita, Redukce Krit. Zranění"
+    },
+    "level": 7,
+    "buyPrice": 82,
+    "sellPrice": 25
+  },
+  {
+    "id": "gw_pg_ironcap_l08",
+    "name": {
+      "en": "Crude Iron Shoulderguard",
+      "cs": "Nahrubo Kovaný Železný Nákrčník"
+    },
+    "description": {
+      "en": "A roughly hammered piece of iron designed to protect one shoulder. Awkward, but better than an exposed collarbone.",
+      "cs": "Nahrubo tepaný kus železa určený k ochraně jednoho ramene. Nepohodlný, ale lepší než odhalená klíční kost."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+20"
+      },
+      "cs": {
+        "Bonus k Integritě": "+20"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Once per combat, you can force an attacker to reroll one successful hit against you."
+      ],
+      "cs": [
+        "Jednou za boj můžeš donutit útočníka, aby si přehodil jeden úspěšný zásah proti tobě."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+20 Integrity, Force Reroll",
+      "cs": "+20 Integrita, Vynutit Přehod"
+    },
+    "level": 8,
+    "buyPrice": 99,
+    "sellPrice": 30
+  },
+  {
+    "id": "gw_pg_watchcloak_l09",
+    "name": {
+      "en": "Heavy Watchman's Cloak",
+      "cs": "Těžký Strážní Plášť"
+    },
+    "description": {
+      "en": "A cloak of dense, dark wool, treated with oils to repel water. Its weight offers a surprising degree of protection.",
+      "cs": "Plášť z husté, tmavé vlny, ošetřený oleji k odpuzování vody. Jeho váha nabízí překvapivý stupeň ochrany."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+22"
+      },
+      "cs": {
+        "Bonus k Integritě": "+22"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on Resilience saves against environmental hazards (rain, wind, etc.)."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Odolnost proti environmentálním rizikům (déšť, vítr atd.)."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+22 Integrity, Environment Resist",
+      "cs": "+22 Integrita, Odol. Prostředí"
+    },
+    "level": 9,
+    "buyPrice": 115,
+    "sellPrice": 34
+  },
+  {
+    "id": "gw_pg_ringmail_l10",
+    "name": {
+      "en": "Reinforced Ringmail Vest",
+      "cs": "Zesílená Kroužková Vesta"
+    },
+    "description": {
+      "en": "A vest made of large metal rings sewn onto a leather backing. Each ring bears a tiny, warding scratch mark.",
+      "cs": "Vesta z velkých kovových kroužků našitých na kožený podklad. Každý kroužek nese drobnou ochrannou rytinu."
+    },
+    "itemType": "protective_gear",
+    "attributes": {
+      "en": {
+        "Integrity Bonus": "+25"
+      },
+      "cs": {
+        "Bonus k Integritě": "+25"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Gain Advantage on Willpower saves against fear or charm effects from supernatural entities."
+      ],
+      "cs": [
+        "Získáš Výhodu při Záchranných hodech na Vůli proti efektům strachu nebo okouzlení od nadpřirozených entit."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+25 Integrity, Spirit Ward",
+      "cs": "+25 Integrita, Ochrana před Duchy"
+    },
+    "level": 10,
+    "buyPrice": 125,
+    "sellPrice": 37
+  }
+]

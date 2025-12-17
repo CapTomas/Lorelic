@@ -7,7 +7,8 @@
     "storm_brewing_active": "themes/salt_reavers/prompts/storm_brewing_active.txt",
     "mutiny_risk_high": "themes/salt_reavers/prompts/mutiny_risk_high.txt",
     "treasure_curse_active": "themes/salt_reavers/prompts/treasure_curse_active.txt",
-    "starts": "themes/salt_reavers/prompts/helpers/starts.txt"
+    "starts": "themes/salt_reavers/prompts/helpers/starts.txt",
+    "traits": "themes/salt_reavers/prompts/helpers/traits.json"
   },
   "NARRATIVE_LANG_PROMPT_PARTS": {
     "en": "The narrative must be a rip-roaring pirate adventure, rendered in English that's as salty as the sea breeze and as sharp as a cutlass. Strive for high-stakes action and cinematic flair: paint scenes not just with the glint of gold and the spray of the ocean, but with the creak of timbers, the roar of cannon, the chilling whispers of ancient curses, and the camaraderie (or treachery) of a pirate crew. Dialogue should be colorful, brash, and laced with nautical jargon and pirate swagger; let every word carry the weight of ambition, desperation, or dark secrets. Combat should be a chaotic ballet of clashing steel and thundering broadsides; environments, a tapestry of tropical islands, bustling pirate dens, and foreboding ancient ruins; and the allure of treasure, a palpable siren's call. This isn't just a tale; it's a plunge into a world of freedom, danger, and legend. Aim for goosebumps.",

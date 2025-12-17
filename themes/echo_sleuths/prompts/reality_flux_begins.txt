@@ -62,7 +62,15 @@ Your ENTIRE response MUST be a single, valid JSON object. No introductory text o
   ],
   "game_state_indicators": {
     // Key-value pairs for game state flags. CRITICALLY, `reality_flux_begins` must be `false`.
-  }
+    },
+    "input_placeholder": "string (A short, context-aware, and subtle hint for the player's next input. Must be in ${currentNarrativeLanguage.toUpperCase()})"
 }
+
+**INPUT_PLACEHOLDER GUIDANCE:**
+    Always provide a short, subtle input_placeholder string in the NARRATIVE LANGUAGE (${currentNarrativeLanguage.toUpperCase()}).
+This placeholder must not reference or suggest any specific action or path.
+It should evoke the inner state, sensory mood, or atmosphere of the scene without implying intent, decision, or direction.
+Keep it under 50 characters, emotionally or descriptively rich, and entirely non-directive.
+Do not echo the available actions. Do not hint at a goal. Do not resolve ambiguity—let it breathe.
 
 The goal here is to make the environment an active, unpredictable force. The player should feel like they're walking through a living dream (or nightmare) where the rules can change at any moment, presenting both peril and bizarre opportunity.

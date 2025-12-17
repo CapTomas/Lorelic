@@ -1,0 +1,360 @@
+[
+  {
+    "id": "sr_shr_tarredplanks_l01",
+    "name": {
+      "en": "Tarred & Patched Planks",
+      "cs": "Dehtovaná & Záplatovaná Prkna"
+    },
+    "description": {
+      "en": "More tar than timber, these planks are a testament to desperation. They keep most of the sea on the outside. Most of the time.",
+      "cs": "Více dehtu než dřeva, tato prkna jsou svědectvím zoufalství. Udržují většinu moře venku. Většinu času."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 21
+      },
+      "cs": {
+        "Bonus k Trupu": 21
+      }
+    },
+    "abilities": {
+      "en": [
+        "Prone to Leaks"
+      ],
+      "cs": [
+        "Náchylné k Průsakům"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+21 Hull, Prone to Leaks",
+      "cs": "+21 Trup, Náchylné k Průsakům"
+    },
+    "level": 1,
+    "buyPrice": 24,
+    "sellPrice": 7
+  },
+  {
+    "id": "sr_shr_scrapsails_l02",
+    "name": {
+      "en": "Scrap Canvas Sails",
+      "cs": "Plachty z Odřezků"
+    },
+    "description": {
+      "en": "A motley collection of stolen laundry, old tarps, and hope, stitched together to catch a breeze. They billow more than they pull.",
+      "cs": "Pestrá sbírka ukradeného prádla, starých plachet a naděje, sešitá dohromady, aby chytila vánek. Více se nadouvají, než táhnou."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 35,
+        "Maneuverability": "Poor"
+      },
+      "cs": {
+        "Bonus k Trupu": 35,
+        "Manévrovatelnost": "Špatná"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Poor Handling"
+      ],
+      "cs": [
+        "Špatná Ovladatelnost"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+35 Hull, Poor Handling",
+      "cs": "+35 Trup, Špatná Ovladatelnost"
+    },
+    "level": 2,
+    "buyPrice": 41,
+    "sellPrice": 12
+  },
+  {
+    "id": "sr_shr_barnaclestudded_l03",
+    "name": {
+      "en": "Barnacle-Studded Plating",
+      "cs": "Plátování Pobité Vilejši"
+    },
+    "description": {
+      "en": "Crude iron plates covered in a thick layer of razor-sharp barnacles. An accidental, yet surprisingly effective, deterrent to boarders.",
+      "cs": "Hrubé železné pláty pokryté tlustou vrstvou ostrých vilejšů. Náhodný, leč překvapivě účinný odstrašující prostředek pro abordáž."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 46
+      },
+      "cs": {
+        "Bonus k Trupu": 46
+      }
+    },
+    "abilities": {
+      "en": [
+        "Deters Boarders"
+      ],
+      "cs": [
+        "Odrazuje Nájezdníky"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+46 Hull, Deters Boarders",
+      "cs": "+46 Trup, Odrazuje Nájezdníky"
+    },
+    "level": 3,
+    "buyPrice": 59,
+    "sellPrice": 18
+  },
+  {
+    "id": "sr_shr_kelpwrappedrig_l04",
+    "name": {
+      "en": "Kelp-Wrapped Rigging",
+      "cs": "Lanoví Obalené Chaluhami"
+    },
+    "description": {
+      "en": "The ropes are slick with a strange, deep-sea kelp that makes them unnervingly quiet. Useful for slipping through a blockade on a foggy night.",
+      "cs": "Lana jsou kluzká od podivné hlubokomořské chaluhy, která je činí znepokojivě tichými. Užitečné pro proklouznutí blokádou za mlhavé noci."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 65
+      },
+      "cs": {
+        "Bonus k Trupu": 65
+      }
+    },
+    "abilities": {
+      "en": [
+        "Quieter Sailing"
+      ],
+      "cs": [
+        "Tišší Plavba"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+65 Hull, Quieter Sailing",
+      "cs": "+65 Trup, Tišší Plavba"
+    },
+    "level": 4,
+    "buyPrice": 68,
+    "sellPrice": 20
+  },
+  {
+    "id": "sr_shr_saltedwalnut_l05",
+    "name": {
+      "en": "Salted Walnut Hull",
+      "cs": "Prosolený Ořechový Trup"
+    },
+    "description": {
+      "en": "A cheap but sturdy timber, cured in salt until it's as tough as an old sea dog's boot. Resists the rot of the sea.",
+      "cs": "Levné, ale pevné dřevo, naložené v soli, dokud není tvrdé jako bota starého mořského vlka. Odolává mořské hnilobě."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 79
+      },
+      "cs": {
+        "Bonus k Trupu": 79
+      }
+    },
+    "abilities": {
+      "en": [
+        "Minor Rot Resistance"
+      ],
+      "cs": [
+        "Menší Odolnost Proti Hnilobě"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+79 Hull, Rot Resist",
+      "cs": "+79 Trup, Odol. Hnilobě"
+    },
+    "level": 5,
+    "buyPrice": 81,
+    "sellPrice": 24
+  },
+  {
+    "id": "sr_shr_reinforcedjib_l06",
+    "name": {
+      "en": "Reinforced Jib & Staysail",
+      "cs": "Zesílená Kosatka & Stěhovka"
+    },
+    "description": {
+      "en": "These forward sails have been reinforced with leather, allowing for sharper, more aggressive turns. For captains who like to live on the edge.",
+      "cs": "Tyto přední plachty byly zesíleny kůží, což umožňuje ostřejší, agresivnější zatáčky. Pro kapitány, kteří rádi žijí na hraně."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 88,
+        "Maneuverability": "Improved"
+      },
+      "cs": {
+        "Bonus k Trupu": 88,
+        "Manévrovatelnost": "Zlepšená"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Faster Turning"
+      ],
+      "cs": [
+        "Rychlejší Zatáčení"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+88 Hull, Faster Turning",
+      "cs": "+88 Trup, Rychl. Zatáčení"
+    },
+    "level": 6,
+    "buyPrice": 108,
+    "sellPrice": 32
+  },
+  {
+    "id": "sr_shr_grogsoakedoak_l07",
+    "name": {
+      "en": "Grog-Soaked Oak Plating",
+      "cs": "Dubové Pláty Napuštěné Grogem"
+    },
+    "description": {
+      "en": "Some mad carpenter claimed soaking oak in cheap grog made it tougher. He was half-right; it's tougher, but the ship constantly smells like a tavern floor.",
+      "cs": "Jeden šílený tesař tvrdil, že namáčení dubu v levném grogu ho činí tvrdším. Měl poloviční pravdu; je tvrdší, ale loď neustále páchne jako podlaha v krčmě."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 109
+      },
+      "cs": {
+        "Bonus k Trupu": 109
+      }
+    },
+    "abilities": {
+      "en": [
+        "Boosts Crew Morale Slightly",
+        "Pungent Aroma"
+      ],
+      "cs": [
+        "Lehce Zvyšuje Morálku Posádky",
+        "Pronikavé Aroma"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+109 Hull, Morale Boost",
+      "cs": "+109 Trup, Zvyšuje Morálku"
+    },
+    "level": 7,
+    "buyPrice": 125,
+    "sellPrice": 38
+  },
+  {
+    "id": "sr_shr_ironbanded_l08",
+    "name": {
+      "en": "Iron-Banded Hull",
+      "cs": "Železem Okovaný Trup"
+    },
+    "description": {
+      "en": "Thick bands of crude iron reinforce the hull, making it resilient to glancing blows and minor impacts from reef-strewn shallows.",
+      "cs": "Tlusté pásy hrubého železa zpevňují trup, činí ho odolným vůči letmým úderům a menším nárazům v útesovitých mělčinách."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 124
+      },
+      "cs": {
+        "Bonus k Trupu": 124
+      }
+    },
+    "abilities": {
+      "en": [
+        "Resists Minor Impacts"
+      ],
+      "cs": [
+        "Odolává Menším Nárazům"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+124 Hull, Resists Minor Impacts",
+      "cs": "+124 Trup, Odol. Menším Nárazům"
+    },
+    "level": 8,
+    "buyPrice": 139,
+    "sellPrice": 42
+  },
+  {
+    "id": "sr_shr_crowsnest_l09",
+    "name": {
+      "en": "Fortified Crow's Nest",
+      "cs": "Opevněné Vraní Hnízdo"
+    },
+    "description": {
+      "en": "A sturdy crow's nest with a small, protective shield for the lookout. Allows for spotting ships and storms from a greater distance.",
+      "cs": "Pevné vraní hnízdo s malým ochranným štítem pro hlídku. Umožňuje spatřit lodě a bouře z větší vzdálenosti."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 135,
+        "Lookout Range": "Improved"
+      },
+      "cs": {
+        "Bonus k Trupu": 135,
+        "Dosah Hlídky": "Zlepšený"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Enhanced Lookout Range"
+      ],
+      "cs": [
+        "Zvýšený Dosah Hlídky"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+135 Hull, Enhanced Lookout",
+      "cs": "+135 Trup, Zlepšená Hlídka"
+    },
+    "level": 9,
+    "buyPrice": 152,
+    "sellPrice": 46
+  },
+  {
+    "id": "sr_shr_sirenfigurehead_l10",
+    "name": {
+      "en": "Crude Siren Figurehead",
+      "cs": "Hrubá Figura Sirény"
+    },
+    "description": {
+      "en": "A crudely carved figurehead of a screaming siren. It's ugly as sin, but sailors whisper that it wards off the siren's deadly song.",
+      "cs": "Hrubě vyřezávaná figura křičící sirény. Je ošklivá jako hřích, ale námořníci si šeptají, že odhání smrtící zpěv sirén."
+    },
+    "itemType": "ship_hull_and_rigging",
+    "attributes": {
+      "en": {
+        "Hull Bonus": 151
+      },
+      "cs": {
+        "Bonus k Trupu": 151
+      }
+    },
+    "abilities": {
+      "en": [
+        "Minor Ward Against Sirens"
+      ],
+      "cs": [
+        "Menší Ochrana Proti Sirénám"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "+151 Hull, Siren Ward",
+      "cs": "+151 Trup, Ochrana Proti Sirénám"
+    },
+    "level": 10,
+    "buyPrice": 179,
+    "sellPrice": 54
+  }
+]

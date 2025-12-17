@@ -62,7 +62,16 @@ Your response MUST be a single, perfectly structured JSON object as follows:
   "game_state_indicators": {
     // (string: boolean/string) Key-value pairs for game state flags.
     "naval_encounter_imminent": false // Mandatory: reset the flag as the encounter is now "active" not "imminent".
-  }
+   },
+    "input_placeholder": "string (A short, context-aware, and subtle hint for the player's next input. Must be in ${currentNarrativeLanguage.toUpperCase()})"
 }
+
+**INPUT_PLACEHOLDER GUIDANCE:**
+Always provide a short, subtle input_placeholder string in the NARRATIVE LANGUAGE (${currentNarrativeLanguage.toUpperCase()}).
+This placeholder must not reference or suggest any specific action or path.
+It should evoke the inner state, sensory mood, or atmosphere of the scene without implying intent, decision, or direction.
+Keep it under 50 characters, emotionally or descriptively rich, and entirely non-directive.
+Do not echo the available actions. Do not hint at a goal. Do not resolve ambiguity—let it breathe.
+
 
 This prompt is about that heart-stopping moment when the unknown appears on the vast ocean. Is it an opportunity for plunder, a deadly threat, or a mysterious omen? Make the Captain lean forward, spyglass in hand, every sense alert. Give them goosebumps as they weigh their first critical move.

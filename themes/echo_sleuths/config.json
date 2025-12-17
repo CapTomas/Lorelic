@@ -11,8 +11,94 @@
   "category_key": "theme_category_echo_sleuths",
   "style_key": "theme_style_echo_sleuths",
   "naming_convention": "entity",
+  "base_attributes": {
+    "integrity": 100,
+    "willpower": 50,
+    "aptitude": 10,
+    "resilience": 10
+  },
+  "attribute_tooltips": {
+    "integrity": "tooltip_attr_integrity_echo_sleuths",
+    "willpower": "tooltip_attr_willpower_echo_sleuths",
+    "aptitude": "tooltip_attr_aptitude_echo_sleuths",
+    "resilience": "tooltip_attr_resilience_echo_sleuths"
+  },
+  "equipment_slots": {
+    "anchor_artifact": {
+      "id": "equipped_anchor_effect",
+      "type": "static",
+      "reward_trigger": "anchor_artifact_reward_trigger"
+    },
+    "mnemosyne_device": {
+      "id": "equipped_flask_effect",
+      "type": "static",
+      "reward_trigger": "mnemosyne_device_reward_trigger"
+    },
+    "cognitive_tool": {
+      "id": "equipped_resolver_effect",
+      "type": "consumable",
+      "reward_trigger": "cognitive_tool_reward_trigger"
+    },
+    "lucidity_shards_currency": {
+      "id": "lucidity_shards",
+      "type": "money",
+      "reward_trigger": "lucidity_shards_reward_trigger"
+    }
+  },
   "dashboard_config_ref": "echo_sleuths",
   "dashboard_config": {
+    "top_panel": [
+      {
+        "id": "integrity",
+        "label_key": "char_panel_label_integrity",
+        "tooltip_key": "tooltip_attr_integrity_echo_sleuths",
+        "type": "meter",
+        "meter_type": "health",
+        "maps_to_run_stat": "currentIntegrity",
+        "short_description": "Psychic Cohesion. The Sleuth's ability to maintain form against reality-bending forces. Zero means dissolution into Reverie's static."
+      },
+      {
+        "id": "willpower",
+        "label_key": "char_panel_label_willpower",
+        "tooltip_key": "tooltip_attr_willpower_echo_sleuths",
+        "type": "meter",
+        "meter_type": "stamina",
+        "maps_to_run_stat": "currentWillpower",
+        "short_description": "Focus. Mental energy for advanced techniques, deconstructing paradoxes, or shaping dream-memories. Recovers through reflection or specific insights."
+      },
+      {
+        "id": "aptitude",
+        "label_key": "char_panel_label_aptitude",
+        "tooltip_key": "tooltip_attr_aptitude_echo_sleuths",
+        "type": "number",
+        "maps_to_run_stat": "aptitude",
+        "short_description": "Deductive Acumen. Skill in investigation, reasoning, and spotting inconsistencies. Influences how well enigmas are unraveled."
+      },
+      {
+        "id": "resilience",
+        "label_key": "char_panel_label_resilience",
+        "tooltip_key": "tooltip_attr_resilience_echo_sleuths",
+        "type": "number",
+        "maps_to_run_stat": "resilience",
+        "short_description": "Cognitive Anchor. Passive ability to filter psychic noise and resist the corrosive effects of Reverie's truths."
+      },
+      {
+        "id": "strain_level",
+        "label_key": "label_strain_level_echo_sleuths",
+        "tooltip_key": "tooltip_item_strain_level_echo_sleuths",
+        "type": "status_icon",
+        "default_ai_value": 1,
+        "maps_to_run_stat": "strainLevel",
+        "level_mappings": {
+          "1": { "display_text_key": "strain_level_1_display_es", "css_class": "status-ok", "icon_path": "images/sentiment/icon_sentiment_satisfied.svg" },
+          "2": { "display_text_key": "strain_level_2_display_es", "css_class": "status-warning", "icon_path": "images/sentiment/icon_sentiment_neutral.svg" },
+          "3": { "display_text_key": "strain_level_3_display_es", "css_class": "status-danger", "icon_path": "images/sentiment/icon_sentiment_dissatisfied.svg" },
+          "4": { "display_text_key": "strain_level_4_display_es", "css_class": "status-critical", "icon_path": "images/sentiment/icon_sentiment_very_dissatisfied.svg" }
+        },
+        "must_translate": false,
+        "short_description": "Cognitive Dissonance. The Sleuth's cumulative mental strain. MUST BE INTEGER (1-4). Higher levels can cause perceptual distortions. 1: Anchored, 2: Adrift, 3: Unmoored, 4: Dissociating."
+      }
+    ],
     "left_panel": [
       {
         "id": "sleuth-identity-psyche-panel",
@@ -37,21 +123,12 @@
             "short_description": "Sleuth's current, often precarious, standing with Reverie's Municipal Authority. This should be a thematic, descriptive phrase."
           },
           {
-            "id": "cognitive_dissonance_pct",
-            "label_key": "label_cognitive_dissonance_echo_sleuths",
-            "type": "meter",
-            "meter_type": "dissonance",
-            "default_value": "0",
-            "must_translate": false,
-            "short_description": "Mental strain/fragmentation (0-100%). Higher values indicate greater mental instability, potentially affecting perception, decision-making, or triggering surreal side-effects. Initial value is low."
-          },
-          {
             "id": "lucidity_shards",
             "label_key": "label_lucidity_shards_echo_sleuths",
-            "type": "text",
+            "type": "number_text",
             "default_value_key": "default_lucidity_shards_echo_sleuths",
             "must_translate": true,
-            "short_description": "Measure of the Sleuth's fleeting moments of profound clarity or focus. This should be a thematic, descriptive phrase reflecting quantity or quality. These might be spent or gained through narrative events."
+            "short_description": "Fragments of focused insight or solidified memories. Used as a form of currency or to fuel potent cognitive abilities."
           },
           {
             "id": "existential_weight_level",
@@ -93,28 +170,31 @@
             "short_description": "The Sleuth's current, likely characteristic, and perhaps slightly unsettling, outfit or appearance."
           },
           {
-            "id": "reality_anchor_item_name",
-            "label_key": "label_reality_anchor_item_echo_sleuths",
-            "type": "text",
-            "default_value_key": "default_reality_anchor_item_echo_sleuths",
+            "id": "equipped_anchor_effect",
+            "label_key": "label_equipped_anchor_effect_echo_sleuths",
+            "tooltip_key": "tooltip_slot_anchor_artifact_echo_sleuths",
+            "type": "text_long",
+            "default_value_key": "default_equipped_anchor_effect_echo_sleuths",
             "must_translate": true,
-            "short_description": "Name of a personal, mundane item that helps the Sleuth stay grounded amidst Reverie's flux. Its perceived state or relevance might change."
+            "short_description": "Name and effect description string of the currently attuned Anchor Artifact."
           },
           {
-            "id": "memoria_flask_state",
-            "label_key": "label_memoria_flask_status_echo_sleuths",
-            "type": "text",
-            "default_value_key": "default_memoria_flask_status_echo_sleuths",
+            "id": "equipped_flask_effect",
+            "label_key": "label_equipped_flask_effect_echo_sleuths",
+            "tooltip_key": "tooltip_slot_mnemosyne_device_echo_sleuths",
+            "type": "text_long",
+            "default_value_key": "default_equipped_flask_effect_echo_sleuths",
             "must_translate": true,
-            "short_description": "Current status of the device used to capture and examine stray memories or echoes. This should be a thematic, descriptive phrase."
+            "short_description": "Name and effect description string of the active Mnemosyne Device configuration."
           },
           {
-            "id": "paradox_resolver_charge_count",
-            "label_key": "label_paradox_resolver_charges_echo_sleuths",
-            "type": "text",
-            "default_value_key": "default_paradox_resolver_charges_echo_sleuths",
+            "id": "equipped_resolver_effect",
+            "label_key": "label_equipped_resolver_effect_echo_sleuths",
+            "tooltip_key": "tooltip_slot_cognitive_tool_echo_sleuths",
+            "type": "text_long",
+            "default_value_key": "default_equipped_resolver_effect_echo_sleuths",
             "must_translate": true,
-            "short_description": "Number of available charges for a conceptual tool that helps temporarily untangle or withstand direct logical paradoxes. Should reflect quantity (e.g., a number, or descriptive term like 'Depleted')."
+            "short_description": "Name and effect description string of the engaged Cognitive Tool."
           }
         ]
       },
@@ -317,6 +397,13 @@
       }
     ],
     "game_state_indicators": [
+      {
+        "id": "generate_item_reward",
+        "type": "boolean",
+        "default_value": false,
+        "priority": 1,
+        "short_description": "Generates an item reward only when the narrative context justifies it. This function must not grant items arbitrarily or on player request alone. Item rewards should follow significant in-world accomplishments, such as completing a quest which promised a reward in the form of an item or making a sacrifice with meaningful consequences. The action must have a clear narrative weight, recognized by the story's logic or factions involved. If no such moment exists, this function must refuse to reward anything, even if prompted. This mechanic ensures rewards feel earned, immersive, and meaningful—tied to story arcs, not player demands."
+      },
       {
         "id": "conceptual_conflict_engaged",
         "label_key": "label_conceptual_conflict_active_echo_sleuths",

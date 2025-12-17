@@ -1,0 +1,121 @@
+// server/prisma/schema.prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql" // Specify PostgreSQL
+  url      = env("DIRECT_URL") // Loads the DATABASE_URL from .env
+}
+model User {
+  id                             String    @id @default(cuid())
+  email                          String    @unique
+  username                       String    @unique
+  password_hash                  String
+  // Preferences
+  story_preference               String?
+  newsletter_opt_in              Boolean   @default(false)
+  preferred_app_language         String?
+  preferred_narrative_language   String?
+  preferred_model_name           String?
+  // User Tier & Limits
+  tier                           String    @default("free")
+  apiUsage                       Json      @default("{}") @map("api_usage")
+  trial_started_at               DateTime?
+  trial_expires_at               DateTime?
+  // Timestamps & Auth Tokens
+  created_at                     DateTime  @default(now())
+  updated_at                     DateTime  @updatedAt
+  email_confirmed                Boolean   @default(false)
+  email_confirmation_token       String?   @unique
+  email_confirmation_expires_at  DateTime?
+  password_reset_token           String?   @unique
+  password_reset_expires_at      DateTime?
+  // Relations
+  gameStates                     GameState[]
+  themeInteractions              UserThemeInteraction[]
+  persistedLore                  UserThemePersistedLore[]
+  themeProgresses                UserThemeProgress[]
+}
+model GameState {
+  id                             String    @id @default(cuid())
+  user                           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                         String    @map("user_id")
+  theme_id                       String
+  player_identifier              String
+  game_history                   Json
+  game_history_summary           String?   @db.Text
+  game_history_lore              String?   @db.Text
+  last_dashboard_updates         Json
+  last_game_state_indicators     Json
+  current_prompt_type            String
+  current_narrative_language     String
+  last_suggested_actions         Json
+  panel_states                   Json
+  model_name_used                String?
+  theme_version_id               String?
+  created_at                     DateTime  @default(now())
+  updated_at                     DateTime  @updatedAt
+  summarization_in_progress      Boolean   @default(false)
+  dashboard_item_meta            Json?     @map("dashboard_item_meta")
+  is_boon_selection_pending      Boolean   @default(false) @map("is_boon_selection_pending")
+  actions_before_boon_selection  Json?     @map("actions_before_boon_selection")
+  session_inventory              Json?     @map("session_inventory")
+  equipped_items                 Json?     @map("equipped_items")
+  @@unique([userId, theme_id])
+  @@index([userId])
+  @@index([theme_id])
+}
+model UserThemeInteraction {
+  id                             String    @id @default(cuid())
+  user                           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                         String    @map("user_id")
+  theme_id                       String
+  is_playing                     Boolean   @default(false)
+  is_liked                       Boolean   @default(false)
+  last_played_at                 DateTime?
+  created_at                     DateTime  @default(now())
+  updated_at                     DateTime  @updatedAt
+  @@unique([userId, theme_id])
+  @@index([userId])
+  @@index([theme_id])
+}
+// New Model for World Shards
+model UserThemePersistedLore {
+  id                          String    @id @default(cuid())
+  user                        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                      String    @map("user_id")
+  themeId                     String    @map("theme_id")
+  loreFragmentKey             String    @map("lore_fragment_key") // Key for this specific lore fragment, suggested by AI
+  loreFragmentTitle           String    @map("lore_fragment_title")
+  loreFragmentContent         String    @db.Text @map("lore_fragment_content")
+  unlockConditionDescription  String    @db.Text @map("unlock_condition_description")
+  unlockedAt                  DateTime  @default(now()) @map("unlocked_at")
+  isActiveForNewGames         Boolean   @default(true) @map("is_active_for_new_games")
+  @@unique([userId, themeId, loreFragmentKey], name: "UserThemeLoreFragmentKeyUnique")
+  @@index([userId])
+  @@index([themeId])
+  @@index([userId, themeId]) // For fetching all shards for a user/theme
+  @@map("user_theme_persisted_lore") // Explicit table name
+}
+model UserThemeProgress {
+  id                  String   @id @default(cuid())
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Ensuring onDelete Cascade
+  userId              String   @map("user_id")
+  themeId             String   @map("theme_id")
+  characterName       String?  @map("character_name")
+  level               Int      @default(1)
+  currentXP           Int      @default(0) @map("current_xp")
+  maxIntegrityBonus   Int      @default(0) @map("max_integrity_bonus")
+  maxWillpowerBonus   Int      @default(0) @map("max_willpower_bonus")
+  aptitudeBonus       Int      @default(0) @map("aptitude_bonus")
+  resilienceBonus     Int      @default(0) @map("resilience_bonus")
+  acquiredTraitKeys   Json     @default("[]") @map("acquired_trait_keys") // Storing keys as strings in JSON array
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  @@unique([userId, themeId])
+  @@index([userId])
+  @@index([themeId])
+  @@map("user_theme_progress")
+}

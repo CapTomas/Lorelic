@@ -1,1 +1,27 @@
-creation
+creation/
+debug/
+condensed-repository.txt
+.repomix/
+curl_tests/
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json # If you're not using npm lockfiles consistently
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE / Editor specific
+.vscode/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Prisma
+/generated/prisma

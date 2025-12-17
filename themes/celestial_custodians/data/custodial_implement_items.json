@@ -1,0 +1,352 @@
+[
+  {
+    "id": "cc_impl_plasmaticmop_l01",
+    "name": {
+      "en": "Standard Issue Plasmatic Mop, Mk. I",
+      "cs": "Standardní Plazmatický Mop, Mk. I"
+    },
+    "description": {
+      "en": "The backbone of the Custodial Union. Tends to leak lukewarm existential dread and requires a firm, encouraging grip. Or a stern talking-to. Results vary.",
+      "cs": "Páteř Odborového svazu Údržbářů. Má sklon prosakovat vlažnou existenciální hrůzu a vyžaduje pevný, povzbudivý úchop. Nebo přísnou domluvu. Výsledky se liší."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d6+1"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d6+1"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Occasionally Cleans Things"
+      ],
+      "cs": [
+        "Občas Něco Vyčistí"
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d6+1 Weirdness Inversion",
+      "cs": "1d6+1 Inverze Podivnosti"
+    },
+    "level": 1,
+    "buyPrice": 25,
+    "sellPrice": 7
+  },
+  {
+    "id": "cc_impl_percussivewrench_l02",
+    "name": {
+      "en": "Percussive Maintenance Wrench",
+      "cs": "Klíč pro Perkusivní Údržbu"
+    },
+    "description": {
+      "en": "A heavy, reassuringly solid wrench for applying the time-honored technique of 'making it work' by hitting it. Approved by Union Bylaw 734.C.",
+      "cs": "Těžký, uklidňujícím způsobem masivní klíč pro aplikaci prastaré techniky 'zprovoznění' úderem. Schváleno stanovami Unie 734.C."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d8+1"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d8+1"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on Aptitude checks to repair simple machinery by hitting it."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na Schopnosti k opravě jednoduchých strojů úderem."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d8+1 Weirdness Inv, Percussive Repair",
+      "cs": "1d8+1 Inverze Podiv., Perkusivní Oprava"
+    },
+    "level": 2,
+    "buyPrice": 35,
+    "sellPrice": 10
+  },
+  {
+    "id": "cc_impl_squeakyhammer_l03",
+    "name": {
+      "en": "Reality-Compliance Mallet",
+      "cs": "Palička pro Dodržování Reality"
+    },
+    "description": {
+      "en": "Looks like a novelty toy hammer. Emits a plaintive squeak when used, which has a surprisingly demoralizing effect on rogue concepts and paradoxes.",
+      "cs": "Vypadá jako vtipné kladívko z hračkářství. Při použití vydává žalostné písknutí, které má překvapivě demoralizující účinek na zbloudilé koncepty a paradoxy."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d8+2"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d8+2"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on Willpower checks to resolve or stabilize minor paradoxes."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na Vůli k řešení nebo stabilizaci menších paradoxů."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d8+2 Weirdness Inv, Annoys Paradoxes",
+      "cs": "1d8+2 Inverze Podiv., Otravuje Paradoxy"
+    },
+    "level": 3,
+    "buyPrice": 45,
+    "sellPrice": 13
+  },
+  {
+    "id": "cc_impl_universalremote_l04",
+    "name": {
+      "en": "Slightly-Sticky Universal Remote",
+      "cs": "Lehce Ulepený Univerzální Ovladač"
+    },
+    "description": {
+      "en": "Covered in buttons, most of which are unlabeled or labeled with cryptic symbols. Sometimes it changes the channel, sometimes it changes the local laws of physics.",
+      "cs": "Pokrytý tlačítky, z nichž většina je bez popisku nebo označena kryptickými symboly. Někdy přepne kanál, někdy změní místní fyzikální zákony."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d10+2"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d10+2"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Using this on an anomaly may have unpredictable, narrative-driven side effects."
+      ],
+      "cs": [
+        "Použití na anomálii může mít nepředvídatelné, příběhem řízené vedlejší účinky."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d10+2 Weirdness Inv, Unpredictable",
+      "cs": "1d10+2 Inverze Podiv., Nepředvídatelný"
+    },
+    "level": 4,
+    "buyPrice": 55,
+    "sellPrice": 16
+  },
+  {
+    "id": "cc_impl_heisenbergsqueegee_l05",
+    "name": {
+      "en": "Heisenberg-Compensating Squeegee",
+      "cs": "Squeegee s Heisenbergovou Kompenzací"
+    },
+    "description": {
+      "en": "For cleaning surfaces that may or may not be there. By observing the dirt, you change its position, making the task delightfully paradoxical. Results are... uncertain.",
+      "cs": "Pro čištění povrchů, které tam mohou, ale také nemusí být. Pozorováním špíny měníte její polohu, což činí úkol nádherně paradoxním. Výsledky jsou... nejisté."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d10+3"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d10+3"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Reduces Quantum Foam Buildup. Once per session, you can reroll one failed check related to cleaning."
+      ],
+      "cs": [
+        "Redukuje Nánosy Kvantové Pěny. Jednou za sezení si můžeš přehodit jeden neúspěšný hod související s úklidem."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d10+3 Weirdness Inv, 1/session Reroll",
+      "cs": "1d10+3 Inverze Podiv., 1/sezení Přehod"
+    },
+    "level": 5,
+    "buyPrice": 65,
+    "sellPrice": 19
+  },
+  {
+    "id": "cc_impl_sentimentalduster_l06",
+    "name": {
+      "en": "Sentimental Feather Duster",
+      "cs": "Sentimentální Prachovka z Peří"
+    },
+    "description": {
+      "en": "This duster has developed a mild emotional attachment to dust bunnies and tends to cry softly while displacing them. Its sorrow is oddly effective against metaphysical grime.",
+      "cs": "Tato prachovka si vytvořila mírnou citovou vazbu na chuchvalce prachu a má tendenci tiše plakat, když je přemísťuje. Její smutek je podivně účinný proti metafyzické špíně."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "1d12+3"
+      },
+      "cs": {
+        "Inverze Podivnosti": "1d12+3"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on checks to pacify or confuse simple-minded, non-hostile entities."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na uklidnění nebo zmatení jednoduchých, ne-nepřátelských entit."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "1d12+3 Weirdness Inv, Pacify",
+      "cs": "1d12+3 Inverze Podiv., Uklidnění"
+    },
+    "level": 6,
+    "buyPrice": 75,
+    "sellPrice": 22
+  },
+  {
+    "id": "cc_impl_sonicspork_l07",
+    "name": {
+      "en": "Sonic Spork",
+      "cs": "Sonická Lžičko-vidlička"
+    },
+    "description": {
+      "en": "It vibrates at a frequency that can loosen stubborn condiments from reality, and also makes a fantastic cup of tea. Mostly. The Union denies all knowledge of its other functions.",
+      "cs": "Vibruje na frekvenci, která dokáže uvolnit tvrdohlavé dochucovadla z reality a také udělá fantastický šálek čaje. Většinou. Unie popírá veškeré znalosti o jejích dalších funkcích."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "2d6+4"
+      },
+      "cs": {
+        "Inverze Podivnosti": "2d6+4"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Can be used to dislodge one minor physical or metaphysical obstacle without a check."
+      ],
+      "cs": [
+        "Lze použít k uvolnění jedné menší fyzické nebo metafyzické překážky bez hodu."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d6+4 Weirdness Inv, Dislodges Obstacles",
+      "cs": "2d6+4 Inverze Podiv., Uvolňuje Překážky"
+    },
+    "level": 7,
+    "buyPrice": 85,
+    "sellPrice": 25
+  },
+  {
+    "id": "cc_impl_rubberchicken_l08",
+    "name": {
+      "en": "Poultry-Based Anomaly Pacifier",
+      "cs": "Anomální Pacifikátor na Bázi Drůbeže"
+    },
+    "description": {
+      "en": "Officially designated the P.B.A.P. It is, for all intents and purposes, a rubber chicken. Its sheer, baffling absurdity can stun lesser cosmic horrors into confused silence.",
+      "cs": "Oficiálně označován jako A.P.B.D. Je to, ve všech ohledech, gumové kuře. Jeho naprostá, matoucí absurdita dokáže omráčit menší kosmické hrůzy do zmateného ticha."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "2d6+5"
+      },
+      "cs": {
+        "Inverze Podivnosti": "2d6+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Once per session, force a reality-bending entity to make a DC 14 Willpower save or be Stunned for one action."
+      ],
+      "cs": [
+        "Jednou za sezení donuť realitu ohýbající entitu k Záchrannému hodu na Vůli (DC 14), jinak je na jednu akci Omráčena."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d6+5 Weirdness Inv, 1/session Stun",
+      "cs": "2d6+5 Inverze Podiv., 1/sezení Omráčení"
+    },
+    "level": 8,
+    "buyPrice": 95,
+    "sellPrice": 28
+  },
+  {
+    "id": "cc_impl_bureaucraticclipboard_l09",
+    "name": {
+      "en": "Form 37-Gamma Compliance Clipboard",
+      "cs": "Desky pro Soulad s Formulářem 37-Gama"
+    },
+    "description": {
+      "en": "A clipboard holding a sheaf of incomprehensible forms. Waving it threateningly at rogue phenomena often convinces them the paperwork isn't worth the hassle.",
+      "cs": "Desky s psací podložkou držící svazek nepochopitelných formulářů. Hrozivé mávání jimi na zbloudilé jevy je často přesvědčí, že papírování nestojí za ty potíže."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "2d8+4"
+      },
+      "cs": {
+        "Inverze Podivnosti": "2d8+4"
+      }
+    },
+    "abilities": {
+      "en": [
+        "Grants Advantage on checks to intimidate or confuse bureaucratic entities or constructs."
+      ],
+      "cs": [
+        "Poskytuje Výhodu při hodech na zastrašení nebo zmatení byrokratických entit či konstruktů."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d8+4 Weirdness Inv, Weaponized Bureaucracy",
+      "cs": "2d8+4 Inverze Podiv., Zbraň. Byrokracie"
+    },
+    "level": 9,
+    "buyPrice": 110,
+    "sellPrice": 33
+  },
+  {
+    "id": "cc_impl_phasicspatula_l10",
+    "name": {
+      "en": "Multi-phasic Spatula",
+      "cs": "Vícefázová Špachtle"
+    },
+    "description": {
+      "en": "Equally adept at scraping gum from the underside of reality and flipping metaphysical pancakes. Can exist in up to three states of 'clean' at once.",
+      "cs": "Stejně zdatná při seškrabávání žvýkaček zespodu reality i obracení metafyzických palačinek. Může existovat až ve třech stavech 'čistoty' najednou."
+    },
+    "itemType": "custodial_implement",
+    "attributes": {
+      "en": {
+        "Weirdness Inversion": "2d8+5"
+      },
+      "cs": {
+        "Inverze Podivnosti": "2d8+5"
+      }
+    },
+    "abilities": {
+      "en": [
+        "When dealing with a temporal or spatial anomaly, you may spend 5 Willpower to gain Advantage on your next action to resolve it."
+      ],
+      "cs": [
+        "Při řešení časové nebo prostorové anomálie můžeš utratit 5 Vůle a získat Výhodu na svou další akci k jejímu vyřešení."
+      ]
+    },
+    "itemEffectDescription": {
+      "en": "2d8+5 Weirdness Inv, Unsticks Paradoxes",
+      "cs": "2d8+5 Inverze Podiv., Uvolňuje Paradoxy"
+    },
+    "level": 10,
+    "buyPrice": 120,
+    "sellPrice": 36
+  }
+]
